@@ -34,7 +34,7 @@ class powerdns (
         priority => 90,
         includepkgs => 'pdns*',
         before => Package['pdns'],
-      }      
+      }
     }
 
     default: {
