@@ -4,7 +4,6 @@ define powerdns::config($setting = $title, $value = '', $ensure = 'present', $ty
   if $setting == 'gmysql-dnssec' { $line = $setting }
   else { $line = "${setting}=${value}" }
 
-
   case $type {
     'authorative': {
       $path = '/etc/pdns/pdns.conf'
@@ -29,3 +28,4 @@ define powerdns::config($setting = $title, $value = '', $ensure = 'present', $ty
     ensure => $ensure,
   }
 }
+
