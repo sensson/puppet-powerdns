@@ -17,7 +17,7 @@ class powerdns::backends::mysql inherits powerdns {
       class { '::mysql::server':
         root_password      => $::powerdns::db_root_password,
         create_root_my_cnf => true,
-        package_name       => $::powerdns::params::mysql_package_name
+        package_name       => $::powerdns::params::mysql_package_name,
       }
     }
 
