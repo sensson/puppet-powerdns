@@ -6,7 +6,7 @@ class powerdns::backends::mysql inherits powerdns {
 
   # set up the powerdns backend
   package { 'pdns-backend-mysql':
-    ensure  => $::powerdns::authorative_install,
+    ensure  => $::powerdns::authorative::authorative_install,
     before  => Service['pdns'],
     require => Package['pdns'],
   }
@@ -17,7 +17,6 @@ class powerdns::backends::mysql inherits powerdns {
       class { '::mysql::server':
         root_password      => $::powerdns::db_root_password,
         create_root_my_cnf => true,
-        package_name       => $::powerdns::params::mysql_package_name,
       }
     }
 
