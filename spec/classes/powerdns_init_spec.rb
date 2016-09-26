@@ -7,7 +7,7 @@ describe 'powerdns', :type => :class do
           facts
         end
 
-        context "powerdns class without any parameters" do
+        context "powerdns class with parameters" do
           let(:params) {{ 
             :db_root_password => 'foobar',
             :db_username => 'foo',
