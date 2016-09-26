@@ -15,17 +15,17 @@ define powerdns::config($setting = $title, $value = '', $ensure = 'present', $ty
     }
 
     default: {
-      fail("$type is not supported as config type.")
+      fail("${type} is not supported as config type.")
     }
   }
 
   file_line { "powerdns-config-${setting}-${value}-${path}":
-    path => $path,
-    line => $line,
-    match => "^${setting}=",
+    ensure  => $ensure,
+    path    => $path,
+    line    => $line,
+    match   => "^${setting}=",
     require => Package[$require],
-    notify => Service[$require],
-    ensure => $ensure,
+    notify  => Service[$require],
   }
 }
 

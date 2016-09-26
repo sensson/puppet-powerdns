@@ -2,13 +2,13 @@
 class powerdns::authorative inherits powerdns {
 
   # enable the authorative powerdns server
-  if $authorative == true {
+  if $powerdns::authorative == true {
     $authorative_install = 'installed'
     $authorative_service = 'running'
   }
 
   # disable the authorative powerdns server
-  if $authorative == false {
+  if $powerdns::authorative == false {
     $authorative_install = 'absent'
     $authorative_service = 'stopped'
   }
@@ -19,17 +19,17 @@ class powerdns::authorative inherits powerdns {
   }
 
   # install the right backend
-  case $backend {
+  case $::powerdns::backend {
     'mysql': {
-      include powerdns::backends::mysql
+      include ::powerdns::backends::mysql
     }
     default: {
-      fail("$backend is not supported. We only support 'mysql' at the moment.")
+      fail("${::powerdns::backend} is not supported. We only support 'mysql' at the moment.")
     }
   }
 
   service { 'pdns':
-    ensure => $authorative_service,
+    ensure  => $authorative_service,
     require => Package['pdns'],
   }
 }

@@ -1,18 +1,18 @@
 {
-	"name": "sensson-powerdns",
-	"version": "0.0.2",
-	"author": "sensson",
-	"license": "Licensed under (Apache 2.0)",
-	"summary": "A module to install and configure PowerDNS 4.x",
-	"source": "https://github.com/sensson/puppet-powerdns",
-	"project_page": "https://github.com/sensson/puppet-powerdns",
-	"issues_url": "https://github.com/sensson/puppet-powerdns/issues",
-	"tags": [ "powerdns" ],
-	"operatingsystem_support": [
-		{ "operatingsystem":"CentOS", "operatingsystemrelease":[ "7.0" ] }
-	],
-	"dependencies": [
-		{ "name": "puppetlabs/stdlib", "version_requirement": ">=4.3.2" },
-		{ "name": "puppetlabs/mysql", "version_requirement": ">=3.4.0" }
-	]
+    "name": "sensson-powerdns",
+    "version": "0.0.2",
+    "author": "sensson",
+    "license": "Licensed under (Apache 2.0)",
+    "summary": "A module to install and configure PowerDNS 4.x",
+    "source": "https://github.com/sensson/puppet-powerdns",
+    "project_page": "https://github.com/sensson/puppet-powerdns",
+    "issues_url": "https://github.com/sensson/puppet-powerdns/issues",
+    "tags": [ "powerdns" ],
+    "operatingsystem_support": [
+        { "operatingsystem": "CentOS", "operatingsystemrelease": [ "7.0" ] }
+    ],
+    "dependencies": [
+        { "name": "puppetlabs/stdlib", "version_requirement": ">=4.3.2 < 5.0.0" },
+        { "name": "puppetlabs/mysql", "version_requirement": ">=3.4.0 < 4.0.0" }
+    ]
 }
