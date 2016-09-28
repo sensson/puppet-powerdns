@@ -17,13 +17,13 @@ define powerdns::backends::mysql::create_table($database = '', $table = $title, 
     # create our table
     exec { "create-table-${table}":
       logoutput => true,
-      command   => "/usr/bin/mysql --defaults-file=${::mysql::root_home}/.my.cnf ${database} < /tmp/create-table-${table}",
-      unless    => "/usr/bin/mysql --defaults-file=${::mysql::root_home}/.my.cnf -e 'desc ${database}.${table}' > /dev/null 2>&1",
+      command   => "/usr/bin/mysql --defaults-file=${::root_home}/.my.cnf ${database} < /tmp/create-table-${table}",
+      unless    => "/usr/bin/mysql --defaults-file=${::root_home}/.my.cnf -e 'desc ${database}.${table}' > /dev/null 2>&1",
       subscribe => Service['mysqld'],
       require   => [
         Service['mysqld'],
         Package['mysql-server'],
-        File["${::mysql::root_home}/.my.cnf"],
+        File["${::root_home}/.my.cnf"],
         File["/tmp/create-table-${table}"],
         Mysql::Db[$database]
       ],
