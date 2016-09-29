@@ -16,7 +16,7 @@ class powerdns::repo {
         enabled     => 1,
         priority    => 90,
         includepkgs => 'pdns*',
-        before      => Package['pdns'],
+        before      => [ Package['pdns'], Package['pdns-recursor'] ],
       }
     }
 
