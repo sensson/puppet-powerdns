@@ -3,7 +3,8 @@
 [![Build Status](https://travis-ci.org/sensson/puppet-powerdns.svg?branch=master)](https://travis-ci.org/sensson/puppet-powerdns)
 
 This module can be used to configure both the recursor and authorative 
-PowerDNS 4.x server. We don't support version 2.x or 3.x.
+PowerDNS 4 server. It doesn't intend to support PowerDNS 2 or 3 but the
+module supports Puppet 2.7.x, 3 and 4.
 
 ## Examples
 
