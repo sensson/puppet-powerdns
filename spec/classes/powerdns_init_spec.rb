@@ -25,11 +25,13 @@ describe 'powerdns', :type => :class do
           }}
 
           it { is_expected.to compile.with_all_deps }
+          it { is_expected.to contain_class('powerdns::params') }
 
           # Check the repositories
           it { is_expected.to contain_class('powerdns::repo') }
           case facts[:osfamily]
           when 'RedHat'
+            it { is_expected.to contain_package('yum-plugin-priorities') }
             it { is_expected.to contain_yumrepo('powerdns') }
             it { is_expected.to contain_yumrepo('powerdns').that_comes_before('Package[pdns]') }
             it { is_expected.to contain_yumrepo('powerdns').that_comes_before('Package[pdns-recursor]') }
@@ -56,12 +58,39 @@ describe 'powerdns', :type => :class do
             :backend => 'mysql'
           }}
 
+          it { is_expected.to contain_class('powerdns::backends::mysql') }
           it { is_expected.to contain_package('pdns-backend-mysql').with('ensure' => 'installed') }
           it { is_expected.to contain_mysql__db('powerdns').with(
               'user' => 'foo',
               'password' => 'bar',
               'host' => 'localhost'
             ) }
+
+          # We expect the following tables to be created
+          it { is_expected.to contain_powerdns__backends__mysql__create_table('comments') }
+          it { is_expected.to contain_powerdns__backends__mysql__create_table('cryptokeys') }
+          it { is_expected.to contain_powerdns__backends__mysql__create_table('domainmetadata') }
+          it { is_expected.to contain_powerdns__backends__mysql__create_table('domains') }
+          it { is_expected.to contain_powerdns__backends__mysql__create_table('records') }
+          it { is_expected.to contain_powerdns__backends__mysql__create_table('supermasters') }
+          it { is_expected.to contain_powerdns__backends__mysql__create_table('tsigkeys') }
+
+          # This creates additional resources
+          it { is_expected.to contain_file('/tmp/create-table-comments') }
+          it { is_expected.to contain_file('/tmp/create-table-cryptokeys') }
+          it { is_expected.to contain_file('/tmp/create-table-domainmetadata') }
+          it { is_expected.to contain_file('/tmp/create-table-domains') }
+          it { is_expected.to contain_file('/tmp/create-table-records') }
+          it { is_expected.to contain_file('/tmp/create-table-supermasters') }
+          it { is_expected.to contain_file('/tmp/create-table-tsigkeys') }
+
+          it { is_expected.to contain_exec('create-table-comments') }
+          it { is_expected.to contain_exec('create-table-cryptokeys') }
+          it { is_expected.to contain_exec('create-table-domainmetadata') }
+          it { is_expected.to contain_exec('create-table-domains') }
+          it { is_expected.to contain_exec('create-table-records') }
+          it { is_expected.to contain_exec('create-table-supermasters') }
+          it { is_expected.to contain_exec('create-table-tsigkeys') }
         end
 
         context "powerdns class with an empty database username" do
