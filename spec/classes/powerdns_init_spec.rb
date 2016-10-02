@@ -5,6 +5,10 @@ describe 'powerdns', :type => :class do
       context "on #{os}" do
         let(:facts) do
           facts
+
+          facts.merge({
+            :root_home => '/root',
+          })
         end
 
         context "powerdns class without parameters" do
