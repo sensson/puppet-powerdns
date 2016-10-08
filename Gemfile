@@ -30,7 +30,7 @@ group :development do
 end
 
 group :system_tests do
-  gem "beaker"
+  gem "beaker", '<= 2.51.0' if RUBY_VERSION < '2.2.5'
   gem "beaker-rspec"
   gem "beaker-puppet_install_helper"
 end
