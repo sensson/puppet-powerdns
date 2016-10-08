@@ -91,6 +91,22 @@ describe 'powerdns', :type => :class do
           it { is_expected.to contain_exec('create-table-records') }
           it { is_expected.to contain_exec('create-table-supermasters') }
           it { is_expected.to contain_exec('create-table-tsigkeys') }
+
+          # This sets our configuration
+          it { is_expected.to contain_powerdns__config('gmysql-dbname').with('value' => 'powerdns') }
+          it { is_expected.to contain_powerdns__config('gmysql-password').with('value' => 'bar') }
+          it { is_expected.to contain_powerdns__config('gmysql-user').with('value' => 'foo') }
+          it { is_expected.to contain_powerdns__config('launch').with('value' => 'gmysql') }
+          it { is_expected.to contain_powerdns__config('gmysql-supermaster-query').with(
+            'value' => 'select account from supermasters where ip=\'%s\''
+          ) }
+
+          it { is_expected.to contain_file_line('powerdns-config-gmysql-dbname-powerdns-/etc/pdns/pdns.conf') }
+          it { is_expected.to contain_file_line('powerdns-config-gmysql-password-bar-/etc/pdns/pdns.conf') }
+          it { is_expected.to contain_file_line('powerdns-config-gmysql-supermaster-query-select account from supermasters where ip=\'%s\'-/etc/pdns/pdns.conf') }
+          it { is_expected.to contain_file_line('powerdns-config-gmysql-user-foo-/etc/pdns/pdns.conf') }
+          it { is_expected.to contain_file_line('powerdns-config-launch-gmysql-/etc/pdns/pdns.conf') }
+
         end
 
         context "powerdns class with an empty database username" do

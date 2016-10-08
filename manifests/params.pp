@@ -9,4 +9,5 @@ class powerdns::params {
   $db_password = ''
   $db_name = 'powerdns'
   $db_host = 'localhost'
+  $supermaster_query = 'select account from supermasters where ip=\'%s\''
 }

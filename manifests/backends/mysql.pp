@@ -4,6 +4,42 @@ class powerdns::backends::mysql inherits powerdns {
   if $::powerdns::db_username == '' { fail('No database username specified.') }
   if $::powerdns::db_password == '' { fail('No database password specified.') }
 
+  # set the configuration variables
+  powerdns::config { 'launch':
+    ensure  => present,
+    setting => 'launch',
+    value   => 'gmysql',
+    type    => 'authorative',
+  }
+
+  powerdns::config { 'gmysql-user':
+    ensure  => present,
+    setting => 'gmysql-user',
+    value   => $::powerdns::db_username,
+    type    => 'authorative',
+  }
+
+  powerdns::config { 'gmysql-password':
+    ensure  => present,
+    setting => 'gmysql-password',
+    value   => $::powerdns::db_password,
+    type    => 'authorative',
+  }
+
+  powerdns::config { 'gmysql-dbname':
+    ensure  => present,
+    setting => 'gmysql-dbname',
+    value   => $::powerdns::db_name,
+    type    => 'authorative',
+  }
+
+  powerdns::config { 'gmysql-supermaster-query':
+    ensure  => present,
+    setting => 'gmysql-supermaster-query',
+    value   => $::powerdns::supermaster_query,
+    type    => 'authorative',
+  }
+
   # set up the powerdns backend
   package { 'pdns-backend-mysql':
     ensure  => $::powerdns::authorative::authorative_install,
