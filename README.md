@@ -130,4 +130,5 @@ powerdns::auth::config:
 
 This module has been tested on:
 
+* CentOS 6
 * CentOS 7
