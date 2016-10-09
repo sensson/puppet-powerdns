@@ -1,9 +1,9 @@
 {
     "name": "sensson-powerdns",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "author": "sensson",
     "license": "Apache-2.0",
-    "summary": "A module to install and configure PowerDNS 4.x",
+    "summary": "A module to install and configure PowerDNS 4.x authorative server and recursor",
     "source": "https://github.com/sensson/puppet-powerdns",
     "project_page": "https://github.com/sensson/puppet-powerdns",
     "issues_url": "https://github.com/sensson/puppet-powerdns/issues",
