@@ -1,7 +1,7 @@
 require 'spec_helper_acceptance'
 
 describe 'powerdns class' do
-  context 'default parameters' do
+  context 'authorative server' do
     # Using puppet_apply as a helper
     it 'should work idempotently with no errors' do
       pp = <<-EOS
@@ -9,20 +9,35 @@ describe 'powerdns class' do
         db_password => 's0m4r4nd0mp4ssw0rd',
         db_root_password => 'v3rys3c4r3',
       }
+
+      # This makes sure the second test can run successfully
+      # on Debian-based systems. Debian has the odd tendency
+      # to start services before they are configured. 
+      powerdns::config { 'authorative-local-port':
+        type => 'authorative',
+        setting => 'local-port',
+        value => 54,
+      }
       EOS
 
       # Run it twice and test for idempotency
       apply_manifest(pp, :catch_failures => true)
       apply_manifest(pp, :catch_changes  => true)
     end
+  end
 
-    #describe package('powerdns') do
-    #  it { is_expected.to be_installed }
-    #end
+  context 'recursor server' do
+    it 'should work idempotently with no errors' do
+      pp = <<-EOS
+      class { 'powerdns':
+        authorative => false,
+        recursor => true,
+      }
+      EOS
 
-    #describe service('powerdns') do
-    #  it { is_expected.to be_enabled }
-    #  it { is_expected.to be_running }
-    #end
+      # Run it twice and test for idempotency
+      apply_manifest(pp, :catch_failures => true)
+      apply_manifest(pp, :catch_changes  => true)
+    end
   end
 end

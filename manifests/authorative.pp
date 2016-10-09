@@ -1,21 +1,8 @@
 # powerdns::authorative
 class powerdns::authorative inherits powerdns {
-
-  # enable the authorative powerdns server
-  if $powerdns::authorative == true {
-    $authorative_install = 'installed'
-    $authorative_service = 'running'
-  }
-
-  # disable the authorative powerdns server
-  if $powerdns::authorative == false {
-    $authorative_install = 'absent'
-    $authorative_service = 'stopped'
-  }
-
   # install the powerdns package
-  package { 'pdns':
-    ensure => $authorative_install,
+  package { $::powerdns::params::authorative_package:
+    ensure => installed,
   }
 
   # install the right backend
@@ -28,8 +15,8 @@ class powerdns::authorative inherits powerdns {
     }
   }
 
-  service { 'pdns':
-    ensure  => $authorative_service,
-    require => Package['pdns'],
+  service { $::powerdns::params::authorative_service:
+    ensure  => running,
+    require => Package[$::powerdns::params::authorative_package],
   }
 }

@@ -17,7 +17,30 @@ MySQL server and the management of the database and its tables.
 class { 'powerdns':
 	db_password => 's0m4r4nd0mp4ssw0rd',
 	db_root_password => 'v3rys3c4r3',
-	backend_install => true,
+}
+```
+
+If you want to install both the recursor and the authorative service on the same
+server it is recommended to have the services listen on their own ip address. The
+example below needs to be adjusted to use the ip addresses of your server.
+
+This may fail the first time on Debian-based distro's.
+
+```
+powerdns::config { 'authorative-listen-address':
+	type => 'authorative',
+	setting => 'listen-address',
+	value => '127.0.0.1',
+}
+powerdns::config { 'recursor-listen-address':
+	type => 'recursor',
+	setting => 'listen-address',
+	value => '127.0.0.2',
+}
+class { 'powerdns':
+	db_password => 's0m4r4nd0mp4ssw0rd',
+	db_root_password => 'v3rys3c4r3',
+	recursor => true,
 }
 ```
 
@@ -128,3 +151,4 @@ This module has been tested on:
 
 * CentOS 6
 * CentOS 7
+* Ubuntu 14.04

@@ -11,6 +11,23 @@ describe 'powerdns', :type => :class do
           })
         end
 
+        case facts[:osfamily]
+        when 'RedHat'
+          authorative_package_name = 'pdns'
+          authorative_service_name = 'pdns'
+          authorative_config = '/etc/pdns/pdns.conf'
+          recursor_package_name = 'pdns-recursor'
+          recursor_service_name = 'pdns-recursor'
+          recursor_config = '/etc/pdns-recursor/recursor.conf'
+        when 'Debian'
+          authorative_package_name = 'pdns-server'
+          authorative_service_name = 'pdns'
+          authorative_config = '/etc/powerdns/pdns.conf'
+          recursor_package_name = 'pdns-recursor'
+          recursor_service_name = 'pdns-recursor'
+          recursor_config = '/etc/powerdns/recursor.conf'
+        end
+
         context "powerdns class without parameters" do
           it 'fails' do
             expect { subject.call } .to raise_error(/Database root password can't be empty/)
@@ -33,21 +50,21 @@ describe 'powerdns', :type => :class do
           when 'RedHat'
             it { is_expected.to contain_package('yum-plugin-priorities') }
             it { is_expected.to contain_yumrepo('powerdns') }
-            it { is_expected.to contain_yumrepo('powerdns').that_comes_before('Package[pdns]') }
-            it { is_expected.to contain_yumrepo('powerdns').that_comes_before('Package[pdns-recursor]') }
+            it { is_expected.to contain_yumrepo('powerdns-recursor') }
+          end
+          case facts[:osfamily]
+          when 'Debian'
+            it { is_expected.to contain_apt__key('powerdns') }
+            it { is_expected.to contain_apt__pin('powerdns') }
+            it { is_expected.to contain_apt__source('powerdns') }
+            it { is_expected.to contain_apt__source('powerdns-recursor') }
           end
 
           # Check the authorative server
           it { is_expected.to contain_class('powerdns::authorative') }
-          it { is_expected.to contain_package('pdns').with('ensure' => 'installed') }
-          it { is_expected.to contain_service('pdns').with('ensure' => 'running') }
-          it { is_expected.to contain_service('pdns').that_requires('Package[pdns]') }
-
-          # Check the recursor
-          it { is_expected.to contain_class('powerdns::recursor') }
-          it { is_expected.to contain_package('pdns-recursor').with('ensure' => 'absent') }
-          it { is_expected.to contain_service('pdns-recursor').with('ensure' => 'stopped') }
-          it { is_expected.to contain_service('pdns-recursor').that_requires('Package[pdns-recursor]') }
+          it { is_expected.to contain_package(authorative_package_name).with('ensure' => 'installed') }
+          it { is_expected.to contain_service(authorative_service_name).with('ensure' => 'running') }
+          it { is_expected.to contain_service(authorative_service_name).that_requires('Package[%s]' % [authorative_package_name]) }
         end
 
         context "powerdns class with mysql backend" do
@@ -101,14 +118,35 @@ describe 'powerdns', :type => :class do
             'value' => 'select account from supermasters where ip=\'%s\''
           ) }
 
-          it { is_expected.to contain_file_line('powerdns-config-gmysql-dbname-powerdns-/etc/pdns/pdns.conf') }
-          it { is_expected.to contain_file_line('powerdns-config-gmysql-password-bar-/etc/pdns/pdns.conf') }
-          it { is_expected.to contain_file_line('powerdns-config-gmysql-supermaster-query-select account from supermasters where ip=\'%s\'-/etc/pdns/pdns.conf') }
-          it { is_expected.to contain_file_line('powerdns-config-gmysql-user-foo-/etc/pdns/pdns.conf') }
-          it { is_expected.to contain_file_line('powerdns-config-launch-gmysql-/etc/pdns/pdns.conf') }
+          it { is_expected.to contain_file_line('powerdns-config-gmysql-dbname-powerdns-%s' % [ authorative_config ]) }
+          it { is_expected.to contain_file_line('powerdns-config-gmysql-password-bar-%s' % [ authorative_config ]) }
+          it { is_expected.to contain_file_line('powerdns-config-gmysql-supermaster-query-select account from supermasters where ip=\'%s\'-%s'  % [ '%s', authorative_config ]) }
+          it { is_expected.to contain_file_line('powerdns-config-gmysql-user-foo-%s' % [ authorative_config ]) }
+          it { is_expected.to contain_file_line('powerdns-config-launch-gmysql-%s' % [ authorative_config ]) }
 
         end
 
+        # Test the recursor
+        context "powerdns class with the recursor enabled and the authorative server disabled" do
+          let(:params) {{ 
+            :db_root_password => 'foobar',
+            :db_username => 'foo',
+            :db_password => 'bar',
+            :recursor => true,
+            :authorative => false,
+          }}
+
+          it { is_expected.to compile.with_all_deps }
+          it { is_expected.to contain_class('powerdns::params') }
+
+          # Check the authorative server
+          it { is_expected.to contain_class('powerdns::recursor') }
+          it { is_expected.to contain_package(recursor_package_name).with('ensure' => 'installed') }
+          it { is_expected.to contain_service(recursor_service_name).with('ensure' => 'running') }
+          it { is_expected.to contain_service(recursor_service_name).that_requires('Package[%s]' % [recursor_package_name]) }
+        end
+
+        # Test errors
         context "powerdns class with an empty database username" do
           let(:params) {{ 
             :db_root_password => 'foobar',

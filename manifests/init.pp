@@ -12,14 +12,22 @@ class powerdns (
   ) inherits powerdns::params {
 
   # do some basic checks
-  if $db_root_password == '' { fail("Database root password can't be empty") }
-  if $db_username == '' { fail("Database username can't be empty") }
-  if $db_password == '' { fail("Database password can't be empty") }
+  if $authorative == true {
+    if $db_root_password == '' { fail("Database root password can't be empty") }
+    if $db_username == '' { fail("Database username can't be empty") }
+    if $db_password == '' { fail("Database password can't be empty") }
+  }
 
   # Include the required classes
   include ::powerdns::repo
-  include ::powerdns::authorative
-  include ::powerdns::recursor
+
+  if $authorative == true {
+    include ::powerdns::authorative
+  }
+
+  if $recursor == true {
+    include ::powerdns::recursor
+  }
 
   # Set up Hiera. Even though it's not necessary to explicitly set $type for the authorative
   # config, it is added for clarity.

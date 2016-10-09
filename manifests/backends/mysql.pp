@@ -42,9 +42,9 @@ class powerdns::backends::mysql inherits powerdns {
 
   # set up the powerdns backend
   package { 'pdns-backend-mysql':
-    ensure  => $::powerdns::authorative::authorative_install,
-    before  => Service['pdns'],
-    require => Package['pdns'],
+    ensure  => installed,
+    before  => Service[$::powerdns::params::authorative_service],
+    require => Package[$::powerdns::params::authorative_package],
   }
 
   if $::powerdns::backend_install == true {
