@@ -73,13 +73,15 @@ The host where your database should be created. Defaults to 'localhost'.
 
 #### powerdns::config
 
-All PowerDNS settings can be managed with `powerdns::config`.
+All PowerDNS settings can be managed with `powerdns::config`. Depending on the backend we will set a few
+configuration settings by default: `launch`, `gmysql-user`, `gmysql-password`, `gmysql-dbname` and 
+`gmysql-supermaster-query`. All other variables can be changed as follows:
 
 ```
-powerdns::config { 'launch':
+powerdns::config { 'api':
 	ensure => present,
-	setting => 'launch',
-	value => 'gmysql',
+	setting => 'api',
+	value => 'yes',
 	type => 'authorative',
 }
 ```
@@ -112,18 +114,12 @@ powerdns::db_password: 's0m4r4nd0mp4ssw0rd'
 powerdns::recursor: true
 
 powerdns::auth::config:
-  launch:
-    value: 'gmysql'
   gmysql-dnssec:
     value: ''
-  gmysql-user: 
-    value: "%{hiera('powerdns::db_username')}"
-  gmysql-password:
-    value: "%{hiera('powerdns::db_password')}"
-  gmysql-dbname:
-    value: 'powerdns'
-  gmysql-supermaster-query:
-    value: "select account from supermasters where ip=\'%s\'"
+  local-address:
+    value: '127.0.0.1'
+  api:
+    value: 'yes'
 ```
 
 ## Limitations
