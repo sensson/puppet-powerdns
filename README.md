@@ -152,3 +152,51 @@ This module has been tested on:
 * CentOS 6
 * CentOS 7
 * Ubuntu 14.04
+
+## Development
+
+We strongly believe in the power of open source. This module is our way
+of saying thanks.
+
+This module is tested against the Ruby versions according to the Puppet
+support matrix. Please make sure you have a supported version of Ruby
+installed.
+
+1. Fork the repository.
+2. Run tests. It's always good to know that you can start with a clean slate.
+3. Add a test for your change.
+4. Make sure it passes.
+5. Push to your fork and submit a pull request.
+
+We only accept pull requests with passing tests.
+
+To install all of its dependencies please run:
+
+```
+bundle install --path vendor/bundle --without development
+```
+
+### Running unit tests
+
+```
+bundle exec rake test
+```
+
+### Running acceptance tests
+
+The unit tests only verify if the code runs, not if it does exactly
+what we want on a real machine. For this we use Beaker. Beaker will
+start a new virtual machine (using Vagrant) and runs a series of
+simple tests. 
+
+You can run Beaker tests with:
+
+```
+bundle exec rake spec_prep
+BEAKER_destroy=onpass bundle exec rake beaker:centos6
+BEAKER_destroy=onpass bundle exec rake beaker:centos7
+BEAKER_destroy=onpass bundle exec rake beaker:ubuntu1404
+```
+
+We recommend specifying BEAKER_destroy=onpass as it will keep the
+Vagrant machine running in case something fails.
