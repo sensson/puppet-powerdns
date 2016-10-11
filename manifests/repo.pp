@@ -50,7 +50,7 @@ class powerdns::repo {
         ensure       => present,
         location     => 'http://repo.powerdns.com/ubuntu',
         repos        => 'main',
-        release      => 'trusty-auth-40',
+        release      => "${::lsbdistcodename}-auth-40",
         architecture => 'amd64',
         require      => Apt::Key['powerdns'],
       }
@@ -59,7 +59,7 @@ class powerdns::repo {
         ensure       => present,
         location     => 'http://repo.powerdns.com/ubuntu',
         repos        => 'main',
-        release      => 'trusty-rec-40',
+        release      => "${::lsbdistcodename}-rec-40",
         architecture => 'amd64',
         require      => Apt::Key['powerdns'],
       }

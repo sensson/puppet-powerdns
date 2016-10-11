@@ -2,7 +2,7 @@ require 'beaker-rspec/spec_helper'
 require 'beaker-rspec/helpers/serverspec'
 require 'beaker/puppet_install_helper'
 
-run_puppet_install_helper unless ENV['BEAKER_provision'] == 'no'
+run_puppet_install_helper unless ENV['BEAKER_helper'] == 'no'
 
 RSpec.configure do |c|
   # Project root
@@ -17,6 +17,7 @@ RSpec.configure do |c|
     # Install module and dependencies
     puppet_module_install(:source => proj_root, :module_name => 'powerdns')
     hosts.each do |host|
+      install_package(host, 'puppet')
       install_package(host, 'rsync')
       rsync_to(host, fixture_modules, '/etc/puppet/modules/')
     end

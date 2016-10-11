@@ -10,7 +10,7 @@
     "tags": [ "powerdns" ],
     "operatingsystem_support": [
         { "operatingsystem": "CentOS", "operatingsystemrelease": [ "6", "7" ] },
-        { "operatingsystem": "Ubuntu", "operatingsystemrelease": [ "14.04" ] }
+        { "operatingsystem": "Ubuntu", "operatingsystemrelease": [ "14.04", "16.04" ] }
     ],
     "dependencies": [
         { "name": "puppetlabs/stdlib", "version_requirement": ">=4.3.2 < 5.0.0" },
