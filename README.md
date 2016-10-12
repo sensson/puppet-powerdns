@@ -11,7 +11,8 @@ module supports Puppet 2.7.x, 3 and 4.
 ### Installation and configuration
 
 This will install the authorative PowerDNS server which includes the
-MySQL server and the management of the database and its tables.
+MySQL server and the management of the database and its tables. This is
+the bare minimum.
 
 ```
 class { 'powerdns':
@@ -152,15 +153,17 @@ This module has been tested on:
 * CentOS 6
 * CentOS 7
 * Ubuntu 14.04
+* Ubuntu 16.04
 
 ## Development
 
 We strongly believe in the power of open source. This module is our way
 of saying thanks.
 
-This module is tested against the Ruby versions according to the Puppet
-support matrix. Please make sure you have a supported version of Ruby
-installed.
+This module is tested against the Ruby versions from Puppet's support
+matrix. Please make sure you have a supported version of Ruby installed.
+
+If you want to contribute please:
 
 1. Fork the repository.
 2. Run tests. It's always good to know that you can start with a clean slate.
@@ -168,7 +171,7 @@ installed.
 4. Make sure it passes.
 5. Push to your fork and submit a pull request.
 
-We only accept pull requests with passing tests.
+We can only accept pull requests with passing tests.
 
 To install all of its dependencies please run:
 
@@ -196,6 +199,7 @@ bundle exec rake spec_prep
 BEAKER_destroy=onpass bundle exec rake beaker:centos6
 BEAKER_destroy=onpass bundle exec rake beaker:centos7
 BEAKER_destroy=onpass bundle exec rake beaker:ubuntu1404
+BEAKER_destroy=onpass bundle exec rake beaker:ubuntu1604
 ```
 
 We recommend specifying BEAKER_destroy=onpass as it will keep the
