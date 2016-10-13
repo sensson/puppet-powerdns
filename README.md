@@ -1,8 +1,8 @@
-# PowerDNS 
+# PowerDNS
 
 [![Build Status](https://travis-ci.org/sensson/puppet-powerdns.svg?branch=master)](https://travis-ci.org/sensson/puppet-powerdns) [![Puppet Forge](https://img.shields.io/puppetforge/v/sensson/powerdns.svg?maxAge=2592000?style=plastic)](https://forge.puppet.com/sensson/powerdns)
 
-This module can be used to configure both the recursor and authorative 
+This module can be used to configure both the recursor and authorative
 PowerDNS 4 server. It doesn't intend to support PowerDNS 2 or 3 but the
 module supports Puppet 2.7.x, 3 and 4.
 
@@ -75,7 +75,7 @@ you. This requires `db_root_password`, `db_username`, `db_password`,
 ##### `db_root_password`
 
 If you set `backend_install` to true you are asked to specify a root
-password for your database. 
+password for your database.
 
 ##### `db_username`
 
@@ -93,12 +93,16 @@ The database you want to use for PowerDNS. Defaults to 'powerdns'.
 
 The host where your database should be created. Defaults to 'localhost'.
 
+##### `custom_repo`
+
+Don't manage repo with this module. Defaults to false.
+
 ### Defines
 
 #### powerdns::config
 
 All PowerDNS settings can be managed with `powerdns::config`. Depending on the backend we will set a few
-configuration settings by default: `launch`, `gmysql-user`, `gmysql-password`, `gmysql-dbname` and 
+configuration settings by default: `launch`, `gmysql-user`, `gmysql-password`, `gmysql-dbname` and
 `gmysql-supermaster-query`. All other variables can be changed as follows:
 
 ```
@@ -190,7 +194,7 @@ bundle exec rake test
 The unit tests only verify if the code runs, not if it does exactly
 what we want on a real machine. For this we use Beaker. Beaker will
 start a new virtual machine (using Vagrant) and runs a series of
-simple tests. 
+simple tests.
 
 You can run Beaker tests with:
 
