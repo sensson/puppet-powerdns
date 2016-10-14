@@ -9,6 +9,7 @@ class powerdns (
     $db_password      = $::powerdns::params::db_password,
     $db_name          = $::powerdns::params::db_name,
     $db_host          = $::powerdns::params::db_host,
+    $custom_repo      = $::powerdns::params::custom_repo,
   ) inherits powerdns::params {
 
   # do some basic checks
@@ -19,7 +20,9 @@ class powerdns (
   }
 
   # Include the required classes
-  include ::powerdns::repo
+  if ! $custom_repo {
+    include ::powerdns::repo
+  }
 
   if $authorative == true {
     include ::powerdns::authorative
