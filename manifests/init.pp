@@ -1,15 +1,16 @@
 # powerdns
 class powerdns (
-    $authorative      = $::powerdns::params::authorative,
-    $recursor         = $::powerdns::params::recursor,
-    $backend          = $::powerdns::params::backend,
-    $backend_install  = $::powerdns::params::backend_install,
-    $db_root_password = $::powerdns::params::db_root_password,
-    $db_username      = $::powerdns::params::db_username,
-    $db_password      = $::powerdns::params::db_password,
-    $db_name          = $::powerdns::params::db_name,
-    $db_host          = $::powerdns::params::db_host,
-    $custom_repo      = $::powerdns::params::custom_repo,
+    $authorative       = $::powerdns::params::authorative,
+    $recursor          = $::powerdns::params::recursor,
+    $backend           = $::powerdns::params::backend,
+    $backend_install   = $::powerdns::params::backend_install,
+    $db_root_password  = $::powerdns::params::db_root_password,
+    $db_username       = $::powerdns::params::db_username,
+    $db_password       = $::powerdns::params::db_password,
+    $db_name           = $::powerdns::params::db_name,
+    $db_host           = $::powerdns::params::db_host,
+    $custom_repo       = $::powerdns::params::custom_repo,
+    $supermaster_query = $::powerdns::params::supermaster_query,
   ) inherits powerdns::params {
 
   # do some basic checks

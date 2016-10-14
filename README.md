@@ -97,6 +97,10 @@ The host where your database should be created. Defaults to 'localhost'.
 
 Don't manage repo with this module. Defaults to false.
 
+##### `supermaster_query`
+
+Set query to select supermasters. Defaults to 'select account from supermasters where ip=\'%s\''.
+
 ### Defines
 
 #### powerdns::config
