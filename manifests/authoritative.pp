@@ -1,7 +1,7 @@
-# powerdns::authorative
-class powerdns::authorative inherits powerdns {
+# powerdns::authoritative
+class powerdns::authoritative inherits powerdns {
   # install the powerdns package
-  package { $::powerdns::params::authorative_package:
+  package { $::powerdns::params::authoritative_package:
     ensure => installed,
   }
 
@@ -15,8 +15,8 @@ class powerdns::authorative inherits powerdns {
     }
   }
 
-  service { $::powerdns::params::authorative_service:
+  service { $::powerdns::params::authoritative_service:
     ensure  => running,
-    require => Package[$::powerdns::params::authorative_package],
+    require => Package[$::powerdns::params::authoritative_package],
   }
 }

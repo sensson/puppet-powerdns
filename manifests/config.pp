@@ -3,7 +3,7 @@ define powerdns::config(
   $setting = $title,
   $value   = '',
   $ensure  = 'present',
-  $type    = 'authorative'
+  $type    = 'authoritative'
 ) {
 
   if $value == '' and $setting != 'gmysql-dnssec' { fail("Value can't be empty.") }
@@ -11,10 +11,10 @@ define powerdns::config(
   else { $line = "${setting}=${value}" }
 
   case $type {
-    'authorative': {
-      $path = $::powerdns::params::authorative_config
-      $require_package = $::powerdns::params::authorative_package
-      $notify_service = $::powerdns::params::authorative_service
+    'authoritative': {
+      $path = $::powerdns::params::authoritative_config
+      $require_package = $::powerdns::params::authoritative_package
+      $notify_service = $::powerdns::params::authoritative_service
     }
     'recursor': {
       $path = $::powerdns::params::recursor_config
@@ -37,4 +37,3 @@ define powerdns::config(
     before  => Service[$notify_service],
   }
 }
-
