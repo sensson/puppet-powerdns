@@ -1,6 +1,6 @@
 # powerdns
 class powerdns (
-    $authoritative       = $::powerdns::params::authoritative,
+    $authoritative     = $::powerdns::params::authoritative,
     $recursor          = $::powerdns::params::recursor,
     $backend           = $::powerdns::params::backend,
     $backend_install   = $::powerdns::params::backend_install,
