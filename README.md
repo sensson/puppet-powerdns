@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/sensson/puppet-powerdns.svg?branch=master)](https://travis-ci.org/sensson/puppet-powerdns) [![Puppet Forge](https://img.shields.io/puppetforge/v/sensson/powerdns.svg?maxAge=2592000?style=plastic)](https://forge.puppet.com/sensson/powerdns)
 
-This module can be used to configure both the recursor and authorative
+This module can be used to configure both the recursor and authoritative
 PowerDNS 4 server. It doesn't intend to support PowerDNS 2 or 3 but the
 module supports Puppet 2.7.x, 3 and 4.
 
@@ -10,7 +10,7 @@ module supports Puppet 2.7.x, 3 and 4.
 
 ### Installation and configuration
 
-This will install the authorative PowerDNS server which includes the
+This will install the authoritative PowerDNS server which includes the
 MySQL server and the management of the database and its tables. This is
 the bare minimum.
 
@@ -21,15 +21,15 @@ class { 'powerdns':
 }
 ```
 
-If you want to install both the recursor and the authorative service on the same
+If you want to install both the recursor and the authoritative service on the same
 server it is recommended to have the services listen on their own ip address. The
 example below needs to be adjusted to use the ip addresses of your server.
 
 This may fail the first time on Debian-based distro's.
 
 ```
-powerdns::config { 'authorative-listen-address':
-	type => 'authorative',
+powerdns::config { 'authoritative-listen-address':
+	type => 'authoritative',
 	setting => 'listen-address',
 	value => '127.0.0.1',
 }
@@ -54,9 +54,9 @@ class { 'powerdns':
 We provide a number of configuration options to change particular settings
 or to override our defaults when required.
 
-##### `authorative`
+##### `authoritative`
 
-Install the PowerDNS authorative server. Defaults to true.
+Install the PowerDNS authoritative server. Defaults to true.
 
 ##### `recursor`
 
@@ -64,7 +64,7 @@ Install the PowerDNS recursor. Defaults to false.
 
 ##### `backend`
 
-Choose a backend for the authorative server. Valid values are 'mysql'. Defaults to 'mysql'.
+Choose a backend for the authoritative server. Valid values are 'mysql'. Defaults to 'mysql'.
 
 ##### `backend_install`
 
@@ -114,7 +114,7 @@ powerdns::config { 'api':
 	ensure => present,
 	setting => 'api',
 	value => 'yes',
-	type => 'authorative',
+	type => 'authoritative',
 }
 ```
 
@@ -128,7 +128,7 @@ The value for the above setting.
 
 ##### `type`
 
-The configuration file you want to change. Valid values are 'authorative', 'recursor'. Defaults to 'authorative'.
+The configuration file you want to change. Valid values are 'authoritative', 'recursor'. Defaults to 'authoritative'.
 
 ##### `ensure`
 

@@ -2,7 +2,7 @@
 class powerdns::repo {
   case $::operatingsystem {
     'centos': {
-      Yumrepo['powerdns'] -> Package <| title == $::powerdns::params::authorative_package |>
+      Yumrepo['powerdns'] -> Package <| title == $::powerdns::params::authoritative_package |>
       Yumrepo['powerdns-recursor'] -> Package <| title == $::powerdns::params::recursor_package |>
 
       package { 'yum-plugin-priorities':
@@ -12,7 +12,7 @@ class powerdns::repo {
 
       yumrepo { 'powerdns':
         name        => 'powerdns',
-        descr       => 'PowerDNS repository for PowerDNS Authorative - version 4.0.X',
+        descr       => 'PowerDNS repository for PowerDNS Authoritative - version 4.0.X',
         baseurl     => 'http://repo.powerdns.com/centos/$basearch/$releasever/auth-40',
         gpgkey      => 'https://repo.powerdns.com/FD380FBB-pub.asc',
         gpgcheck    => 1,

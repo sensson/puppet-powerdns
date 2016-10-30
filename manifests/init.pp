@@ -1,6 +1,6 @@
 # powerdns
 class powerdns (
-    $authorative       = $::powerdns::params::authorative,
+    $authoritative     = $::powerdns::params::authoritative,
     $recursor          = $::powerdns::params::recursor,
     $backend           = $::powerdns::params::backend,
     $backend_install   = $::powerdns::params::backend_install,
@@ -14,7 +14,7 @@ class powerdns (
   ) inherits powerdns::params {
 
   # do some basic checks
-  if $authorative == true {
+  if $authoritative == true {
     if $db_root_password == '' { fail("Database root password can't be empty") }
     if $db_username == '' { fail("Database username can't be empty") }
     if $db_password == '' { fail("Database password can't be empty") }
@@ -25,18 +25,18 @@ class powerdns (
     include ::powerdns::repo
   }
 
-  if $authorative == true {
-    include ::powerdns::authorative
+  if $authoritative == true {
+    include ::powerdns::authoritative
   }
 
   if $recursor == true {
     include ::powerdns::recursor
   }
 
-  # Set up Hiera. Even though it's not necessary to explicitly set $type for the authorative
+  # Set up Hiera. Even though it's not necessary to explicitly set $type for the authoritative
   # config, it is added for clarity.
   $powerdns_auth_config = hiera('powerdns::auth::config', {})
-  $powerdns_auth_defaults = { 'type' => 'authorative' }
+  $powerdns_auth_defaults = { 'type' => 'authoritative' }
   create_resources(powerdns::config, $powerdns_auth_config, $powerdns_auth_defaults)
 
   # Set up Hiera for the recursor.

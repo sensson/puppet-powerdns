@@ -13,16 +13,16 @@ describe 'powerdns', :type => :class do
 
         case facts[:osfamily]
         when 'RedHat'
-          authorative_package_name = 'pdns'
-          authorative_service_name = 'pdns'
-          authorative_config = '/etc/pdns/pdns.conf'
+          authoritative_package_name = 'pdns'
+          authoritative_service_name = 'pdns'
+          authoritative_config = '/etc/pdns/pdns.conf'
           recursor_package_name = 'pdns-recursor'
           recursor_service_name = 'pdns-recursor'
           recursor_config = '/etc/pdns-recursor/recursor.conf'
         when 'Debian'
-          authorative_package_name = 'pdns-server'
-          authorative_service_name = 'pdns'
-          authorative_config = '/etc/powerdns/pdns.conf'
+          authoritative_package_name = 'pdns-server'
+          authoritative_service_name = 'pdns'
+          authoritative_config = '/etc/powerdns/pdns.conf'
           recursor_package_name = 'pdns-recursor'
           recursor_service_name = 'pdns-recursor'
           recursor_config = '/etc/powerdns/recursor.conf'
@@ -35,7 +35,7 @@ describe 'powerdns', :type => :class do
         end
 
         context "powerdns class with parameters" do
-          let(:params) {{ 
+          let(:params) {{
             :db_root_password => 'foobar',
             :db_username => 'foo',
             :db_password => 'bar'
@@ -60,15 +60,15 @@ describe 'powerdns', :type => :class do
             it { is_expected.to contain_apt__source('powerdns-recursor') }
           end
 
-          # Check the authorative server
-          it { is_expected.to contain_class('powerdns::authorative') }
-          it { is_expected.to contain_package(authorative_package_name).with('ensure' => 'installed') }
-          it { is_expected.to contain_service(authorative_service_name).with('ensure' => 'running') }
-          it { is_expected.to contain_service(authorative_service_name).that_requires('Package[%s]' % [authorative_package_name]) }
+          # Check the authoritative server
+          it { is_expected.to contain_class('powerdns::authoritative') }
+          it { is_expected.to contain_package(authoritative_package_name).with('ensure' => 'installed') }
+          it { is_expected.to contain_service(authoritative_service_name).with('ensure' => 'running') }
+          it { is_expected.to contain_service(authoritative_service_name).that_requires('Package[%s]' % [authoritative_package_name]) }
         end
 
         context "powerdns class with mysql backend" do
-          let(:params) {{ 
+          let(:params) {{
             :db_root_password => 'foobar',
             :db_username => 'foo',
             :db_password => 'bar',
@@ -118,28 +118,28 @@ describe 'powerdns', :type => :class do
             'value' => 'select account from supermasters where ip=\'%s\''
           ) }
 
-          it { is_expected.to contain_file_line('powerdns-config-gmysql-dbname-powerdns-%s' % [ authorative_config ]) }
-          it { is_expected.to contain_file_line('powerdns-config-gmysql-password-bar-%s' % [ authorative_config ]) }
-          it { is_expected.to contain_file_line('powerdns-config-gmysql-supermaster-query-select account from supermasters where ip=\'%s\'-%s'  % [ '%s', authorative_config ]) }
-          it { is_expected.to contain_file_line('powerdns-config-gmysql-user-foo-%s' % [ authorative_config ]) }
-          it { is_expected.to contain_file_line('powerdns-config-launch-gmysql-%s' % [ authorative_config ]) }
+          it { is_expected.to contain_file_line('powerdns-config-gmysql-dbname-powerdns-%s' % [ authoritative_config ]) }
+          it { is_expected.to contain_file_line('powerdns-config-gmysql-password-bar-%s' % [ authoritative_config ]) }
+          it { is_expected.to contain_file_line('powerdns-config-gmysql-supermaster-query-select account from supermasters where ip=\'%s\'-%s'  % [ '%s', authoritative_config ]) }
+          it { is_expected.to contain_file_line('powerdns-config-gmysql-user-foo-%s' % [ authoritative_config ]) }
+          it { is_expected.to contain_file_line('powerdns-config-launch-gmysql-%s' % [ authoritative_config ]) }
 
         end
 
         # Test the recursor
-        context "powerdns class with the recursor enabled and the authorative server disabled" do
-          let(:params) {{ 
+        context "powerdns class with the recursor enabled and the authoritative server disabled" do
+          let(:params) {{
             :db_root_password => 'foobar',
             :db_username => 'foo',
             :db_password => 'bar',
             :recursor => true,
-            :authorative => false,
+            :authoritative => false,
           }}
 
           it { is_expected.to compile.with_all_deps }
           it { is_expected.to contain_class('powerdns::params') }
 
-          # Check the authorative server
+          # Check the authoritative server
           it { is_expected.to contain_class('powerdns::recursor') }
           it { is_expected.to contain_package(recursor_package_name).with('ensure' => 'installed') }
           it { is_expected.to contain_service(recursor_service_name).with('ensure' => 'running') }
@@ -148,41 +148,41 @@ describe 'powerdns', :type => :class do
 
         # Test errors
         context "powerdns class with an empty database username" do
-          let(:params) {{ 
+          let(:params) {{
             :db_root_password => 'foobar',
             :db_username => '',
             :db_password => 'bar'
           }}
-          
+
           it 'fails' do
             expect { subject.call } .to raise_error(/Database username can't be empty/)
           end
         end
 
         context "powerdns class without database password" do
-          let(:params) {{ 
+          let(:params) {{
             :db_root_password => 'foobar',
             :db_username => 'foo'
           }}
-          
+
           it 'fails' do
             expect { subject.call } .to raise_error(/Database password can't be empty/)
           end
         end
 
         context "powerdns class with an unsupported backend" do
-          let(:params) {{ 
+          let(:params) {{
             :db_root_password => 'foobar',
             :db_username => 'foo',
             :db_password => 'bar',
             :backend => 'awesomedb'
           }}
-          
+
           it 'fails' do
             expect { subject.call } .to raise_error(/is not supported/)
           end
         end
       end
-    end 
+    end
   end
 end

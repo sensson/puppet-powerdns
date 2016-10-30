@@ -1,6 +1,6 @@
 # powerdns::params
 class powerdns::params {
-  $authorative = true
+  $authoritative = true
   $recursor = false
   $backend = 'mysql'
   $backend_install = true
@@ -14,17 +14,17 @@ class powerdns::params {
 
   case $::operatingsystem {
     'centos': {
-      $authorative_package = 'pdns'
-      $authorative_service = 'pdns'
-      $authorative_config = '/etc/pdns/pdns.conf'
+      $authoritative_package = 'pdns'
+      $authoritative_service = 'pdns'
+      $authoritative_config = '/etc/pdns/pdns.conf'
       $recursor_package = 'pdns-recursor'
       $recursor_service = 'pdns-recursor'
       $recursor_config = '/etc/pdns-recursor/recursor.conf'
     }
     'ubuntu': {
-      $authorative_package = 'pdns-server'
-      $authorative_service = 'pdns'
-      $authorative_config = '/etc/powerdns/pdns.conf'
+      $authoritative_package = 'pdns-server'
+      $authoritative_service = 'pdns'
+      $authoritative_config = '/etc/powerdns/pdns.conf'
       $recursor_package = 'pdns-recursor'
       $recursor_service = 'pdns-recursor'
       $recursor_config = '/etc/powerdns/recursor.conf'

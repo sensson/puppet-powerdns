@@ -1,7 +1,7 @@
 require 'spec_helper_acceptance'
 
 describe 'powerdns class' do
-  context 'authorative server' do
+  context 'authoritative server' do
     # Using puppet_apply as a helper
     it 'should work idempotently with no errors' do
       pp = <<-EOS
@@ -12,9 +12,9 @@ describe 'powerdns class' do
 
       # This makes sure the second test can run successfully
       # on Debian-based systems. Debian has the odd tendency
-      # to start services before they are configured. 
-      powerdns::config { 'authorative-local-port':
-        type => 'authorative',
+      # to start services before they are configured.
+      powerdns::config { 'authoritative-local-port':
+        type => 'authoritative',
         setting => 'local-port',
         value => 54,
       }
@@ -30,7 +30,7 @@ describe 'powerdns class' do
     it 'should work idempotently with no errors' do
       pp = <<-EOS
       class { 'powerdns':
-        authorative => false,
+        authoritative => false,
         recursor => true,
       }
       EOS
