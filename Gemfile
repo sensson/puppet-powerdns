@@ -12,6 +12,7 @@ group :test do
   gem 'simplecov', '>= 0.11.0'
   gem 'simplecov-console'
   gem 'json_pure', '<= 2.0.1' if RUBY_VERSION < '2.0.0'
+  gem 'public_suffix', '<= 1.4.6' if RUBY_VERSION < '2.0.0'
 
   gem "puppet-lint-absolute_classname-check"
   gem "puppet-lint-leading_zero-check"
