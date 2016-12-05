@@ -10,7 +10,6 @@ class powerdns (
     $db_name           = $::powerdns::params::db_name,
     $db_host           = $::powerdns::params::db_host,
     $custom_repo       = $::powerdns::params::custom_repo,
-    $supermaster_query = $::powerdns::params::supermaster_query,
   ) inherits powerdns::params {
 
   # do some basic checks

@@ -33,13 +33,6 @@ class powerdns::backends::mysql inherits powerdns {
     type    => 'authoritative',
   }
 
-  powerdns::config { 'gmysql-supermaster-query':
-    ensure  => present,
-    setting => 'gmysql-supermaster-query',
-    value   => $::powerdns::supermaster_query,
-    type    => 'authoritative',
-  }
-
   # set up the powerdns backend
   package { 'pdns-backend-mysql':
     ensure  => installed,

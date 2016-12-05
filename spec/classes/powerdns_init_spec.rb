@@ -114,13 +114,9 @@ describe 'powerdns', :type => :class do
           it { is_expected.to contain_powerdns__config('gmysql-password').with('value' => 'bar') }
           it { is_expected.to contain_powerdns__config('gmysql-user').with('value' => 'foo') }
           it { is_expected.to contain_powerdns__config('launch').with('value' => 'gmysql') }
-          it { is_expected.to contain_powerdns__config('gmysql-supermaster-query').with(
-            'value' => 'select account from supermasters where ip=\'%s\''
-          ) }
 
           it { is_expected.to contain_file_line('powerdns-config-gmysql-dbname-powerdns-%s' % [ authoritative_config ]) }
           it { is_expected.to contain_file_line('powerdns-config-gmysql-password-bar-%s' % [ authoritative_config ]) }
-          it { is_expected.to contain_file_line('powerdns-config-gmysql-supermaster-query-select account from supermasters where ip=\'%s\'-%s'  % [ '%s', authoritative_config ]) }
           it { is_expected.to contain_file_line('powerdns-config-gmysql-user-foo-%s' % [ authoritative_config ]) }
           it { is_expected.to contain_file_line('powerdns-config-launch-gmysql-%s' % [ authoritative_config ]) }
 

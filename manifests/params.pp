@@ -10,7 +10,6 @@ class powerdns::params {
   $db_name = 'powerdns'
   $db_host = 'localhost'
   $custom_repo = false
-  $supermaster_query = 'select account from supermasters where ip=\'%s\''
 
   case $::operatingsystem {
     'centos': {
