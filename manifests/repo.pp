@@ -33,8 +33,10 @@ class powerdns::repo {
       }
     }
 
-    'ubuntu': {
+    'ubuntu', 'debian': {
       include ::apt
+
+      $os = downcase($::operatingsystem)
 
       # Make sure the repo's are added before we're managing packages
       # puppet-lint seems to error out on spaces here (bug?) so it looks a bit dodgy
@@ -48,7 +50,7 @@ class powerdns::repo {
 
       apt::source { 'powerdns':
         ensure       => present,
-        location     => 'http://repo.powerdns.com/ubuntu',
+        location     => "http://repo.powerdns.com/${os}",
         repos        => 'main',
         release      => "${::lsbdistcodename}-auth-40",
         architecture => 'amd64',
@@ -57,7 +59,7 @@ class powerdns::repo {
 
       apt::source { 'powerdns-recursor':
         ensure       => present,
-        location     => 'http://repo.powerdns.com/ubuntu',
+        location     => "http://repo.powerdns.com/${os}",
         repos        => 'main',
         release      => "${::lsbdistcodename}-rec-40",
         architecture => 'amd64',

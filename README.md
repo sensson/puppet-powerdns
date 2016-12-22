@@ -162,6 +162,7 @@ This module has been tested on:
 * CentOS 7
 * Ubuntu 14.04
 * Ubuntu 16.04
+* Debian 8
 
 ## Development
 
@@ -208,6 +209,7 @@ BEAKER_destroy=onpass bundle exec rake beaker:centos6
 BEAKER_destroy=onpass bundle exec rake beaker:centos7
 BEAKER_destroy=onpass bundle exec rake beaker:ubuntu1404
 BEAKER_destroy=onpass bundle exec rake beaker:ubuntu1604
+BEAKER_destroy=onpass bundle exec rake beaker:debian8
 ```
 
 We recommend specifying BEAKER_destroy=onpass as it will keep the

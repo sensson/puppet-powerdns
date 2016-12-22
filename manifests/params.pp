@@ -20,7 +20,7 @@ class powerdns::params {
       $recursor_service = 'pdns-recursor'
       $recursor_config = '/etc/pdns-recursor/recursor.conf'
     }
-    'ubuntu': {
+    'ubuntu', 'debian': {
       $authoritative_package = 'pdns-server'
       $authoritative_service = 'pdns'
       $authoritative_config = '/etc/powerdns/pdns.conf'
