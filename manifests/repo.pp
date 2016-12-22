@@ -33,7 +33,7 @@ class powerdns::repo {
       }
     }
 
-    'ubuntu': {
+    /^(ubuntu|Debian)$/: {
       include ::apt
 
       # Make sure the repo's are added before we're managing packages
@@ -48,7 +48,7 @@ class powerdns::repo {
 
       apt::source { 'powerdns':
         ensure       => present,
-        location     => 'http://repo.powerdns.com/ubuntu',
+        location     => "http://repo.powerdns.com/${::operatingsystem}",
         repos        => 'main',
         release      => "${::lsbdistcodename}-auth-40",
         architecture => 'amd64',
@@ -57,7 +57,7 @@ class powerdns::repo {
 
       apt::source { 'powerdns-recursor':
         ensure       => present,
-        location     => 'http://repo.powerdns.com/ubuntu',
+        location     => "http://repo.powerdns.com/${::operatingsystem}",
         repos        => 'main',
         release      => "${::lsbdistcodename}-rec-40",
         architecture => 'amd64',
