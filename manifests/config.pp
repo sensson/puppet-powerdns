@@ -27,7 +27,7 @@ define powerdns::config(
     }
   }
 
-  file_line { "powerdns-config-${setting}-${value}-${path}":
+  file_line { "powerdns-config-${setting}-${path}":
     ensure  => $ensure,
     path    => $path,
     line    => $line,

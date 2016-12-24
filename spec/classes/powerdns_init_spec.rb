@@ -115,10 +115,10 @@ describe 'powerdns', :type => :class do
           it { is_expected.to contain_powerdns__config('gmysql-user').with('value' => 'foo') }
           it { is_expected.to contain_powerdns__config('launch').with('value' => 'gmysql') }
 
-          it { is_expected.to contain_file_line('powerdns-config-gmysql-dbname-powerdns-%s' % [ authoritative_config ]) }
-          it { is_expected.to contain_file_line('powerdns-config-gmysql-password-bar-%s' % [ authoritative_config ]) }
-          it { is_expected.to contain_file_line('powerdns-config-gmysql-user-foo-%s' % [ authoritative_config ]) }
-          it { is_expected.to contain_file_line('powerdns-config-launch-gmysql-%s' % [ authoritative_config ]) }
+          it { is_expected.to contain_file_line('powerdns-config-gmysql-dbname-%s' % [ authoritative_config ]) }
+          it { is_expected.to contain_file_line('powerdns-config-gmysql-password-%s' % [ authoritative_config ]) }
+          it { is_expected.to contain_file_line('powerdns-config-gmysql-user-%s' % [ authoritative_config ]) }
+          it { is_expected.to contain_file_line('powerdns-config-launch-%s' % [ authoritative_config ]) }
 
         end
 
