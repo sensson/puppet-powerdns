@@ -1,7 +1,7 @@
 # the powerdns recursor
-class powerdns::recursor inherits powerdns {
+class powerdns::recursor ($package_ensure = $powerdns::params::default_package_ensure) inherits powerdns {
   package { $::powerdns::params::recursor_package:
-    ensure => installed,
+    ensure => $package_ensure,
   }
 
   service { $::powerdns::params::recursor_service:

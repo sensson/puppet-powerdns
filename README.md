@@ -101,6 +101,12 @@ Don't manage repo with this module. Defaults to false.
 
 Set query to select supermasters. Defaults to 'select account from supermasters where ip=\'%s\''.
 
+#### powerdns::authoritative and powerdns::recursor
+
+##### `package_ensure`
+
+You can set the package version to be installed. Defaults to 'installed'.
+
 ### Defines
 
 #### powerdns::config
@@ -144,6 +150,8 @@ powerdns::db_root_password: 's0m4r4nd0mp4ssw0rd'
 powerdns::db_username: 'powerdns'
 powerdns::db_password: 's0m4r4nd0mp4ssw0rd'
 powerdns::recursor: true
+powerdns::recursor::package_ensure: 'latest'
+powerdns::authoritative::package_ensure: 'latest'
 
 powerdns::auth::config:
   gmysql-dnssec:

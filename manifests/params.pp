@@ -10,6 +10,7 @@ class powerdns::params {
   $db_name = 'powerdns'
   $db_host = 'localhost'
   $custom_repo = false
+  $default_package_ensure = installed
 
   case $::operatingsystem {
     'centos': {
