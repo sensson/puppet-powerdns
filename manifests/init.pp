@@ -14,7 +14,9 @@ class powerdns (
 
   # do some basic checks
   if $authoritative == true {
-    if $db_root_password == '' { fail("Database root password can't be empty") }
+    if $backend_install == true {
+      if $db_root_password == '' { fail("Database root password can't be empty") }
+    }
     if $db_username == '' { fail("Database username can't be empty") }
     if $db_password == '' { fail("Database password can't be empty") }
   }
