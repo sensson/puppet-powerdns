@@ -1,3 +1,17 @@
+## 0.0.8
+
+### Summary
+
+This release adds 1 feature and solves 3 bugs.
+
+#### Features
+- Added support for `ensure` to the recursor and authoritative package
+
+#### Bugfixes
+- Make powerdns::config more specific
+- Pin rake tests to simplecov-console to 0.3.1
+- Only fail on `db_root_password` if `backend_install` is true
+
 ## 0.0.7
 
 ### Summary
@@ -9,7 +23,7 @@ This release adds support for Debian 8.
 
 #### Bugfixes
 - Only try to set config if the corresponding services are used
-- Removed our default supermaster-query setting as it was causing issues on 4.x.
+- Removed our default supermaster-query setting as it was causing issues on 4.x
 
 ## 0.0.6
 
