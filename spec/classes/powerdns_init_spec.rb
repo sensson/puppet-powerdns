@@ -64,6 +64,7 @@ describe 'powerdns', :type => :class do
           it { is_expected.to contain_class('powerdns::authoritative') }
           it { is_expected.to contain_package(authoritative_package_name).with('ensure' => 'installed') }
           it { is_expected.to contain_service(authoritative_service_name).with('ensure' => 'running') }
+          it { is_expected.to contain_service(authoritative_service_name).with('enable' => 'true') }
           it { is_expected.to contain_service(authoritative_service_name).that_requires('Package[%s]' % [authoritative_package_name]) }
         end
 
@@ -139,6 +140,7 @@ describe 'powerdns', :type => :class do
           it { is_expected.to contain_class('powerdns::recursor') }
           it { is_expected.to contain_package(recursor_package_name).with('ensure' => 'installed') }
           it { is_expected.to contain_service(recursor_service_name).with('ensure' => 'running') }
+          it { is_expected.to contain_service(recursor_service_name).with('enable' => 'true') }
           it { is_expected.to contain_service(recursor_service_name).that_requires('Package[%s]' % [recursor_package_name]) }
         end
 
