@@ -16,8 +16,8 @@ class powerdns::authoritative ($package_ensure = $powerdns::params::default_pack
   }
 
   service { $::powerdns::params::authoritative_service:
-    enable  => true,
     ensure  => running,
+    enable  => true,
     require => Package[$::powerdns::params::authoritative_package],
   }
 }
