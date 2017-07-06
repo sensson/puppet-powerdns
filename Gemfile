@@ -16,7 +16,7 @@ if RUBY_VERSION < '2.0.0'
   gem 'metadata-json-lint', '1.1.0'
   gem 'rubocop', '<= 0.41.2'
 else
-  gem 'metadata-json-lint'
+  gem 'metadata-json-lint', '< 2.0.0'
   gem 'rubocop', '>= 0.48.1'
 end
 
