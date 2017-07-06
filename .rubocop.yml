@@ -1,0 +1,28 @@
+AllCops:
+  Exclude:
+    - '**/*.erb'
+    - 'vendor/**/*'
+    - 'spec/fixtures/**/*'
+
+# Bug: https://github.com/bbatsov/rubocop/issues/3752
+# This is only added in rubocop 0.46
+Bundler/DuplicatedGem:
+  Enabled: false
+
+# Support for 1.9.3
+# https://github.com/bbatsov/ruby-style-guide#percent-i
+Style/SymbolArray:
+  Enabled: false
+
+# This fails on older Puppet versions for some reason
+Style/WordArray:
+  Enabled: false
+
+# This isn't really necessary as they limit us in how
+# long text can be when describing a test
+Metrics/BlockLength:
+  Enabled: false
+  
+# There is no real reason to check for line length
+Metrics/LineLength:
+  Enabled: false
