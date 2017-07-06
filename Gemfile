@@ -5,8 +5,8 @@ gem 'facter', '>= 1.7.0'
 gem 'puppet', puppetversion
 gem 'puppet-lint', '>= 1.0.0'
 gem 'puppetlabs_spec_helper', '>= 1.0.0'
-gem 'rspec-puppet'
-gem 'rspec-puppet-facts'
+gem 'rspec-puppet', '<= 2.5.0'
+gem 'rspec-puppet-facts', '< 1.8.0'
 gem 'safe_yaml', '~> 1.0.4'
 gem 'simplecov', require: false
 gem 'simplecov-console', require: false
