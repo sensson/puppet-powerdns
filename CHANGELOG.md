@@ -1,3 +1,12 @@
+## 0.0.9
+
+### Summary
+
+This release adds 1 feature.
+
+#### Features
+- Added `enable` for the recursor and authoritative service
+
 ## 0.0.8
 
 ### Summary
