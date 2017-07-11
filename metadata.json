@@ -1,6 +1,6 @@
 {
     "name": "sensson-powerdns",
-    "version": "0.0.9",
+    "version": "0.0.10",
     "author": "sensson",
     "license": "Apache-2.0",
     "summary": "A module to install and configure PowerDNS 4.x authoritative server and recursor",

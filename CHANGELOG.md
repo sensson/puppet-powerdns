@@ -1,3 +1,9 @@
+## 0.0.10
+
+### Summary
+
+Version bump to update forge.puppet.com.
+
 ## 0.0.9
 
 ### Summary
