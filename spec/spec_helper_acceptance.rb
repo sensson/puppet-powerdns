@@ -13,33 +13,22 @@ RSpec.configure do |c|
   # Configure all nodes in nodeset
   c.before :suite do
     hosts.each do |host|
-      # This is our workaround for Ubuntu 16.04 servers
-      if host['platform'] == 'ubuntu-1604-amd64'
-        unless ENV['BEAKER_provision'] == 'no'
-          # Install the repo and the puppet agent package
-          on host, 'wget -O /tmp/puppetlabs-release-pc1-xenial.deb https://apt.puppetlabs.com/puppetlabs-release-pc1-xenial.deb'
-          on host, 'dpkg -i /tmp/puppetlabs-release-pc1-xenial.deb'
-          on host, 'apt-get update'
-          install_package(host, 'puppet-agent')
-          
-          # Sorry, it's a symlink
-          on host, 'ln -s /opt/puppetlabs/bin/puppet /usr/bin/puppet'
-          on host, 'puppet --version'
+      run_puppet_install_helper unless ENV['BEAKER_provision'] == 'no'
 
-          # Override the module directory as this is required for Puppet 4
-          on host, 'mkdir -p /etc/puppet/modules'
-          on host, 'rm -rf /opt/puppetlabs/puppet/modules'
-          on host, 'ln -s /etc/puppet/modules/ /opt/puppetlabs/puppet/modules'
-        end
-      else
-        run_puppet_install_helper unless ENV['BEAKER_provision'] == 'no'
-      end
-
+      # Install rsync
       install_package(host, 'rsync')
+
+      # A workaround -- this is required for backwards compatibility
+      on host, 'mkdir -p /etc/puppet/modules/'
+      on host, 'mkdir -p /etc/puppetlabs/code/'
+      on host, 'rm -rf /etc/puppetlabs/code/modules'
+      on host, 'ln -s /etc/puppet/modules/ /etc/puppetlabs/code/'
+
+      # Synchronise modules
       rsync_to(host, fixture_modules, '/etc/puppet/modules/')
     end
 
     # Install module and dependencies
-    puppet_module_install(:source => proj_root, :module_name => 'powerdns')
+    puppet_module_install(source: proj_root, module_name: 'powerdns')
   end
 end
