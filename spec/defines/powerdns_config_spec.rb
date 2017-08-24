@@ -19,7 +19,8 @@ describe 'powerdns::config' do
           'class { "::powerdns":
             db_root_password => "foobar",
             db_username => "foo",
-            db_password => "bar"
+            db_password => "bar",
+            recursor => true,
           }'
         end
 
