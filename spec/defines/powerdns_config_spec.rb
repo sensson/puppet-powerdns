@@ -99,7 +99,7 @@ describe 'powerdns::config' do
           end
 
           it 'fails' do
-            expect { subject.call } .to raise_error(/Value can't be empty./)
+            expect { subject.call } .to raise_error(/Value for empty can't be empty./)
           end
         end
 
