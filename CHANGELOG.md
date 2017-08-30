@@ -1,3 +1,17 @@
+## 0.0.11
+
+### Summary
+
+This release officially drops support for Puppet 2.
+
+#### Features
+- Allow the `only-notify` PowerDNS configuration setting to be empty.
+- Improved error messages on failure when setting configurations.
+
+#### Bugfixes
+- Added the recursor to our test suite.
+- Update Ruby versions in our test suite.
+
 ## 0.0.10
 
 ### Summary
