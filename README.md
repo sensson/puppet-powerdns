@@ -28,14 +28,14 @@ example below needs to be adjusted to use the ip addresses of your server.
 This may fail the first time on Debian-based distro's.
 
 ```
-powerdns::config { 'authoritative-listen-address':
+powerdns::config { 'authoritative-local-address':
 	type => 'authoritative',
-	setting => 'listen-address',
+	setting => 'local-address',
 	value => '127.0.0.1',
 }
-powerdns::config { 'recursor-listen-address':
+powerdns::config { 'recursor-local-address':
 	type => 'recursor',
-	setting => 'listen-address',
+	setting => 'local-address',
 	value => '127.0.0.2',
 }
 class { 'powerdns':
