@@ -1,14 +1,14 @@
+override_facts = {
+  root_home: '/root'
+}
+
 require 'spec_helper'
-describe 'powerdns', :type => :class do
+describe 'powerdns', type: :class do
   context 'supported operating systems' do
     on_supported_os.each do |os, facts|
       context "on #{os}" do
         let(:facts) do
-          facts
-
-          facts.merge({
-            :root_home => '/root',
-          })
+          facts.merge(override_facts)
         end
 
         case facts[:osfamily]
@@ -18,28 +18,28 @@ describe 'powerdns', :type => :class do
           authoritative_config = '/etc/pdns/pdns.conf'
           recursor_package_name = 'pdns-recursor'
           recursor_service_name = 'pdns-recursor'
-          recursor_config = '/etc/pdns-recursor/recursor.conf'
         when 'Debian'
           authoritative_package_name = 'pdns-server'
           authoritative_service_name = 'pdns'
           authoritative_config = '/etc/powerdns/pdns.conf'
           recursor_package_name = 'pdns-recursor'
           recursor_service_name = 'pdns-recursor'
-          recursor_config = '/etc/powerdns/recursor.conf'
         end
 
-        context "powerdns class without parameters" do
+        context 'powerdns class without parameters' do
           it 'fails' do
             expect { subject.call } .to raise_error(/Database root password can't be empty/)
           end
         end
 
-        context "powerdns class with parameters" do
-          let(:params) {{
-            :db_root_password => 'foobar',
-            :db_username => 'foo',
-            :db_password => 'bar'
-          }}
+        context 'powerdns class with parameters' do
+          let(:params) do
+            {
+              db_root_password: 'foobar',
+              db_username: 'foo',
+              db_password: 'bar'
+            }
+          end
 
           it { is_expected.to compile.with_all_deps }
           it { is_expected.to contain_class('powerdns::params') }
@@ -65,24 +65,22 @@ describe 'powerdns', :type => :class do
           it { is_expected.to contain_package(authoritative_package_name).with('ensure' => 'installed') }
           it { is_expected.to contain_service(authoritative_service_name).with('ensure' => 'running') }
           it { is_expected.to contain_service(authoritative_service_name).with('enable' => 'true') }
-          it { is_expected.to contain_service(authoritative_service_name).that_requires('Package[%s]' % [authoritative_package_name]) }
+          it { is_expected.to contain_service(authoritative_service_name).that_requires(format('Package[%s]', authoritative_package_name)) }
         end
 
-        context "powerdns class with mysql backend" do
-          let(:params) {{
-            :db_root_password => 'foobar',
-            :db_username => 'foo',
-            :db_password => 'bar',
-            :backend => 'mysql'
-          }}
+        context 'powerdns class with mysql backend' do
+          let(:params) do
+            {
+              db_root_password: 'foobar',
+              db_username: 'foo',
+              db_password: 'bar',
+              backend: 'mysql'
+            }
+          end
 
           it { is_expected.to contain_class('powerdns::backends::mysql') }
           it { is_expected.to contain_package('pdns-backend-mysql').with('ensure' => 'installed') }
-          it { is_expected.to contain_mysql__db('powerdns').with(
-              'user' => 'foo',
-              'password' => 'bar',
-              'host' => 'localhost'
-            ) }
+          it { is_expected.to contain_mysql__db('powerdns').with('user' => 'foo', 'password' => 'bar', 'host' => 'localhost') }
 
           # We expect the following tables to be created
           it { is_expected.to contain_powerdns__backends__mysql__create_table('comments') }
@@ -116,22 +114,23 @@ describe 'powerdns', :type => :class do
           it { is_expected.to contain_powerdns__config('gmysql-user').with('value' => 'foo') }
           it { is_expected.to contain_powerdns__config('launch').with('value' => 'gmysql') }
 
-          it { is_expected.to contain_file_line('powerdns-config-gmysql-dbname-%s' % [ authoritative_config ]) }
-          it { is_expected.to contain_file_line('powerdns-config-gmysql-password-%s' % [ authoritative_config ]) }
-          it { is_expected.to contain_file_line('powerdns-config-gmysql-user-%s' % [ authoritative_config ]) }
-          it { is_expected.to contain_file_line('powerdns-config-launch-%s' % [ authoritative_config ]) }
-
+          it { is_expected.to contain_file_line(format('powerdns-config-gmysql-dbname-%s', authoritative_config)) }
+          it { is_expected.to contain_file_line(format('powerdns-config-gmysql-password-%s', authoritative_config)) }
+          it { is_expected.to contain_file_line(format('powerdns-config-gmysql-user-%s', authoritative_config)) }
+          it { is_expected.to contain_file_line(format('powerdns-config-launch-%s', authoritative_config)) }
         end
 
         # Test the recursor
-        context "powerdns class with the recursor enabled and the authoritative server disabled" do
-          let(:params) {{
-            :db_root_password => 'foobar',
-            :db_username => 'foo',
-            :db_password => 'bar',
-            :recursor => true,
-            :authoritative => false,
-          }}
+        context 'powerdns class with the recursor enabled and the authoritative server disabled' do
+          let(:params) do
+            {
+              db_root_password: 'foobar',
+              db_username: 'foo',
+              db_password: 'bar',
+              recursor: true,
+              authoritative: false
+            }
+          end
 
           it { is_expected.to compile.with_all_deps }
           it { is_expected.to contain_class('powerdns::params') }
@@ -141,40 +140,46 @@ describe 'powerdns', :type => :class do
           it { is_expected.to contain_package(recursor_package_name).with('ensure' => 'installed') }
           it { is_expected.to contain_service(recursor_service_name).with('ensure' => 'running') }
           it { is_expected.to contain_service(recursor_service_name).with('enable' => 'true') }
-          it { is_expected.to contain_service(recursor_service_name).that_requires('Package[%s]' % [recursor_package_name]) }
+          it { is_expected.to contain_service(recursor_service_name).that_requires(format('Package[%s]', recursor_package_name)) }
         end
 
         # Test errors
-        context "powerdns class with an empty database username" do
-          let(:params) {{
-            :db_root_password => 'foobar',
-            :db_username => '',
-            :db_password => 'bar'
-          }}
+        context 'powerdns class with an empty database username' do
+          let(:params) do
+            {
+              db_root_password: 'foobar',
+              db_username: '',
+              db_password: 'bar'
+            }
+          end
 
           it 'fails' do
             expect { subject.call } .to raise_error(/Database username can't be empty/)
           end
         end
 
-        context "powerdns class without database password" do
-          let(:params) {{
-            :db_root_password => 'foobar',
-            :db_username => 'foo'
-          }}
+        context 'powerdns class without database password' do
+          let(:params) do
+            {
+              db_root_password: 'foobar',
+              db_username: 'foo'
+            }
+          end
 
           it 'fails' do
             expect { subject.call } .to raise_error(/Database password can't be empty/)
           end
         end
 
-        context "powerdns class with an unsupported backend" do
-          let(:params) {{
-            :db_root_password => 'foobar',
-            :db_username => 'foo',
-            :db_password => 'bar',
-            :backend => 'awesomedb'
-          }}
+        context 'powerdns class with an unsupported backend' do
+          let(:params) do
+            {
+              db_root_password: 'foobar',
+              db_username: 'foo',
+              db_password: 'bar',
+              backend: 'awesomedb'
+            }
+          end
 
           it 'fails' do
             expect { subject.call } .to raise_error(/is not supported/)
