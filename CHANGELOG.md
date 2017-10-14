@@ -1,3 +1,16 @@
+## 0.0.12
+
+### Summary
+
+We have dropped Ruby 1.9.3 from our tests and added Rubocop coverage to
+ensure we write decent code where possible.
+
+### Features
+- Rubocop coverage for all Ruby code in this module.
+
+### Bugfixes
+- The README wrongly mentioned listen-address instead of local-address
+
 ## 0.0.11
 
 ### Summary

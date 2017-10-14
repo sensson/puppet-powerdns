@@ -35,9 +35,7 @@ end
 
 desc 'Run metadata_lint, lint, validate, and spec tests.'
 task :test do
-  # This should be changed once we drop support for 1.9.3 to
-  # %i[metadata_lint lint validate rubocop spec].each
-  [:metadata_lint, :lint, :validate, :spec].each do |test|
+  %i[metadata_lint lint validate rubocop spec].each do |test|
     Rake::Task[test].invoke
   end
 end

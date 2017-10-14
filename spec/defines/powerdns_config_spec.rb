@@ -1,14 +1,14 @@
+override_facts = {
+  root_home: '/root'
+}
+
 require 'spec_helper'
 describe 'powerdns::config' do
   context 'supported operating systems' do
     on_supported_os.each do |os, facts|
       context "on #{os}" do
         let(:facts) do
-          facts
-
-          facts.merge({
-            :root_home => '/root',
-          })
+          facts.merge(override_facts)
         end
 
         let :title do
@@ -26,22 +26,16 @@ describe 'powerdns::config' do
 
         case facts[:osfamily]
         when 'RedHat'
-          authoritative_package_name = 'pdns'
-          authoritative_service_name = 'pdns'
           authoritative_config = '/etc/pdns/pdns.conf'
-          recursor_package_name = 'pdns-recursor'
-          recursor_service_name = 'pdns-recursor'
           recursor_config = '/etc/pdns-recursor/recursor.conf'
-        when 'Debian'
-          authoritative_package_name = 'pdns-server'
           authoritative_service_name = 'pdns'
+        when 'Debian'
           authoritative_config = '/etc/powerdns/pdns.conf'
-          recursor_package_name = 'pdns-recursor'
-          recursor_service_name = 'pdns-recursor'
           recursor_config = '/etc/powerdns/recursor.conf'
+          authoritative_service_name = 'pdns'
         end
 
-        # 
+        #
         context 'powerdns::config with parameters' do
           let(:params) do
             {
@@ -50,12 +44,12 @@ describe 'powerdns::config' do
             }
           end
 
-          it { is_expected.to contain_file_line('powerdns-config-foo-%s' % [ authoritative_config ]) }
-          it { is_expected.to contain_file_line('powerdns-config-foo-%s' % [ authoritative_config ]).with_ensure('present') }
-          it { is_expected.to contain_file_line('powerdns-config-foo-%s' % [ authoritative_config ]).with_path(authoritative_config) }
-          it { is_expected.to contain_file_line('powerdns-config-foo-%s' % [ authoritative_config ]).with_line('foo=bar') }
-          it { is_expected.to contain_file_line('powerdns-config-foo-%s' % [ authoritative_config ]).with_match('^foo=') }
-          it { is_expected.to contain_file_line('powerdns-config-foo-%s' % [ authoritative_config ]).that_notifies('Service[%s]' % authoritative_service_name) }
+          it { is_expected.to contain_file_line(format('powerdns-config-foo-%s', authoritative_config)) }
+          it { is_expected.to contain_file_line(format('powerdns-config-foo-%s', authoritative_config)).with_ensure('present') }
+          it { is_expected.to contain_file_line(format('powerdns-config-foo-%s', authoritative_config)).with_path(authoritative_config) }
+          it { is_expected.to contain_file_line(format('powerdns-config-foo-%s', authoritative_config)).with_line('foo=bar') }
+          it { is_expected.to contain_file_line(format('powerdns-config-foo-%s', authoritative_config)).with_match('^foo=') }
+          it { is_expected.to contain_file_line(format('powerdns-config-foo-%s', authoritative_config)).that_notifies(format('Service[%s]', authoritative_service_name)) }
         end
 
         context 'powerdns::config with recursor type' do
@@ -67,34 +61,34 @@ describe 'powerdns::config' do
             }
           end
 
-          it { is_expected.to contain_file_line('powerdns-config-foo-%s' % [ recursor_config ]) }
+          it { is_expected.to contain_file_line(format('powerdns-config-foo-%s', recursor_config)) }
         end
 
         # Test for empty values
         context 'powerdns::config with empty value for gmysql-dnssec' do
           let(:params) do
             {
-              setting: 'gmysql-dnssec',
+              setting: 'gmysql-dnssec'
             }
           end
 
-          it { is_expected.to contain_file_line('powerdns-config-gmysql-dnssec-%s' % [ authoritative_config ]) }
+          it { is_expected.to contain_file_line(format('powerdns-config-gmysql-dnssec-%s', authoritative_config)) }
         end
 
         context 'powerdns::config with empty value for only-notify' do
           let(:params) do
             {
-              setting: 'only-notify',
+              setting: 'only-notify'
             }
           end
 
-          it { is_expected.to contain_file_line('powerdns-config-only-notify-%s' % [ authoritative_config ]) }
+          it { is_expected.to contain_file_line(format('powerdns-config-only-notify-%s', authoritative_config)) }
         end
 
         context 'powerdns::config with empty value' do
           let(:params) do
             {
-              setting: 'empty',
+              setting: 'empty'
             }
           end
 
