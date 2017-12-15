@@ -6,7 +6,10 @@ define powerdns::config(
   $type    = 'authoritative'
 ) {
 
-  if $value == '' and ! ($setting in [ 'gmysql-dnssec', 'only-notify' ]) { fail("Value for ${setting} can't be empty.") }
+  unless $ensure == 'absent' {
+    if $value == '' and ! ($setting in [ 'gmysql-dnssec', 'only-notify' ]) { fail("Value for ${setting} can't be empty.") }
+  }
+
   if $setting == 'gmysql-dnssec' { $line = $setting }
   else { $line = "${setting}=${value}" }
 
@@ -28,12 +31,13 @@ define powerdns::config(
   }
 
   file_line { "powerdns-config-${setting}-${path}":
-    ensure  => $ensure,
-    path    => $path,
-    line    => $line,
-    match   => "^${setting}=",
-    require => Package[$require_package],
-    notify  => Service[$notify_service],
-    before  => Service[$notify_service],
+    ensure            => $ensure,
+    path              => $path,
+    line              => $line,
+    match             => "^${setting}=",
+    match_for_absence => true, # ignored when ensure == 'present'
+    require           => Package[$require_package],
+    notify            => Service[$notify_service],
+    before            => Service[$notify_service],
   }
 }
