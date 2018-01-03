@@ -120,7 +120,7 @@ describe 'powerdns::config' do
           end
 
           it 'fails' do
-            expect { subject.call } .to raise_error(/is not supported as config type/)
+            expect { subject.call } .to raise_error(/expects a match for Enum\['authoritative', 'recursor'\], got/)
           end
         end
       end
