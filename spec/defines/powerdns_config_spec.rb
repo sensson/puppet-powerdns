@@ -49,6 +49,7 @@ describe 'powerdns::config' do
           it { is_expected.to contain_file_line(format('powerdns-config-foo-%<config>s', config: authoritative_config)).with_path(authoritative_config) }
           it { is_expected.to contain_file_line(format('powerdns-config-foo-%<config>s', config: authoritative_config)).with_line('foo=bar') }
           it { is_expected.to contain_file_line(format('powerdns-config-foo-%<config>s', config: authoritative_config)).with_match('^foo=') }
+          it { is_expected.to contain_file_line(format('powerdns-config-foo-%<config>s', config: authoritative_config)).with_match_for_absence(true) }
           it { is_expected.to contain_file_line(format('powerdns-config-foo-%<config>s', config: authoritative_config)).that_notifies(format('Service[%<service>s]', service: authoritative_service_name)) }
         end
 
@@ -97,6 +98,17 @@ describe 'powerdns::config' do
           end
         end
 
+        context 'powerdns::config with empty value and ensure == absent' do
+          let(:params) do
+            {
+              ensure: 'absent',
+              setting: 'foo'
+            }
+          end
+
+          it { is_expected.to contain_file_line(format('powerdns-config-foo-%<config>s', config: authoritative_config)) }
+        end
+
         # Test incorrect service type
         context 'powerdns::config with wrong type' do
           let(:params) do
@@ -108,7 +120,7 @@ describe 'powerdns::config' do
           end
 
           it 'fails' do
-            expect { subject.call } .to raise_error(/is not supported as config type/)
+            expect { subject.call } .to raise_error(/expects a match for Enum\['authoritative', 'recursor'\], got/)
           end
         end
       end
