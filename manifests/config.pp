@@ -6,7 +6,7 @@ define powerdns::config(
   $type    = 'authoritative'
 ) {
 
-  if $value == '' and ! ($setting in [ 'gmysql-dnssec', 'only-notify' ]) { fail("Value for ${setting} can't be empty.") }
+  if $value == '' and ! ($setting in [ 'gmysql-dnssec', 'only-notify', 'allow-notify-from' ]) { fail("Value for ${setting} can't be empty.") }
   if $setting == 'gmysql-dnssec' { $line = $setting }
   else { $line = "${setting}=${value}" }
 
