@@ -14,10 +14,10 @@ This will install the authoritative PowerDNS server which includes the
 MySQL server and the management of the database and its tables. This is
 the bare minimum.
 
-```
+```puppet
 class { 'powerdns':
-	db_password => 's0m4r4nd0mp4ssw0rd',
-	db_root_password => 'v3rys3c4r3',
+  db_password      => 's0m4r4nd0mp4ssw0rd',
+  db_root_password => 'v3rys3c4r3',
 }
 ```
 
@@ -27,21 +27,35 @@ example below needs to be adjusted to use the ip addresses of your server.
 
 This may fail the first time on Debian-based distro's.
 
-```
+```puppet
 powerdns::config { 'authoritative-local-address':
-	type => 'authoritative',
-	setting => 'local-address',
-	value => '127.0.0.1',
+  type    => 'authoritative',
+  setting => 'local-address',
+  value   => '127.0.0.1',
 }
 powerdns::config { 'recursor-local-address':
-	type => 'recursor',
-	setting => 'local-address',
-	value => '127.0.0.2',
+  type    => 'recursor',
+  setting => 'local-address',
+  value   => '127.0.0.2',
 }
 class { 'powerdns':
-	db_password => 's0m4r4nd0mp4ssw0rd',
-	db_root_password => 'v3rys3c4r3',
-	recursor => true,
+  db_password      => 's0m4r4nd0mp4ssw0rd',
+  db_root_password => 'v3rys3c4r3',
+  recursor         => true,
+}
+```
+
+The module also has limited support for using postgresql as the database backend.
+
+To use postgresql you must set `backend_install` and `backend_create_tables` to false.
+eg
+
+```puppet
+class { 'powerdns':
+  backend               => 'postgresql',
+  backend_install       => false,
+  backend_create_tables => false,
+  db_password           => 's0m4r4nd0mp4ssw0rd',
 }
 ```
 
@@ -64,7 +78,7 @@ Install the PowerDNS recursor. Defaults to false.
 
 ##### `backend`
 
-Choose a backend for the authoritative server. Valid values are 'mysql'. Defaults to 'mysql'.
+Choose a backend for the authoritative server. Valid values are 'mysql' and 'postgresql'. Defaults to 'mysql'.
 
 ##### `backend_install`
 
@@ -74,7 +88,7 @@ you. This requires `db_root_password`. Defaults to true.
 ##### `backend_create_tables`
 
 If set to true, it will ensure the required powerdns tables exist in your backend database.
-If your database is on a separate host, set `backend_install` and `backend_create_tables` to false.
+If your database is on a separate host or you are using the postgresql backend, set `backend_install` and `backend_create_tables` to false.
 Defaults to true.
 
 ##### `db_root_password`
@@ -120,12 +134,12 @@ All PowerDNS settings can be managed with `powerdns::config`. Depending on the b
 configuration settings by default: `launch`, `gmysql-user`, `gmysql-password`, `gmysql-dbname` and
 `gmysql-supermaster-query`. All other variables can be changed as follows:
 
-```
+```puppet
 powerdns::config { 'api':
-	ensure => present,
-	setting => 'api',
-	value => 'yes',
-	type => 'authoritative',
+  ensure  => present,
+  setting => 'api',
+  value   => 'yes',
+  type    => 'authoritative',
 }
 ```
 
