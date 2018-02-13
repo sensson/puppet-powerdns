@@ -6,7 +6,7 @@ define powerdns::config(
   Enum['authoritative', 'recursor'] $type    = 'authoritative'
 ) {
 
-  unless $ensure == 'absent' or ($setting in [ 'gmysql-dnssec', 'only-notify' ]) {
+  unless $ensure == 'absent' or ($setting in [ 'gmysql-dnssec', 'only-notify', 'allow-notify-from' ]) {
     assert_type(String[1], $value) |$_expected, $_actual| {
       fail("Value for ${setting} can't be empty.")
     }
