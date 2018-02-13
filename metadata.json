@@ -1,6 +1,6 @@
 {
     "name": "sensson-powerdns",
-    "version": "0.0.12",
+    "version": "1.0.0",
     "author": "sensson",
     "license": "Apache-2.0",
     "summary": "A module to install and configure PowerDNS 4.x authoritative server and recursor",
@@ -13,9 +13,12 @@
         { "operatingsystem": "Ubuntu", "operatingsystemrelease": [ "14.04", "16.04" ] },
         { "operatingsystem": "Debian", "operatingsystemrelease": [ "8" ] }
     ],
+    "requirements": [
+        { "name": "puppet", "version_requirement": ">= 4.7.0 < 6.0.0" }
+    ],
     "dependencies": [
         { "name": "puppetlabs/stdlib", "version_requirement": ">=4.3.2 < 5.0.0" },
-        { "name": "puppetlabs/mysql", "version_requirement": ">=3.4.0 < 4.0.0" },
+        { "name": "puppetlabs/mysql", "version_requirement": ">=3.4.0 < 6.0.0" },
         { "name": "puppetlabs/apt", "version_requirement": ">=2.0.0 < 3.0.0" }
     ]
 }

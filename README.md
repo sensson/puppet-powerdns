@@ -4,7 +4,7 @@
 
 This module can be used to configure both the recursor and authoritative
 PowerDNS 4 server. It doesn't intend to support PowerDNS 2 or 3 but the
-module supports Puppet 3, 4 and 5.
+module supports Puppet 4 and 5.
 
 ## Examples
 
@@ -186,7 +186,7 @@ If you want to contribute please:
 2. Run tests. It's always good to know that you can start with a clean slate.
 3. Add a test for your change.
 4. Make sure it passes.
-5. Push to your fork and submit a pull request.
+5. Push to your fork and submit a pull request to the `develop` branch.
 
 We can only accept pull requests with passing tests.
 

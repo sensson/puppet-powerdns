@@ -26,3 +26,7 @@ Metrics/BlockLength:
 # There is no real reason to check for line length
 Metrics/LineLength:
   Enabled: false
+
+# Disable MixinUsage
+Style/MixinUsage:
+  Enabled: false
