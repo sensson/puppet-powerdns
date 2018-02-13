@@ -1,32 +1,35 @@
 # powerdns
 class powerdns (
-    $authoritative     = $::powerdns::params::authoritative,
-    $recursor          = $::powerdns::params::recursor,
-    $backend           = $::powerdns::params::backend,
-    $backend_install   = $::powerdns::params::backend_install,
-    $db_root_password  = $::powerdns::params::db_root_password,
-    $db_username       = $::powerdns::params::db_username,
-    $db_password       = $::powerdns::params::db_password,
-    $db_name           = $::powerdns::params::db_name,
-    $db_host           = $::powerdns::params::db_host,
-    $custom_repo       = $::powerdns::params::custom_repo,
+    Boolean             $authoritative    = $::powerdns::params::authoritative,
+    Boolean             $recursor         = $::powerdns::params::recursor,
+    Enum['mysql']       $backend          = $::powerdns::params::backend,
+    Boolean             $backend_install  = $::powerdns::params::backend_install,
+    Optional[String[1]] $db_root_password = $::powerdns::params::db_root_password,
+    String[1]           $db_username      = $::powerdns::params::db_username,
+    Optional[String[1]] $db_password      = $::powerdns::params::db_password,
+    String[1]           $db_name          = $::powerdns::params::db_name,
+    String[1]           $db_host          = $::powerdns::params::db_host,
+    Boolean             $custom_repo      = $::powerdns::params::custom_repo,
   ) inherits powerdns::params {
 
-  # do some basic checks
-  if $authoritative == true {
-    if $backend_install == true {
-      if $db_root_password == '' { fail("Database root password can't be empty") }
+  # Do some additional checks. In certain cases, some parameters are no longer optional.
+  if $authoritative {
+    assert_type(String[1], $db_password) |$expected, $actual| {
+      fail("'db_password' must be a non-empty string when 'authoritative' == true")
     }
-    if $db_username == '' { fail("Database username can't be empty") }
-    if $db_password == '' { fail("Database password can't be empty") }
+    if $backend_install {
+      assert_type(String[1], $db_root_password) |$expected, $actual| {
+        fail("'db_root_password' must be a non-empty string when 'backend_install' == true")
+      }
+    }
   }
 
   # Include the required classes
-  if ! $custom_repo {
+  unless $custom_repo {
     include ::powerdns::repo
   }
 
-  if $authoritative == true {
+  if $authoritative {
     include ::powerdns::authoritative
 
     # Set up Hiera. Even though it's not necessary to explicitly set $type for the authoritative
@@ -36,7 +39,7 @@ class powerdns (
     create_resources(powerdns::config, $powerdns_auth_config, $powerdns_auth_defaults)
   }
 
-  if $recursor == true {
+  if $recursor {
     include ::powerdns::recursor
 
     # Set up Hiera for the recursor.
