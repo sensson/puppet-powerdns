@@ -65,7 +65,7 @@ describe 'powerdns', type: :class do
           it { is_expected.to contain_package(authoritative_package_name).with('ensure' => 'installed') }
           it { is_expected.to contain_service(authoritative_service_name).with('ensure' => 'running') }
           it { is_expected.to contain_service(authoritative_service_name).with('enable' => 'true') }
-          it { is_expected.to contain_service(authoritative_service_name).that_requires(format('Package[%s]', authoritative_package_name)) }
+          it { is_expected.to contain_service(authoritative_service_name).that_requires(format('Package[%<package>s]', package: authoritative_package_name)) }
         end
 
         context 'powerdns class with mysql backend' do
@@ -114,10 +114,10 @@ describe 'powerdns', type: :class do
           it { is_expected.to contain_powerdns__config('gmysql-user').with('value' => 'foo') }
           it { is_expected.to contain_powerdns__config('launch').with('value' => 'gmysql') }
 
-          it { is_expected.to contain_file_line(format('powerdns-config-gmysql-dbname-%s', authoritative_config)) }
-          it { is_expected.to contain_file_line(format('powerdns-config-gmysql-password-%s', authoritative_config)) }
-          it { is_expected.to contain_file_line(format('powerdns-config-gmysql-user-%s', authoritative_config)) }
-          it { is_expected.to contain_file_line(format('powerdns-config-launch-%s', authoritative_config)) }
+          it { is_expected.to contain_file_line(format('powerdns-config-gmysql-dbname-%<config>s', config: authoritative_config)) }
+          it { is_expected.to contain_file_line(format('powerdns-config-gmysql-password-%<config>s', config: authoritative_config)) }
+          it { is_expected.to contain_file_line(format('powerdns-config-gmysql-user-%<config>s', config: authoritative_config)) }
+          it { is_expected.to contain_file_line(format('powerdns-config-launch-%<config>s', config: authoritative_config)) }
         end
 
         # Test the recursor
@@ -140,7 +140,7 @@ describe 'powerdns', type: :class do
           it { is_expected.to contain_package(recursor_package_name).with('ensure' => 'installed') }
           it { is_expected.to contain_service(recursor_service_name).with('ensure' => 'running') }
           it { is_expected.to contain_service(recursor_service_name).with('enable' => 'true') }
-          it { is_expected.to contain_service(recursor_service_name).that_requires(format('Package[%s]', recursor_package_name)) }
+          it { is_expected.to contain_service(recursor_service_name).that_requires(format('Package[%<package>s]', package: recursor_package_name)) }
         end
 
         # Test errors

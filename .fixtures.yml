@@ -1,9 +1,11 @@
 fixtures:
   repositories:
-    stdlib: "https://github.com/puppetlabs/puppetlabs-stdlib.git"
+    stdlib:
+      repo: "https://github.com/puppetlabs/puppetlabs-stdlib.git"
+      ref: "4.24.0"
     mysql:
       repo: "https://github.com/puppetlabs/puppetlabs-mysql.git"
-      ref: "3.11.0"
+      ref: "5.1.0"
     apt:
       repo: "https://github.com/puppetlabs/puppetlabs-apt.git"
       ref: "2.4.0"
