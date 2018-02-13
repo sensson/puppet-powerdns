@@ -1,3 +1,21 @@
+## 1.0.1
+
+### Summary
+
+This marks the long overdue stable release of the PowerDNS module. The 1.0.0
+release was missing these release notes so we immediately released 1.0.1.
+
+We have dropped support for Puppet 3 in this release.
+
+### Feates
+- Default to Puppet 4.
+- Support removing config with `ensure => absent`.
+- Use Puppet 4 data types in `config.pp`.
+
+### Bugs
+- Rubocop updates caused tests to fail.
+- `allow-notify-from` was not allowed to be empty.
+
 ## 0.0.12
 
 ### Summary
