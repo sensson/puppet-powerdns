@@ -26,11 +26,11 @@ class powerdns (
 
   # Include the required classes
   unless $custom_repo {
-    include ::powerdns::repo
+    contain powerdns::repo
   }
 
   if $authoritative {
-    include ::powerdns::authoritative
+    contain powerdns::authoritative
 
     # Set up Hiera. Even though it's not necessary to explicitly set $type for the authoritative
     # config, it is added for clarity.
@@ -40,7 +40,7 @@ class powerdns (
   }
 
   if $recursor {
-    include ::powerdns::recursor
+    contain powerdns::recursor
 
     # Set up Hiera for the recursor.
     $powerdns_recursor_config = hiera('powerdns::recursor::config', {})
