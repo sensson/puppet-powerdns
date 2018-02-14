@@ -1,9 +1,5 @@
 # mysql backend for powerdns
 class powerdns::backends::mysql inherits powerdns {
-  if $::powerdns::db_name == '' { fail('No database name specified.') }
-  if $::powerdns::db_username == '' { fail('No database username specified.') }
-  if $::powerdns::db_password == '' { fail('No database password specified.') }
-
   # set the configuration variables
   powerdns::config { 'launch':
     ensure  => present,
@@ -40,7 +36,7 @@ class powerdns::backends::mysql inherits powerdns {
     require => Package[$::powerdns::params::authoritative_package],
   }
 
-  if $::powerdns::backend_install == true {
+  if $::powerdns::backend_install {
     # mysql database
     if ! defined(Class['::mysql::server']) {
       class { '::mysql::server':
