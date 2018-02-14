@@ -28,7 +28,7 @@ describe 'powerdns', type: :class do
 
         context 'powerdns class without parameters' do
           it 'fails' do
-            expect { subject.call } .to raise_error(/'db_password' must be a non-empty string when 'authoritative' == true/)
+            expect { subject.call } .to raise_error(/Database root password can't be empty/)
           end
         end
 
@@ -154,7 +154,7 @@ describe 'powerdns', type: :class do
           end
 
           it 'fails' do
-            expect { subject.call } .to raise_error(/parameter 'db_username' expects a String\[1, default\] value, got String/)
+            expect { subject.call } .to raise_error(/Database username can't be empty/)
           end
         end
 
@@ -167,7 +167,7 @@ describe 'powerdns', type: :class do
           end
 
           it 'fails' do
-            expect { subject.call } .to raise_error(/'db_password' must be a non-empty string when 'authoritative' == true/)
+            expect { subject.call } .to raise_error(/Database password can't be empty/)
           end
         end
 
@@ -182,7 +182,7 @@ describe 'powerdns', type: :class do
           end
 
           it 'fails' do
-            expect { subject.call } .to raise_error(/'backend' expects a match for Enum\['mysql'\]/)
+            expect { subject.call } .to raise_error(/is not supported/)
           end
         end
       end
