@@ -4,6 +4,7 @@ class powerdns::params {
   $recursor = false
   $backend = 'mysql'
   $backend_install = true
+  $backend_create_tables = true
   $db_root_password = undef
   $db_username = 'powerdns'
   $db_password = undef

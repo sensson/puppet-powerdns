@@ -50,47 +50,49 @@ class powerdns::backends::mysql inherits powerdns {
     }
   }
 
-  # make sure the database exists
-  mysql::db { $::powerdns::db_name:
-    user     => $::powerdns::db_username,
-    password => $::powerdns::db_password,
-    host     => $::powerdns::db_host,
-    grant    => [ 'ALL' ],
-  }
+  if $::powerdns::backend_create_tables {
+    # make sure the database exists
+    mysql::db { $::powerdns::db_name:
+      user     => $::powerdns::db_username,
+      password => $::powerdns::db_password,
+      host     => $::powerdns::db_host,
+      grant    => [ 'ALL' ],
+    }
 
-  # create tables
-  powerdns::backends::mysql::create_table { 'domains':
-    database => $::powerdns::db_name,
-    create   => template('powerdns/domains.sql.erb'),
-  }
+    # create tables
+    powerdns::backends::mysql::create_table { 'domains':
+      database => $::powerdns::db_name,
+      create   => template('powerdns/domains.sql.erb'),
+    }
 
-  powerdns::backends::mysql::create_table { 'records':
-    database => $::powerdns::db_name,
-    create   => template('powerdns/records.sql.erb'),
-  }
+    powerdns::backends::mysql::create_table { 'records':
+      database => $::powerdns::db_name,
+      create   => template('powerdns/records.sql.erb'),
+    }
 
-  powerdns::backends::mysql::create_table { 'supermasters':
-    database => $::powerdns::db_name,
-    create   => template('powerdns/supermasters.sql.erb'),
-  }
+    powerdns::backends::mysql::create_table { 'supermasters':
+      database => $::powerdns::db_name,
+      create   => template('powerdns/supermasters.sql.erb'),
+    }
 
-  powerdns::backends::mysql::create_table { 'domainmetadata':
-    database => $::powerdns::db_name,
-    create   => template('powerdns/domainmetadata.sql.erb'),
-  }
+    powerdns::backends::mysql::create_table { 'domainmetadata':
+      database => $::powerdns::db_name,
+      create   => template('powerdns/domainmetadata.sql.erb'),
+    }
 
-  powerdns::backends::mysql::create_table { 'cryptokeys':
-    database => $::powerdns::db_name,
-    create   => template('powerdns/cryptokeys.sql.erb'),
-  }
+    powerdns::backends::mysql::create_table { 'cryptokeys':
+      database => $::powerdns::db_name,
+      create   => template('powerdns/cryptokeys.sql.erb'),
+    }
 
-  powerdns::backends::mysql::create_table { 'comments':
-    database => $::powerdns::db_name,
-    create   => template('powerdns/comments.sql.erb'),
-  }
+    powerdns::backends::mysql::create_table { 'comments':
+      database => $::powerdns::db_name,
+      create   => template('powerdns/comments.sql.erb'),
+    }
 
-  powerdns::backends::mysql::create_table { 'tsigkeys':
-    database => $::powerdns::db_name,
-    create   => template('powerdns/tsigkeys.sql.erb'),
+    powerdns::backends::mysql::create_table { 'tsigkeys':
+      database => $::powerdns::db_name,
+      create   => template('powerdns/tsigkeys.sql.erb'),
+    }
   }
 }
