@@ -69,8 +69,13 @@ Choose a backend for the authoritative server. Valid values are 'mysql'. Default
 ##### `backend_install`
 
 If you set this to true it will try to install a database backend for
-you. This requires `db_root_password`, `db_username`, `db_password`,
-`db_name` and `db_host` to be set. Defaults to true.
+you. This requires `db_root_password`. Defaults to true.
+
+##### `backend_create_tables`
+
+If set to true, it will ensure the required powerdns tables exist in your backend database.
+If your database is on a separate host, set `backend_install` and `backend_create_tables` to false.
+Defaults to true.
 
 ##### `db_root_password`
 

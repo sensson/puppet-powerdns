@@ -120,6 +120,29 @@ describe 'powerdns', type: :class do
           it { is_expected.to contain_file_line(format('powerdns-config-launch-%<config>s', config: authoritative_config)) }
         end
 
+        context 'powerdns class with backend_create_tables set to false' do
+          let(:params) do
+            {
+              db_root_password: 'foobar',
+              db_username: 'foo',
+              db_password: 'bar',
+              backend: 'mysql',
+              backend_create_tables: false
+            }
+          end
+
+          # Tables aren't created and neither is the database
+          it { is_expected.not_to contain_mysql__db('powerdns').with('user' => 'foo', 'password' => 'bar', 'host' => 'localhost') }
+
+          it { is_expected.not_to contain_powerdns__backends__mysql__create_table('comments') }
+          it { is_expected.not_to contain_powerdns__backends__mysql__create_table('cryptokeys') }
+          it { is_expected.not_to contain_powerdns__backends__mysql__create_table('domainmetadata') }
+          it { is_expected.not_to contain_powerdns__backends__mysql__create_table('domains') }
+          it { is_expected.not_to contain_powerdns__backends__mysql__create_table('records') }
+          it { is_expected.not_to contain_powerdns__backends__mysql__create_table('supermasters') }
+          it { is_expected.not_to contain_powerdns__backends__mysql__create_table('tsigkeys') }
+        end
+
         # Test the recursor
         context 'powerdns class with the recursor enabled and the authoritative server disabled' do
           let(:params) do
