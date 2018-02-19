@@ -1,17 +1,17 @@
 # powerdns
 class powerdns (
-    Boolean             $authoritative         = $::powerdns::params::authoritative,
-    Boolean             $recursor              = $::powerdns::params::recursor,
-    Enum['mysql']       $backend               = $::powerdns::params::backend,
-    Boolean             $backend_install       = $::powerdns::params::backend_install,
-    Boolean             $backend_create_tables = $::powerdns::params::backend_create_tables,
-    Optional[String[1]] $db_root_password      = $::powerdns::params::db_root_password,
-    String[1]           $db_username           = $::powerdns::params::db_username,
-    Optional[String[1]] $db_password           = $::powerdns::params::db_password,
-    String[1]           $db_name               = $::powerdns::params::db_name,
-    String[1]           $db_host               = $::powerdns::params::db_host,
-    Boolean             $custom_repo           = $::powerdns::params::custom_repo,
-  ) inherits powerdns::params {
+  Boolean                    $authoritative         = $::powerdns::params::authoritative,
+  Boolean                    $recursor              = $::powerdns::params::recursor,
+  Enum['mysql','postgresql'] $backend               = $::powerdns::params::backend,
+  Boolean                    $backend_install       = $::powerdns::params::backend_install,
+  Boolean                    $backend_create_tables = $::powerdns::params::backend_create_tables,
+  Optional[String[1]]        $db_root_password      = $::powerdns::params::db_root_password,
+  String[1]                  $db_username           = $::powerdns::params::db_username,
+  Optional[String[1]]        $db_password           = $::powerdns::params::db_password,
+  String[1]                  $db_name               = $::powerdns::params::db_name,
+  String[1]                  $db_host               = $::powerdns::params::db_host,
+  Boolean                    $custom_repo           = $::powerdns::params::custom_repo,
+) inherits powerdns::params {
 
   # Do some additional checks. In certain cases, some parameters are no longer optional.
   if $authoritative {
