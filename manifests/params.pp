@@ -13,7 +13,7 @@ class powerdns::params {
   $default_package_ensure = installed
 
   case $::operatingsystem {
-    'centos': {
+    'centos', 'OracleLinux': {
       $authoritative_package = 'pdns'
       $authoritative_service = 'pdns'
       $authoritative_config = '/etc/pdns/pdns.conf'
