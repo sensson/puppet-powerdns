@@ -1,7 +1,7 @@
 # powerdns::repo
 class powerdns::repo {
   case $::operatingsystem {
-    'centos': {
+    'centos', 'OracleLinux': {
       Yumrepo['powerdns'] -> Package <| title == $::powerdns::params::authoritative_package |>
       Yumrepo['powerdns-recursor'] -> Package <| title == $::powerdns::params::recursor_package |>
 
