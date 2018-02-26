@@ -266,7 +266,7 @@ describe 'powerdns', type: :class do
           end
 
           it 'fails' do
-            expect { subject.call } .to raise_error(/'backend' expects a match for Enum\['mysql'\]/)
+            expect { subject.call } .to raise_error(/'backend' expects a match for Enum\['mysql', 'postgresql'\]/)
           end
         end
       end
