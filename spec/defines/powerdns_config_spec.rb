@@ -65,6 +65,17 @@ describe 'powerdns::config' do
           it { is_expected.to contain_file_line(format('powerdns-config-foo-%<config>s', config: recursor_config)) }
         end
 
+        context 'powerdns::config with integers' do
+          let(:params) do
+            {
+              setting: 'local-port',
+              value: 54
+            }
+          end
+
+          it { is_expected.to contain_file_line(format('powerdns-config-local-port-%<config>s', config: authoritative_config)) }
+        end
+
         # Test for empty values
         context 'powerdns::config with empty value for gmysql-dnssec' do
           let(:params) do
