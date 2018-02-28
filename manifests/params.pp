@@ -13,8 +13,8 @@ class powerdns::params {
   $custom_repo = false
   $default_package_ensure = installed
 
-  case $::operatingsystem {
-    'centos': {
+  case $facts['os']['family'] {
+    'RedHat': {
       $authoritative_package = 'pdns'
       $authoritative_service = 'pdns'
       $authoritative_config = '/etc/pdns/pdns.conf'
@@ -22,7 +22,7 @@ class powerdns::params {
       $recursor_service = 'pdns-recursor'
       $recursor_config = '/etc/pdns-recursor/recursor.conf'
     }
-    'ubuntu', 'debian': {
+    'Debian': {
       $authoritative_package = 'pdns-server'
       $authoritative_service = 'pdns'
       $authoritative_config = '/etc/powerdns/pdns.conf'
@@ -31,7 +31,7 @@ class powerdns::params {
       $recursor_config = '/etc/powerdns/recursor.conf'
     }
     default: {
-      fail("${::operatingsystem} is not supported yet.")
+      fail("${facts['os']['family']} is not supported yet.")
     }
   }
 }
