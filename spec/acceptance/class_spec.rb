@@ -1,5 +1,16 @@
 require 'spec_helper_acceptance'
 
+case default['platform']
+when /debian|ubuntu/
+  authoritative_config = '/etc/powerdns/pdns.conf'
+  authoritative_service = 'pdns'
+when /el|centos/
+  authoritative_config = '/etc/pdns/pdns.conf'
+  authoritative_service = 'pdns'
+else
+  logger.notify("Cannot manage PowerDNS on #{default['platform']}")
+end
+
 describe 'powerdns class' do
   context 'authoritative server' do
     # Using puppet_apply as a helper
@@ -23,6 +34,15 @@ describe 'powerdns class' do
       # Run it twice and test for idempotency
       apply_manifest(pp, catch_failures: true)
       apply_manifest(pp, catch_changes: true)
+    end
+
+    describe file(authoritative_config) do
+      it { should be_file }
+      its(:content) { should match 'gmysql-host=localhost' }
+    end
+
+    describe service(authoritative_service) do
+      it { should be_running }
     end
   end
 

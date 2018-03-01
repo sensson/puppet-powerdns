@@ -8,6 +8,13 @@ class powerdns::backends::mysql inherits powerdns {
     type    => 'authoritative',
   }
 
+  powerdns::config { 'gmysql-host':
+    ensure  => present,
+    setting => 'gmysql-host',
+    value   => $::powerdns::db_host,
+    type    => 'authoritative',
+  }
+
   powerdns::config { 'gmysql-user':
     ensure  => present,
     setting => 'gmysql-user',
