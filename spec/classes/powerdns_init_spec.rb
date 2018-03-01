@@ -71,6 +71,7 @@ describe 'powerdns', type: :class do
         context 'powerdns class with mysql backend' do
           let(:params) do
             {
+              db_host: '127.0.0.1',
               db_root_password: 'foobar',
               db_username: 'foo',
               db_password: 'bar',
@@ -80,7 +81,7 @@ describe 'powerdns', type: :class do
 
           it { is_expected.to contain_class('powerdns::backends::mysql') }
           it { is_expected.to contain_package('pdns-backend-mysql').with('ensure' => 'installed') }
-          it { is_expected.to contain_mysql__db('powerdns').with('user' => 'foo', 'password' => 'bar', 'host' => 'localhost') }
+          it { is_expected.to contain_mysql__db('powerdns').with('user' => 'foo', 'password' => 'bar', 'host' => '127.0.0.1') }
 
           # We expect the following tables to be created
           it { is_expected.to contain_powerdns__backends__mysql__create_table('comments') }
@@ -109,11 +110,13 @@ describe 'powerdns', type: :class do
           it { is_expected.to contain_exec('create-table-tsigkeys') }
 
           # This sets our configuration
+          it { is_expected.to contain_powerdns__config('gmysql-host').with('value' => '127.0.0.1') }
           it { is_expected.to contain_powerdns__config('gmysql-dbname').with('value' => 'powerdns') }
           it { is_expected.to contain_powerdns__config('gmysql-password').with('value' => 'bar') }
           it { is_expected.to contain_powerdns__config('gmysql-user').with('value' => 'foo') }
           it { is_expected.to contain_powerdns__config('launch').with('value' => 'gmysql') }
 
+          it { is_expected.to contain_file_line(format('powerdns-config-gmysql-host-%<config>s', config: authoritative_config)) }
           it { is_expected.to contain_file_line(format('powerdns-config-gmysql-dbname-%<config>s', config: authoritative_config)) }
           it { is_expected.to contain_file_line(format('powerdns-config-gmysql-password-%<config>s', config: authoritative_config)) }
           it { is_expected.to contain_file_line(format('powerdns-config-gmysql-user-%<config>s', config: authoritative_config)) }
