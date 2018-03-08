@@ -35,7 +35,6 @@ describe 'powerdns::config' do
           authoritative_service_name = 'pdns'
         end
 
-        #
         context 'powerdns::config with parameters' do
           let(:params) do
             {
