@@ -1,7 +1,7 @@
 # powerdns::repo
 class powerdns::repo {
-  case $::operatingsystem {
-    'centos': {
+  case $facts['os']['family'] {
+    'RedHat': {
       Yumrepo['powerdns'] -> Package <| title == $::powerdns::params::authoritative_package |>
       Yumrepo['powerdns-recursor'] -> Package <| title == $::powerdns::params::recursor_package |>
 
@@ -33,10 +33,10 @@ class powerdns::repo {
       }
     }
 
-    'ubuntu', 'debian': {
+    'Debian': {
       include ::apt
 
-      $os = downcase($::operatingsystem)
+      $os = downcase($facts['os']['name'])
 
       # Make sure the repo's are added before we're managing packages
       # puppet-lint seems to error out on spaces here (bug?) so it looks a bit dodgy
@@ -75,7 +75,7 @@ class powerdns::repo {
     }
 
     default: {
-      fail("${::operatingsystem} is not supported yet.")
+      fail("${facts['os']['family']} is not supported yet.")
     }
   }
 }

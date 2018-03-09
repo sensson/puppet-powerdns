@@ -35,7 +35,6 @@ describe 'powerdns::config' do
           authoritative_service_name = 'pdns'
         end
 
-        #
         context 'powerdns::config with parameters' do
           let(:params) do
             {
@@ -63,6 +62,17 @@ describe 'powerdns::config' do
           end
 
           it { is_expected.to contain_file_line(format('powerdns-config-foo-%<config>s', config: recursor_config)) }
+        end
+
+        context 'powerdns::config with integers' do
+          let(:params) do
+            {
+              setting: 'local-port',
+              value: 54
+            }
+          end
+
+          it { is_expected.to contain_file_line(format('powerdns-config-local-port-%<config>s', config: authoritative_config)) }
         end
 
         # Test for empty values
