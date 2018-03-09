@@ -1,3 +1,17 @@
+## 1.1.0
+
+### Features
+- Use Puppet 4 datatypes.
+- Support for `backend_create_tables`, making database management optional.
+- (Basic) Support for PostgreSQL.
+- Support all RedHat flavours.
+- Bump apt support to < 5.0.0
+
+### Bugs
+- Contain private subclasses
+- Set `gmysql-host` when managing MySQL.
+- Allow both String and Integer as value for `powerdns::config` values.
+
 ## 1.0.1
 
 ### Summary
@@ -7,7 +21,7 @@ release was missing these release notes so we immediately released 1.0.1.
 
 We have dropped support for Puppet 3 in this release.
 
-### Feates
+### Features
 - Default to Puppet 4.
 - Support removing config with `ensure => absent`.
 - Use Puppet 4 data types in `config.pp`.
