@@ -28,7 +28,7 @@ describe 'powerdns', type: :class do
 
         context 'powerdns class without parameters' do
           it 'fails' do
-            expect { subject.call } .to raise_error(/Database root password can't be empty/)
+            expect { subject.call } .to raise_error(/'db_password' must be a non-empty string when 'authoritative' == true/)
           end
         end
 
@@ -71,6 +71,7 @@ describe 'powerdns', type: :class do
         context 'powerdns class with mysql backend' do
           let(:params) do
             {
+              db_host: '127.0.0.1',
               db_root_password: 'foobar',
               db_username: 'foo',
               db_password: 'bar',
@@ -80,7 +81,7 @@ describe 'powerdns', type: :class do
 
           it { is_expected.to contain_class('powerdns::backends::mysql') }
           it { is_expected.to contain_package('pdns-backend-mysql').with('ensure' => 'installed') }
-          it { is_expected.to contain_mysql__db('powerdns').with('user' => 'foo', 'password' => 'bar', 'host' => 'localhost') }
+          it { is_expected.to contain_mysql__db('powerdns').with('user' => 'foo', 'password' => 'bar', 'host' => '127.0.0.1') }
 
           # We expect the following tables to be created
           it { is_expected.to contain_powerdns__backends__mysql__create_table('comments') }
@@ -109,15 +110,101 @@ describe 'powerdns', type: :class do
           it { is_expected.to contain_exec('create-table-tsigkeys') }
 
           # This sets our configuration
+          it { is_expected.to contain_powerdns__config('gmysql-host').with('value' => '127.0.0.1') }
           it { is_expected.to contain_powerdns__config('gmysql-dbname').with('value' => 'powerdns') }
           it { is_expected.to contain_powerdns__config('gmysql-password').with('value' => 'bar') }
           it { is_expected.to contain_powerdns__config('gmysql-user').with('value' => 'foo') }
           it { is_expected.to contain_powerdns__config('launch').with('value' => 'gmysql') }
 
+          it { is_expected.to contain_file_line(format('powerdns-config-gmysql-host-%<config>s', config: authoritative_config)) }
           it { is_expected.to contain_file_line(format('powerdns-config-gmysql-dbname-%<config>s', config: authoritative_config)) }
           it { is_expected.to contain_file_line(format('powerdns-config-gmysql-password-%<config>s', config: authoritative_config)) }
           it { is_expected.to contain_file_line(format('powerdns-config-gmysql-user-%<config>s', config: authoritative_config)) }
           it { is_expected.to contain_file_line(format('powerdns-config-launch-%<config>s', config: authoritative_config)) }
+        end
+
+        context 'powerdns class with postgresql backend' do
+          context 'with backend_install and backend_create_tables set to false' do
+            let(:params) do
+              {
+                db_root_password: 'foobar',
+                db_username: 'foo',
+                db_password: 'bar',
+                backend: 'postgresql',
+                backend_install: false,
+                backend_create_tables: false
+              }
+            end
+            it { is_expected.to compile.with_all_deps }
+            it { is_expected.to contain_class('powerdns::backends::postgresql') }
+            it { is_expected.to contain_package('pdns-backend-postgresql').with('ensure' => 'installed') }
+
+            it { is_expected.to contain_powerdns__config('launch').with('value' => 'gpgsql') }
+            it { is_expected.to contain_powerdns__config('gpgsql-host').with('value' => 'localhost') }
+            it { is_expected.to contain_powerdns__config('gpgsql-dbname').with('value' => 'powerdns') }
+            it { is_expected.to contain_powerdns__config('gpgsql-password').with('value' => 'bar') }
+            it { is_expected.to contain_powerdns__config('gpgsql-user').with('value' => 'foo') }
+
+            it { is_expected.to contain_file_line(format('powerdns-config-gpgsql-host-%<config>s', config: authoritative_config)) }
+            it { is_expected.to contain_file_line(format('powerdns-config-gpgsql-dbname-%<config>s', config: authoritative_config)) }
+            it { is_expected.to contain_file_line(format('powerdns-config-gpgsql-password-%<config>s', config: authoritative_config)) }
+            it { is_expected.to contain_file_line(format('powerdns-config-gpgsql-user-%<config>s', config: authoritative_config)) }
+          end
+
+          context 'with backend_install set to true' do
+            let(:params) do
+              {
+                db_root_password: 'foobar',
+                db_username: 'foo',
+                db_password: 'bar',
+                backend: 'postgresql',
+                backend_install: true,
+                backend_create_tables: false
+              }
+            end
+            it 'fails' do
+              expect { subject.call } .to raise_error(/backend_install isn't supported with postgresql yet/)
+            end
+          end
+
+          context 'with backend_create_tables set to true' do
+            let(:params) do
+              {
+                db_root_password: 'foobar',
+                db_username: 'foo',
+                db_password: 'bar',
+                backend: 'postgresql',
+                backend_install: false,
+                backend_create_tables: true
+              }
+            end
+            it 'fails' do
+              expect { subject.call } .to raise_error(/backend_create_tables isn't supported with postgresql yet/)
+            end
+          end
+        end
+
+        context 'powerdns class with backend_create_tables set to false' do
+          let(:params) do
+            {
+              db_root_password: 'foobar',
+              db_username: 'foo',
+              db_password: 'bar',
+              backend: 'mysql',
+              backend_create_tables: false
+            }
+          end
+
+          # Tables aren't created and neither is the database
+          it { is_expected.not_to contain_mysql__db('powerdns').with('user' => 'foo', 'password' => 'bar', 'host' => 'localhost') }
+
+          it { is_expected.not_to contain_powerdns__backends__mysql__create_table('comments') }
+          it { is_expected.not_to contain_powerdns__backends__mysql__create_table('cryptokeys') }
+          it { is_expected.not_to contain_powerdns__backends__mysql__create_table('domainmetadata') }
+          it { is_expected.not_to contain_powerdns__backends__mysql__create_table('domains') }
+          it { is_expected.not_to contain_powerdns__backends__mysql__create_table('records') }
+          it { is_expected.not_to contain_powerdns__backends__mysql__create_table('supermasters') }
+          it { is_expected.not_to contain_powerdns__backends__mysql__create_table('tsigkeys') }
         end
 
         # Test the recursor
@@ -154,7 +241,7 @@ describe 'powerdns', type: :class do
           end
 
           it 'fails' do
-            expect { subject.call } .to raise_error(/Database username can't be empty/)
+            expect { subject.call } .to raise_error(/parameter 'db_username' expects a String\[1, default\] value, got String/)
           end
         end
 
@@ -167,7 +254,7 @@ describe 'powerdns', type: :class do
           end
 
           it 'fails' do
-            expect { subject.call } .to raise_error(/Database password can't be empty/)
+            expect { subject.call } .to raise_error(/'db_password' must be a non-empty string when 'authoritative' == true/)
           end
         end
 
@@ -182,7 +269,7 @@ describe 'powerdns', type: :class do
           end
 
           it 'fails' do
-            expect { subject.call } .to raise_error(/is not supported/)
+            expect { subject.call } .to raise_error(/'backend' expects a match for Enum\['mysql', 'postgresql'\]/)
           end
         end
       end
