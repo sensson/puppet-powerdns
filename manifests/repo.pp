@@ -17,6 +17,8 @@ class powerdns::repo {
 
   case $facts['os']['family'] {
     'RedHat': {
+      include ::epel
+
       Yumrepo['powerdns'] -> Package <| title == $::powerdns::params::authoritative_package |>
       Yumrepo['powerdns-recursor'] -> Package <| title == $::powerdns::params::recursor_package |>
 
