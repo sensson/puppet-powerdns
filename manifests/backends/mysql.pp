@@ -69,37 +69,37 @@ class powerdns::backends::mysql inherits powerdns {
     # create tables
     powerdns::backends::mysql::create_table { 'domains':
       database => $::powerdns::db_name,
-      create   => template('powerdns/domains.sql.erb'),
+      create   => template("powerdns/mysql/${::powerdns::version}/domains.sql.erb"),
     }
 
     powerdns::backends::mysql::create_table { 'records':
       database => $::powerdns::db_name,
-      create   => template('powerdns/records.sql.erb'),
+      create   => template("powerdns/mysql/${::powerdns::version}/records.sql.erb"),
     }
 
     powerdns::backends::mysql::create_table { 'supermasters':
       database => $::powerdns::db_name,
-      create   => template('powerdns/supermasters.sql.erb'),
+      create   => template("powerdns/mysql/${::powerdns::version}/supermasters.sql.erb"),
     }
 
     powerdns::backends::mysql::create_table { 'domainmetadata':
       database => $::powerdns::db_name,
-      create   => template('powerdns/domainmetadata.sql.erb'),
+      create   => template("powerdns/mysql/${::powerdns::version}/domainmetadata.sql.erb"),
     }
 
     powerdns::backends::mysql::create_table { 'cryptokeys':
       database => $::powerdns::db_name,
-      create   => template('powerdns/cryptokeys.sql.erb'),
+      create   => template("powerdns/mysql/${::powerdns::version}/cryptokeys.sql.erb"),
     }
 
     powerdns::backends::mysql::create_table { 'comments':
       database => $::powerdns::db_name,
-      create   => template('powerdns/comments.sql.erb'),
+      create   => template("powerdns/mysql/${::powerdns::version}/comments.sql.erb"),
     }
 
     powerdns::backends::mysql::create_table { 'tsigkeys':
       database => $::powerdns::db_name,
-      create   => template('powerdns/tsigkeys.sql.erb'),
+      create   => template("powerdns/mysql/${::powerdns::version}/tsigkeys.sql.erb"),
     }
   }
 }

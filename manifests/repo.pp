@@ -1,7 +1,24 @@
 # powerdns::repo
 class powerdns::repo {
+
+  # The repositories of PowerDNS use a version such as '40' for version 4.0
+  # and 41 for version 4.1.
+  case $::powerdns::version {
+    '4.0': {
+      $short_version = '40'
+    }
+    '4.1': {
+      $short_version = '41'
+    }
+    default: {
+      fail("Version ${::powerdns::version} is not supported.")
+    }
+  }
+
   case $facts['os']['family'] {
     'RedHat': {
+      include ::epel
+
       Yumrepo['powerdns'] -> Package <| title == $::powerdns::params::authoritative_package |>
       Yumrepo['powerdns-recursor'] -> Package <| title == $::powerdns::params::recursor_package |>
 
@@ -12,8 +29,8 @@ class powerdns::repo {
 
       yumrepo { 'powerdns':
         name        => 'powerdns',
-        descr       => 'PowerDNS repository for PowerDNS Authoritative - version 4.0.X',
-        baseurl     => 'http://repo.powerdns.com/centos/$basearch/$releasever/auth-40',
+        descr       => "PowerDNS repository for PowerDNS Authoritative - version ${::powerdns::version}",
+        baseurl     => "http://repo.powerdns.com/centos/\$basearch/\$releasever/auth-${short_version}",
         gpgkey      => 'https://repo.powerdns.com/FD380FBB-pub.asc',
         gpgcheck    => 1,
         enabled     => 1,
@@ -23,8 +40,8 @@ class powerdns::repo {
 
       yumrepo { 'powerdns-recursor':
         name        => 'powerdns-recursor',
-        descr       => 'PowerDNS repository for PowerDNS Recursor - version 4.0.X',
-        baseurl     => 'http://repo.powerdns.com/centos/$basearch/$releasever/rec-40',
+        descr       => "PowerDNS repository for PowerDNS Recursor - version ${::powerdns::version}",
+        baseurl     => "http://repo.powerdns.com/centos/\$basearch/\$releasever/rec-${short_version}",
         gpgkey      => 'https://repo.powerdns.com/FD380FBB-pub.asc',
         gpgcheck    => 1,
         enabled     => 1,
@@ -52,7 +69,7 @@ class powerdns::repo {
         ensure       => present,
         location     => "http://repo.powerdns.com/${os}",
         repos        => 'main',
-        release      => "${::lsbdistcodename}-auth-40",
+        release      => "${::lsbdistcodename}-auth-${short_version}",
         architecture => 'amd64',
         require      => Apt::Key['powerdns'],
       }
@@ -61,7 +78,7 @@ class powerdns::repo {
         ensure       => present,
         location     => "http://repo.powerdns.com/${os}",
         repos        => 'main',
-        release      => "${::lsbdistcodename}-rec-40",
+        release      => "${::lsbdistcodename}-rec-${short_version}",
         architecture => 'amd64',
         require      => Apt::Key['powerdns'],
       }
