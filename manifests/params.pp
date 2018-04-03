@@ -12,6 +12,7 @@ class powerdns::params {
   $db_host = 'localhost'
   $custom_repo = false
   $default_package_ensure = installed
+  $version = '4.1'
 
   case $facts['os']['family'] {
     'RedHat': {
