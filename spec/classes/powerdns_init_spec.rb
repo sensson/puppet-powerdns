@@ -50,18 +50,14 @@ describe 'powerdns', type: :class do
           when 'RedHat'
             it { is_expected.to contain_package('yum-plugin-priorities') }
             it { is_expected.to contain_yumrepo('powerdns') }
-            it { is_expected.to contain_yumrepo('powerdns').with('baseurl' => 'http://repo.powerdns.com/centos/$basearch/$releasever/auth-41') }
             it { is_expected.to contain_yumrepo('powerdns-recursor') }
-            it { is_expected.to contain_yumrepo('powerdns-recursor').with('baseurl' => 'http://repo.powerdns.com/centos/$basearch/$releasever/rec-41') }
           end
           case facts[:osfamily]
           when 'Debian'
             it { is_expected.to contain_apt__key('powerdns') }
             it { is_expected.to contain_apt__pin('powerdns') }
             it { is_expected.to contain_apt__source('powerdns') }
-            it { is_expected.to contain_apt__source('powerdns').with_release(/auth-41/) }
             it { is_expected.to contain_apt__source('powerdns-recursor') }
-            it { is_expected.to contain_apt__source('powerdns-recursor').with_release(/rec-41/) }
           end
 
           # Check the authoritative server
@@ -70,29 +66,6 @@ describe 'powerdns', type: :class do
           it { is_expected.to contain_service(authoritative_service_name).with('ensure' => 'running') }
           it { is_expected.to contain_service(authoritative_service_name).with('enable' => 'true') }
           it { is_expected.to contain_service(authoritative_service_name).that_requires(format('Package[%<package>s]', package: authoritative_package_name)) }
-        end
-
-        context 'powerdns class with different version' do
-          let(:params) do
-            {
-              db_root_password: 'foobar',
-              db_username: 'foo',
-              db_password: 'bar',
-              version: '4.0'
-            }
-          end
-
-          case facts[:osfamily]
-          when 'RedHat'
-            it { is_expected.to contain_yumrepo('powerdns').with('baseurl' => 'http://repo.powerdns.com/centos/$basearch/$releasever/auth-40') }
-            it { is_expected.to contain_yumrepo('powerdns-recursor').with('baseurl' => 'http://repo.powerdns.com/centos/$basearch/$releasever/rec-40') }
-          end
-
-          case facts[:osfamily]
-          when 'Debian'
-            it { is_expected.to contain_apt__source('powerdns').with_release(/auth-40/) }
-            it { is_expected.to contain_apt__source('powerdns-recursor').with_release(/rec-40/) }
-          end
         end
 
         context 'powerdns class with mysql backend' do
