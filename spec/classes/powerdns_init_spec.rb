@@ -110,31 +110,9 @@ describe 'powerdns', type: :class do
           it { is_expected.to contain_package('pdns-backend-mysql').with('ensure' => 'installed') }
           it { is_expected.to contain_mysql__db('powerdns').with('user' => 'foo', 'password' => 'bar', 'host' => '127.0.0.1') }
 
-          # We expect the following tables to be created
-          it { is_expected.to contain_powerdns__backends__mysql__create_table('comments') }
-          it { is_expected.to contain_powerdns__backends__mysql__create_table('cryptokeys') }
-          it { is_expected.to contain_powerdns__backends__mysql__create_table('domainmetadata') }
-          it { is_expected.to contain_powerdns__backends__mysql__create_table('domains') }
-          it { is_expected.to contain_powerdns__backends__mysql__create_table('records') }
-          it { is_expected.to contain_powerdns__backends__mysql__create_table('supermasters') }
-          it { is_expected.to contain_powerdns__backends__mysql__create_table('tsigkeys') }
-
-          # This creates additional resources
-          it { is_expected.to contain_file('/tmp/create-table-comments') }
-          it { is_expected.to contain_file('/tmp/create-table-cryptokeys') }
-          it { is_expected.to contain_file('/tmp/create-table-domainmetadata') }
-          it { is_expected.to contain_file('/tmp/create-table-domains') }
-          it { is_expected.to contain_file('/tmp/create-table-records') }
-          it { is_expected.to contain_file('/tmp/create-table-supermasters') }
-          it { is_expected.to contain_file('/tmp/create-table-tsigkeys') }
-
-          it { is_expected.to contain_exec('create-table-comments') }
-          it { is_expected.to contain_exec('create-table-cryptokeys') }
-          it { is_expected.to contain_exec('create-table-domainmetadata') }
-          it { is_expected.to contain_exec('create-table-domains') }
-          it { is_expected.to contain_exec('create-table-records') }
-          it { is_expected.to contain_exec('create-table-supermasters') }
-          it { is_expected.to contain_exec('create-table-tsigkeys') }
+          # We expect the schema to be created with version 4.1
+          it { is_expected.to contain_exec('create-powerdns-schema') }
+          it { is_expected.to contain_exec('create-powerdns-schema').with_command(/4.1/) }
 
           # This sets our configuration
           it { is_expected.to contain_powerdns__config('gmysql-host').with('value' => '127.0.0.1') }
