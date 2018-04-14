@@ -66,40 +66,20 @@ class powerdns::backends::mysql inherits powerdns {
       grant    => [ 'ALL' ],
     }
 
-    # create tables
-    powerdns::backends::mysql::create_table { 'domains':
-      database => $::powerdns::db_name,
-      create   => template("powerdns/mysql/${::powerdns::version}/domains.sql.erb"),
-    }
-
-    powerdns::backends::mysql::create_table { 'records':
-      database => $::powerdns::db_name,
-      create   => template("powerdns/mysql/${::powerdns::version}/records.sql.erb"),
-    }
-
-    powerdns::backends::mysql::create_table { 'supermasters':
-      database => $::powerdns::db_name,
-      create   => template("powerdns/mysql/${::powerdns::version}/supermasters.sql.erb"),
-    }
-
-    powerdns::backends::mysql::create_table { 'domainmetadata':
-      database => $::powerdns::db_name,
-      create   => template("powerdns/mysql/${::powerdns::version}/domainmetadata.sql.erb"),
-    }
-
-    powerdns::backends::mysql::create_table { 'cryptokeys':
-      database => $::powerdns::db_name,
-      create   => template("powerdns/mysql/${::powerdns::version}/cryptokeys.sql.erb"),
-    }
-
-    powerdns::backends::mysql::create_table { 'comments':
-      database => $::powerdns::db_name,
-      create   => template("powerdns/mysql/${::powerdns::version}/comments.sql.erb"),
-    }
-
-    powerdns::backends::mysql::create_table { 'tsigkeys':
-      database => $::powerdns::db_name,
-      create   => template("powerdns/mysql/${::powerdns::version}/tsigkeys.sql.erb"),
+    # create the database schema
+    exec { 'create-powerdns-schema':
+      logoutput => true,
+      command   => "/usr/bin/mysql --defaults-file=${::root_home}/.my.cnf ${::powerdns::db_name} < ${::powerdns::mysql_schema_file}",
+      unless    => "/usr/bin/mysql --defaults-file=${::root_home}/.my.cnf -e 'desc ${::powerdns::db_name}.domains' > /dev/null 2>&1",
+      provider  => 'shell',
+      subscribe => Service['mysqld'],
+      require   => [
+        Service['mysqld'],
+        Package['mysql-server'],
+        Package['pdns-backend-mysql'],
+        File["${::root_home}/.my.cnf"],
+        Mysql::Db[$::powerdns::db_name]
+      ],
     }
   }
 }
