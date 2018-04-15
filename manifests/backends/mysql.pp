@@ -64,22 +64,8 @@ class powerdns::backends::mysql inherits powerdns {
       password => $::powerdns::db_password,
       host     => $::powerdns::db_host,
       grant    => [ 'ALL' ],
-    }
-
-    # create the database schema
-    exec { 'create-powerdns-schema':
-      logoutput => true,
-      command   => "/usr/bin/mysql --defaults-file=${::root_home}/.my.cnf ${::powerdns::db_name} < ${::powerdns::mysql_schema_file}",
-      unless    => "/usr/bin/mysql --defaults-file=${::root_home}/.my.cnf -e 'desc ${::powerdns::db_name}.domains' > /dev/null 2>&1",
-      provider  => 'shell',
-      subscribe => Service['mysqld'],
-      require   => [
-        Service['mysqld'],
-        Package['mysql-server'],
-        Package['pdns-backend-mysql'],
-        File["${::root_home}/.my.cnf"],
-        Mysql::Db[$::powerdns::db_name]
-      ],
+      sql      => $::powerdns::mysql_schema_file,
+      require  => Package['pdns-backend-mysql'],
     }
   }
 }
