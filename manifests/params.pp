@@ -12,7 +12,7 @@ class powerdns::params {
   $db_host = 'localhost'
   $custom_repo = false
   $default_package_ensure = installed
-  $version = '4.0'
+  $version = '4.1'
   $mysql_schema_file = "/usr/share/doc/pdns-backend-mysql-${version}.?/schema.mysql.sql"
 
   case $facts['os']['family'] {
