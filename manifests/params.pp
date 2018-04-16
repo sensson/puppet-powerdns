@@ -13,7 +13,7 @@ class powerdns::params {
   $custom_repo = false
   $default_package_ensure = installed
   $version = '4.1'
-  $mysql_schema_file = "/usr/share/doc/pdns-backend-mysql-${version}.?/schema.mysql.sql"
+  $mysql_schema_file = "/usr/share/doc/pdns-backend-mysql-4.?.?/schema.mysql.sql"
 
   case $facts['os']['family'] {
     'RedHat': {
