@@ -109,7 +109,7 @@ describe 'powerdns', type: :class do
           it { is_expected.to contain_class('powerdns::backends::mysql') }
           it { is_expected.to contain_package('pdns-backend-mysql').with('ensure' => 'installed') }
           it { is_expected.to contain_mysql__db('powerdns').with('user' => 'foo', 'password' => 'bar', 'host' => '127.0.0.1') }
-          it { is_expected.to contain_mysql__db('powerdns').with_sql(/4.1/) }
+          it { is_expected.to contain_mysql__db('powerdns').with_sql(/4\.\?\.\?/) }
 
           # This sets our configuration
           it { is_expected.to contain_powerdns__config('gmysql-host').with('value' => '127.0.0.1') }
