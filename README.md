@@ -116,9 +116,13 @@ The host where your database should be created. Defaults to 'localhost'.
 
 Don't manage repo with this module. Defaults to false.
 
-##### `supermaster_query`
+##### `version`
 
-Set query to select supermasters. Defaults to 'select account from supermasters where ip=\'%s\''.
+Set the PowerDNS version. Defaults to '4.1'.
+
+##### `mysql_schema_file`
+
+Set the PowerDNS MySQL schema file. Defaults to `/usr/share/doc/pdns-backend-mysql-4.?.?/schema.mysql.sql`.
 
 #### powerdns::authoritative and powerdns::recursor
 
