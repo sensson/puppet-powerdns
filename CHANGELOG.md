@@ -1,3 +1,7 @@
+## 1.2.1
+
+This is a minor release which removes unused template files.
+
 ## 1.2.0
 
 ### Summary
