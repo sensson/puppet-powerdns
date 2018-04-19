@@ -1,6 +1,6 @@
 {
     "name": "sensson-powerdns",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "author": "sensson",
     "license": "Apache-2.0",
     "summary": "A module to install and configure PowerDNS 4.x authoritative server and recursor",
@@ -9,10 +9,10 @@
     "issues_url": "https://github.com/sensson/puppet-powerdns/issues",
     "tags": [ "powerdns" ],
     "operatingsystem_support": [
-        { "operatingsystem": "CentOS",      "operatingsystemrelease": [ "6", "7" ] },
+        { "operatingsystem": "CentOS", "operatingsystemrelease": [ "6", "7" ] },
         { "operatingsystem": "OracleLinux", "operatingsystemrelease": [ "6", "7" ] },
-        { "operatingsystem": "RedHat",      "operatingsystemrelease": [ "6", "7" ] },
-        { "operatingsystem": "Scientific",  "operatingsystemrelease": [ "6", "7" ] },
+        { "operatingsystem": "RedHat", "operatingsystemrelease": [ "6", "7" ] },
+        { "operatingsystem": "Scientific", "operatingsystemrelease": [ "6", "7" ] },
         { "operatingsystem": "Ubuntu", "operatingsystemrelease": [ "14.04", "16.04" ] },
         { "operatingsystem": "Debian", "operatingsystemrelease": [ "8" ] }
     ],

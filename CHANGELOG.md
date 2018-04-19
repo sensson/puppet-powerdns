@@ -1,3 +1,16 @@
+## 1.2.0
+
+### Summary
+
+PowerDNS 4.1 is now the default version. You can switch versions through a
+newly introduced parameter `$version`. This will change the repositories to
+the latest version but it will not update PowerDNS for you, nor does it make
+any required database changes.
+
+### Features
+- Add version support. This also includes the EPEL-repository on RHEL.
+- Use the MySQL database schema as provided by PowerDNS.
+
 ## 1.1.0
 
 ### Features
