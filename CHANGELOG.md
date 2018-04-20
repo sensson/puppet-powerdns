@@ -1,3 +1,8 @@
+## 1.2.2
+
+This release has no code changes. An incorrect file was added to the Forge
+and this release is to correct that error.
+
 ## 1.2.1
 
 This is a minor release which removes unused template files.
