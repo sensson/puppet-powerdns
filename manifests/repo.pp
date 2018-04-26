@@ -44,7 +44,7 @@ class powerdns::repo {
 
       apt::key { 'powerdns':
         ensure => present,
-        id     => 'FD380FBB',
+        id     => '9FAAA5577E8FCF62093D036C1B0C6205FD380FBB',
         source => 'https://repo.powerdns.com/FD380FBB-pub.asc',
       }
 
