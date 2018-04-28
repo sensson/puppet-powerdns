@@ -1,3 +1,13 @@
+## 1.2.3
+
+### Summary
+
+This release reimplements the `$version` parameter.
+
+### Bugs
+- The `$version`-functionality was never implemented by accident.
+- Update apt id to be a full fingerprint.
+
 ## 1.2.2
 
 This release has no code changes. An incorrect file was added to the Forge
