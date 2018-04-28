@@ -44,6 +44,10 @@ describe 'powerdns class' do
     describe service(authoritative_service) do
       it { should be_running }
     end
+
+    describe command('/usr/bin/pdns_control version') do
+      its(:stdout) { should match '4.1' }
+    end
   end
 
   context 'recursor server' do
