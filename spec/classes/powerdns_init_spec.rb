@@ -62,6 +62,19 @@ describe 'powerdns', type: :class do
             it { is_expected.to contain_apt__source('powerdns').with_release(/auth-41/) }
             it { is_expected.to contain_apt__source('powerdns-recursor') }
             it { is_expected.to contain_apt__source('powerdns-recursor').with_release(/rec-41/) }
+
+            # On Ubuntu 17.04 and higher and Debian 9 and higher it expects dirmngr
+            if facts[:operatingsystem] == 'Ubuntu'
+              if facts[:operatingsystemmajrelease].to_i >= 17
+                it { is_expected.to contain_package('dirmngr') }
+              end
+            end
+
+            if facts[:operatingsystem] == 'Debian'
+              if facts[:operatingsystemmajrelease].to_i >= 9
+                it { is_expected.to contain_package('dirmngr') }
+              end
+            end
           end
 
           # Check the authoritative server
