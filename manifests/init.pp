@@ -17,16 +17,16 @@ class powerdns (
 
   # Do some additional checks. In certain cases, some parameters are no longer optional.
   if $authoritative {
-	  if ($::powerdns::backend != 'bind') {
-	      assert_type(String[1], $db_password) |$expected, $actual| {
-	        fail("'db_password' must be a non-empty string when 'authoritative' == true")
-	      }
-	      if $backend_install {
-	        assert_type(String[1], $db_root_password) |$expected, $actual| {
-	          fail("'db_root_password' must be a non-empty string when 'backend_install' == true")
-	        }
-	      }
-	  }
+    if ($::powerdns::backend != 'bind') {
+      assert_type(String[1], $db_password) |$expected, $actual| {
+        fail("'db_password' must be a non-empty string when 'authoritative' == true")
+      }
+      if $backend_install {
+        assert_type(String[1], $db_root_password) |$expected, $actual| {
+          fail("'db_root_password' must be a non-empty string when 'backend_install' == true")
+        }
+      }
+    }
   }
 
   # Include the required classes
