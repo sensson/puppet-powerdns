@@ -194,6 +194,7 @@ This module has been tested on:
 * Ubuntu 14.04
 * Ubuntu 16.04
 * Debian 8
+* Debian 9
 * Oracle Linux 7
 
 We believe it also works on:
