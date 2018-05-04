@@ -10,11 +10,14 @@ class powerdns::authoritative ($package_ensure = $powerdns::params::default_pack
     'mysql': {
       include powerdns::backends::mysql
     }
+    'bind': {
+      include powerdns::backends::bind
+    }
     'postgresql': {
       include powerdns::backends::postgresql
     }
     default: {
-      fail("${::powerdns::backend} is not supported. We only support 'mysql' and 'postgresql' at the moment.")
+      fail("${::powerdns::backend} is not supported. We only support 'mysql', 'bind' and 'postgresql' at the moment.")
     }
   }
 

@@ -45,7 +45,7 @@ class { 'powerdns':
 }
 ```
 
-The module also has limited support for using postgresql as the database backend.
+The module also has limited support for using postgresql and bind as the powerdns backend.
 
 To use postgresql you must set `backend_install` and `backend_create_tables` to false.
 eg
@@ -56,6 +56,17 @@ class { 'powerdns':
   backend_install       => false,
   backend_create_tables => false,
   db_password           => 's0m4r4nd0mp4ssw0rd',
+}
+```
+
+To use bind you must set `backend_install` and `backend_create_tables` to false.
+eg
+
+```puppet
+class { 'powerdns':
+  backend               => 'bind',
+  backend_install       => false,
+  backend_create_tables => false,
 }
 ```
 
