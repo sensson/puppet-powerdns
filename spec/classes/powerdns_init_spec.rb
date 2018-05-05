@@ -192,8 +192,19 @@ describe 'powerdns', type: :class do
           it { is_expected.to contain_class('powerdns::backends::bind') }
           it { is_expected.to contain_package('pdns-backend-bind').with('ensure' => 'installed') }
 
-          # This sets our configuration
-          it { is_expected.to contain_powerdns__config('bind-config').with('value' => '/etc/powerdns/bindbackend.conf') }
+          case facts[:osfamily]
+          when 'RedHat'
+            it { is_expected.to contain_file('/etc/pdns/bindbackend.conf').with('ensure' => 'file') }
+            it { is_expected.to contain_file('/etc/pdns/bind').with('ensure' => 'directory') }
+            it { is_expected.to contain_powerdns__config('bind-config').with('value' => '/etc/pdns/bindbackend.conf') }
+          end
+          case facts[:osfamily]
+          when 'Debian'
+            it { is_expected.to contain_file('/etc/powerdns/bindbackend.conf').with('ensure' => 'file') }
+            it { is_expected.to contain_file('/etc/powerdns/bind').with('ensure' => 'directory') }
+            it { is_expected.to contain_powerdns__config('bind-config').with('value' => '/etc/powerdns/bindbackend.conf') }
+          end
+
           it { is_expected.to contain_powerdns__config('launch').with('value' => 'bind') }
 
           it { is_expected.to contain_file_line(format('powerdns-config-bind-config-%<config>s', config: authoritative_config)) }

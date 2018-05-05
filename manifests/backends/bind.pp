@@ -11,7 +11,7 @@ class powerdns::backends::bind inherits powerdns {
   powerdns::config { 'bind-config':
     ensure  => present,
     setting => 'bind-config',
-    value   => '/etc/powerdns/bindbackend.conf',
+    value   => "${::powerdns::params::authoritative_configdir}/bindbackend.conf",
     type    => 'authoritative',
   }
 
