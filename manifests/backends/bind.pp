@@ -29,7 +29,7 @@ class powerdns::backends::bind inherits powerdns {
     group  => 'root',
   }
 
-  file { "${}::powerdns::params::authoritative_configdirbindbackend}/bind":
+  file { "${::powerdns::params::authoritative_configdirbindbackend}/bind":
     ensure => directory,
     mode   => '0755',
     owner  => 'root',
