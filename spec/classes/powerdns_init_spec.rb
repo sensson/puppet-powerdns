@@ -182,6 +182,24 @@ describe 'powerdns', type: :class do
           end
         end
 
+        context 'powerdns class with bind backend' do
+          let(:params) do
+            {
+              backend: 'bind'
+            }
+          end
+
+          it { is_expected.to contain_class('powerdns::backends::bind') }
+          it { is_expected.to contain_package('pdns-backend-bind').with('ensure' => 'installed') }
+
+          # This sets our configuration
+          it { is_expected.to contain_powerdns__config('bind-config').with('value' => '/etc/powerdns/bindbackend.conf') }
+          it { is_expected.to contain_powerdns__config('launch').with('value' => 'bind') }
+
+          it { is_expected.to contain_file_line(format('powerdns-config-bind-config-%<config>s', config: authoritative_config)) }
+          it { is_expected.to contain_file_line(format('powerdns-config-launch-%<config>s', config: authoritative_config)) }
+        end
+
         context 'powerdns class with backend_create_tables set to false' do
           let(:params) do
             {
@@ -267,7 +285,7 @@ describe 'powerdns', type: :class do
           end
 
           it 'fails' do
-            expect { subject.call } .to raise_error(/'backend' expects a match for Enum\['mysql', 'postgresql'\]/)
+            expect { subject.call } .to raise_error(/'backend' expects a match for Enum\['bind', 'mysql', 'postgresql'\]/)
           end
         end
       end
