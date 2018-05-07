@@ -195,6 +195,36 @@ describe 'powerdns', type: :class do
           end
         end
 
+        context 'powerdns class with bind backend' do
+          let(:params) do
+            {
+              backend: 'bind'
+            }
+          end
+
+          it { is_expected.to contain_class('powerdns::backends::bind') }
+          it { is_expected.to contain_package('pdns-backend-bind').with('ensure' => 'installed') }
+
+          case facts[:osfamily]
+          when 'RedHat'
+            it { is_expected.to contain_file('/etc/pdns/named.conf').with('ensure' => 'file') }
+            it { is_expected.to contain_file('/etc/pdns/named').with('ensure' => 'directory') }
+            it { is_expected.to contain_powerdns__config('bind-config').with('value' => '/etc/pdns/named.conf') }
+          end
+          case facts[:osfamily]
+          when 'Debian'
+            it { is_expected.to contain_file('/etc/powerdns/named.conf').with('ensure' => 'file') }
+            it { is_expected.to contain_file('/etc/powerdns/named').with('ensure' => 'directory') }
+            it { is_expected.to contain_powerdns__config('bind-config').with('value' => '/etc/powerdns/named.conf') }
+          end
+
+          it { is_expected.to contain_powerdns__config('launch').with('value' => 'bind') }
+
+          it { is_expected.to contain_file_line(format('powerdns-config-bind-config-%<config>s', config: authoritative_config)) }
+          it { is_expected.to contain_file_line(format('powerdns-config-launch-%<config>s', config: authoritative_config)) }
+          it { is_expected.to contain_file_line(format('powerdns-bind-baseconfig')) }
+        end
+
         context 'powerdns class with backend_create_tables set to false' do
           let(:params) do
             {
@@ -252,7 +282,7 @@ describe 'powerdns', type: :class do
           end
 
           it 'fails' do
-            expect { subject.call } .to raise_error(/parameter 'db_username' expects a String\[1, default\] value, got String/)
+            expect { subject.call } .to raise_error(/parameter 'db_username' expects a (value of type Undef or )?String\[1, default\]( value)?, got String/)
           end
         end
 
@@ -280,7 +310,7 @@ describe 'powerdns', type: :class do
           end
 
           it 'fails' do
-            expect { subject.call } .to raise_error(/'backend' expects a match for Enum\['mysql', 'postgresql'\]/)
+            expect { subject.call } .to raise_error(/'backend' expects a match for Enum\['bind', 'mysql', 'postgresql'\]/)
           end
         end
       end

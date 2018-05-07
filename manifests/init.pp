@@ -2,14 +2,14 @@
 class powerdns (
   Boolean                    $authoritative         = $::powerdns::params::authoritative,
   Boolean                    $recursor              = $::powerdns::params::recursor,
-  Enum['mysql','postgresql'] $backend               = $::powerdns::params::backend,
+  Enum['mysql', 'bind', 'postgresql'] $backend      = $::powerdns::params::backend,
   Boolean                    $backend_install       = $::powerdns::params::backend_install,
   Boolean                    $backend_create_tables = $::powerdns::params::backend_create_tables,
   Optional[String[1]]        $db_root_password      = $::powerdns::params::db_root_password,
-  String[1]                  $db_username           = $::powerdns::params::db_username,
+  Optional[String[1]]        $db_username           = $::powerdns::params::db_username,
   Optional[String[1]]        $db_password           = $::powerdns::params::db_password,
-  String[1]                  $db_name               = $::powerdns::params::db_name,
-  String[1]                  $db_host               = $::powerdns::params::db_host,
+  Optional[String[1]]        $db_name               = $::powerdns::params::db_name,
+  Optional[String[1]]        $db_host               = $::powerdns::params::db_host,
   Boolean                    $custom_repo           = $::powerdns::params::custom_repo,
   Enum['4.0','4.1']          $version               = $::powerdns::params::version,
   String[1]                  $mysql_schema_file     = $::powerdns::params::mysql_schema_file,
@@ -17,12 +17,14 @@ class powerdns (
 
   # Do some additional checks. In certain cases, some parameters are no longer optional.
   if $authoritative {
-    assert_type(String[1], $db_password) |$expected, $actual| {
-      fail("'db_password' must be a non-empty string when 'authoritative' == true")
-    }
-    if $backend_install {
-      assert_type(String[1], $db_root_password) |$expected, $actual| {
-        fail("'db_root_password' must be a non-empty string when 'backend_install' == true")
+    if ($::powerdns::backend != 'bind') {
+      assert_type(String[1], $db_password) |$expected, $actual| {
+        fail("'db_password' must be a non-empty string when 'authoritative' == true")
+      }
+      if $backend_install {
+        assert_type(String[1], $db_root_password) |$expected, $actual| {
+          fail("'db_root_password' must be a non-empty string when 'backend_install' == true")
+        }
       }
     }
   }
