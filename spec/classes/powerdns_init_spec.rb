@@ -209,6 +209,7 @@ describe 'powerdns', type: :class do
 
           it { is_expected.to contain_file_line(format('powerdns-config-bind-config-%<config>s', config: authoritative_config)) }
           it { is_expected.to contain_file_line(format('powerdns-config-launch-%<config>s', config: authoritative_config)) }
+          it { is_expected.to contain_file_line(format('powerdns-bind-baseconfig')) }
         end
 
         context 'powerdns class with backend_create_tables set to false' do
@@ -268,7 +269,7 @@ describe 'powerdns', type: :class do
           end
 
           it 'fails' do
-            expect { subject.call } .to raise_error(/parameter 'db_username' expects a String\[1, default\] value, got String/)
+            expect { subject.call } .to raise_error(/parameter 'db_username' expects a value of type Undef or String\[1, default\], got String/)
           end
         end
 
