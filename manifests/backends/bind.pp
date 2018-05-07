@@ -39,7 +39,7 @@ class powerdns::backends::bind inherits powerdns {
   file_line { 'powerdns-bind-baseconfig':
     ensure  => present,
     path    => "${::powerdns::params::authoritative_configdir}/bindbackend.conf",
-    line    => 'options { directory "/etc/powerdns/named"; };',
+    line    => 'options { directory "${::powerdns::params::authoritative_configdir}/named"; };',
     match   => 'options',
     require => Package['pdns-backend-bind'],
     notify  => Service[$::powerdns::params::authoritative_service],
