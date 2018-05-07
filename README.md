@@ -45,7 +45,7 @@ class { 'powerdns':
 }
 ```
 
-The module also has limited support for using postgresql and bind as the powerdns backend.
+The module also has limited support for using PostgreSQL and Bind as the PowerDNS backend.
 
 To use postgresql you must set `backend_install` and `backend_create_tables` to false.
 eg
@@ -89,7 +89,7 @@ Install the PowerDNS recursor. Defaults to false.
 
 ##### `backend`
 
-Choose a backend for the authoritative server. Valid values are 'mysql' and 'postgresql'. Defaults to 'mysql'.
+Choose a backend for the authoritative server. Valid values are 'mysql',  'postgresql' and 'bind'. Defaults to 'mysql'.
 
 ##### `backend_install`
 

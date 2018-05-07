@@ -194,15 +194,15 @@ describe 'powerdns', type: :class do
 
           case facts[:osfamily]
           when 'RedHat'
-            it { is_expected.to contain_file('/etc/pdns/bindbackend.conf').with('ensure' => 'file') }
-            it { is_expected.to contain_file('/etc/pdns/bind').with('ensure' => 'directory') }
-            it { is_expected.to contain_powerdns__config('bind-config').with('value' => '/etc/pdns/bindbackend.conf') }
+            it { is_expected.to contain_file('/etc/pdns/named.conf').with('ensure' => 'file') }
+            it { is_expected.to contain_file('/etc/pdns/named').with('ensure' => 'directory') }
+            it { is_expected.to contain_powerdns__config('bind-config').with('value' => '/etc/pdns/named.conf') }
           end
           case facts[:osfamily]
           when 'Debian'
-            it { is_expected.to contain_file('/etc/powerdns/bindbackend.conf').with('ensure' => 'file') }
-            it { is_expected.to contain_file('/etc/powerdns/bind').with('ensure' => 'directory') }
-            it { is_expected.to contain_powerdns__config('bind-config').with('value' => '/etc/powerdns/bindbackend.conf') }
+            it { is_expected.to contain_file('/etc/powerdns/named.conf').with('ensure' => 'file') }
+            it { is_expected.to contain_file('/etc/powerdns/named').with('ensure' => 'directory') }
+            it { is_expected.to contain_powerdns__config('bind-config').with('value' => '/etc/powerdns/named.conf') }
           end
 
           it { is_expected.to contain_powerdns__config('launch').with('value' => 'bind') }
@@ -269,7 +269,7 @@ describe 'powerdns', type: :class do
           end
 
           it 'fails' do
-            expect { subject.call } .to raise_error(/parameter 'db_username' expects a value of type Undef or String\[1, default\], got String/)
+            expect { subject.call } .to raise_error(/parameter 'db_username' expects a (value of type Undef or )?String\[1, default\]( value)?, got String/)
           end
         end
 

@@ -11,7 +11,7 @@ class powerdns::backends::bind inherits powerdns {
   powerdns::config { 'bind-config':
     ensure  => present,
     setting => 'bind-config',
-    value   => "${::powerdns::params::authoritative_configdir}/bindbackend.conf",
+    value   => "${::powerdns::params::authoritative_configdir}/named.conf",
     type    => 'authoritative',
   }
 
@@ -22,14 +22,14 @@ class powerdns::backends::bind inherits powerdns {
     require => Package[$::powerdns::params::authoritative_package],
   }
 
-  file { "${::powerdns::params::authoritative_configdir}/bindbackend.conf":
+  file { "${::powerdns::params::authoritative_configdir}/named.conf":
     ensure => file,
     mode   => '0644',
     owner  => 'root',
     group  => 'root',
   }
 
-  file { "${::powerdns::params::authoritative_configdir}/bind":
+  file { "${::powerdns::params::authoritative_configdir}/named":
     ensure => directory,
     mode   => '0755',
     owner  => 'root',
@@ -39,7 +39,7 @@ class powerdns::backends::bind inherits powerdns {
   file_line { 'powerdns-bind-baseconfig':
     ensure  => present,
     path    => "${::powerdns::params::authoritative_configdir}/bindbackend.conf",
-    line    => 'options { directory "/etc/powerdns/bind"; };',
+    line    => 'options { directory "/etc/powerdns/named"; };',
     match   => 'options',
     require => Package['pdns-backend-bind'],
     notify  => Service[$::powerdns::params::authoritative_service],
