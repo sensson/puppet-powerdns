@@ -203,18 +203,19 @@ describe 'powerdns', type: :class do
           end
 
           it { is_expected.to contain_class('powerdns::backends::bind') }
-          it { is_expected.to contain_package('pdns-backend-bind').with('ensure' => 'installed') }
 
           case facts[:osfamily]
           when 'RedHat'
             it { is_expected.to contain_file('/etc/pdns/named.conf').with('ensure' => 'file') }
             it { is_expected.to contain_file('/etc/pdns/named').with('ensure' => 'directory') }
+            it { is_expected.to contain_file('/etc/pdns/pdns.d/pdns.simplebind.conf').with('ensure' => 'absent') }
             it { is_expected.to contain_powerdns__config('bind-config').with('value' => '/etc/pdns/named.conf') }
           end
           case facts[:osfamily]
           when 'Debian'
             it { is_expected.to contain_file('/etc/powerdns/named.conf').with('ensure' => 'file') }
             it { is_expected.to contain_file('/etc/powerdns/named').with('ensure' => 'directory') }
+            it { is_expected.to contain_file('/etc/powerdns/pdns.d/pdns.simplebind.conf').with('ensure' => 'absent') }
             it { is_expected.to contain_powerdns__config('bind-config').with('value' => '/etc/powerdns/named.conf') }
           end
 
