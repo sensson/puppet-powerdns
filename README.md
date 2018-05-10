@@ -55,8 +55,8 @@ If you don't specify the backend it assumes you will use MySQL.
 
 ```puppet
 class { 'powerdns':
-  backend               => 'mysql',
-  db_password           => 's0m4r4nd0mp4ssw0rd',
+  backend     => 'mysql',
+  db_password => 's0m4r4nd0mp4ssw0rd',
 }
 ```
 
@@ -64,8 +64,8 @@ To use PostgreSQL set `backend` to `postgresql`.
 
 ```puppet
 class { 'powerdns':
-  backend               => 'postgresql',
-  db_password           => 's0m4r4nd0mp4ssw0rd',
+  backend     => 'postgresql',
+  db_password => 's0m4r4nd0mp4ssw0rd',
 }
 ```
 
