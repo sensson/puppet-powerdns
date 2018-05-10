@@ -148,6 +148,11 @@ Set the PowerDNS version. Defaults to '4.1'.
 Set the PowerDNS MySQL schema file. Defaults to the location provided by
 PowerDNS.
 
+##### `pgsql_schema_file`
+
+Set the PowerDNS PostgreSQL schema file. Defaults to the location provided by
+PowerDNS.
+
 #### powerdns::authoritative and powerdns::recursor
 
 ##### `package_ensure`

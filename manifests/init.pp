@@ -13,6 +13,7 @@ class powerdns (
   Boolean                    $custom_repo           = $::powerdns::params::custom_repo,
   Enum['4.0','4.1']          $version               = $::powerdns::params::version,
   String[1]                  $mysql_schema_file     = $::powerdns::params::mysql_schema_file,
+  String[1]                  $pgsql_schema_file     = $::powerdns::params::pgsql_schema_file,
 ) inherits powerdns::params {
 
   # Do some additional checks. In certain cases, some parameters are no longer optional.
