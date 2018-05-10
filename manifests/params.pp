@@ -13,7 +13,6 @@ class powerdns::params {
   $custom_repo = false
   $default_package_ensure = installed
   $version = '4.1'
-  $mysql_schema_file = '/usr/share/doc/pdns-backend-mysql-4.?.?/schema.mysql.sql'
 
   case $facts['os']['family'] {
     'RedHat': {
@@ -21,6 +20,7 @@ class powerdns::params {
       $authoritative_service = 'pdns'
       $authoritative_config = '/etc/pdns/pdns.conf'
       $pgsql_backend_package_name = 'pdns-backend-postgresql'
+      $mysql_schema_file = '/usr/share/doc/pdns-backend-mysql-4.?.?/schema.mysql.sql'
       $pgsql_schema_file = '/usr/share/doc/pdns-backend-postgresql-4.?.?/schema.pgsql.sql'
       $authoritative_configdir = '/etc/pdns'
       $recursor_package = 'pdns-recursor'
@@ -32,6 +32,7 @@ class powerdns::params {
       $authoritative_service = 'pdns'
       $authoritative_config = '/etc/powerdns/pdns.conf'
       $pgsql_backend_package_name = 'pdns-backend-pgsql'
+      $mysql_schema_file = '/usr/share/doc/pdns-backend-mysql/schema.mysql.sql'
       $pgsql_schema_file = '/usr/share/doc/pdns-backend-pgsql/schema.pgsql.sql'
       $authoritative_configdir = '/etc/powerdns'
       $recursor_package = 'pdns-recursor'
