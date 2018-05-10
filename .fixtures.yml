@@ -6,6 +6,12 @@ fixtures:
     mysql:
       repo: "https://github.com/puppetlabs/puppetlabs-mysql.git"
       ref: "5.1.0"
+    postgresql:
+      repo: "https://github.com/puppetlabs/puppetlabs-postgresql.git"
+      ref: "5.4.0"
+    concat:
+      repo: "https://github.com/puppetlabs/puppetlabs-concat.git"
+      ref: "4.2.1"
     apt:
       repo: "https://github.com/puppetlabs/puppetlabs-apt.git"
       ref: "4.5.1"
