@@ -16,6 +16,7 @@ describe 'powerdns', type: :class do
           authoritative_package_name = 'pdns'
           authoritative_service_name = 'pdns'
           authoritative_config = '/etc/pdns/pdns.conf'
+          mysql_schema_file = '/usr/share/doc/pdns-backend-mysql-4.?.?/schema.mysql.sql'
           pgsql_backend_package_name = 'pdns-backend-postgresql'
           pgsql_schema_file = '/usr/share/doc/pdns-backend-postgresql-4.?.?/schema.pgsql.sql'
           recursor_package_name = 'pdns-recursor'
@@ -24,6 +25,7 @@ describe 'powerdns', type: :class do
           authoritative_package_name = 'pdns-server'
           authoritative_service_name = 'pdns'
           authoritative_config = '/etc/powerdns/pdns.conf'
+          mysql_schema_file = '/usr/share/doc/pdns-backend-mysql/schema.mysql.sql'
           pgsql_backend_package_name = 'pdns-backend-pgsql'
           pgsql_schema_file = '/usr/share/doc/pdns-backend-pgsql/schema.pgsql.sql'
           recursor_package_name = 'pdns-recursor'
@@ -122,7 +124,7 @@ describe 'powerdns', type: :class do
           it { is_expected.to contain_class('powerdns::backends::mysql') }
           it { is_expected.to contain_package('pdns-backend-mysql').with('ensure' => 'installed') }
           it { is_expected.to contain_mysql__db('powerdns').with('user' => 'foo', 'password' => 'bar', 'host' => '127.0.0.1') }
-          it { is_expected.to contain_mysql__db('powerdns').with_sql(/4\.\?\.\?/) }
+          it { is_expected.to contain_mysql__db('powerdns').with_sql(mysql_schema_file) }
 
           # This sets our configuration
           it { is_expected.to contain_powerdns__config('gmysql-host').with('value' => '127.0.0.1') }
