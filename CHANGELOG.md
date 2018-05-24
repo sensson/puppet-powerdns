@@ -1,3 +1,14 @@
+## 1.3.0
+
+### Summary
+
+This completes support for PostgreSQL and adds Bind as backend for PowerDNS.
+
+### Features
+- Full support for PostgreSQL as backend.
+- Support for Bind as backend.
+- Support for Debian 9.
+
 ## 1.2.3
 
 ### Summary
