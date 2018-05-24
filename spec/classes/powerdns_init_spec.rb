@@ -16,12 +16,18 @@ describe 'powerdns', type: :class do
           authoritative_package_name = 'pdns'
           authoritative_service_name = 'pdns'
           authoritative_config = '/etc/pdns/pdns.conf'
+          mysql_schema_file = '/usr/share/doc/pdns-backend-mysql-4.?.?/schema.mysql.sql'
+          pgsql_backend_package_name = 'pdns-backend-postgresql'
+          pgsql_schema_file = '/usr/share/doc/pdns-backend-postgresql-4.?.?/schema.pgsql.sql'
           recursor_package_name = 'pdns-recursor'
           recursor_service_name = 'pdns-recursor'
         when 'Debian'
           authoritative_package_name = 'pdns-server'
           authoritative_service_name = 'pdns'
           authoritative_config = '/etc/powerdns/pdns.conf'
+          mysql_schema_file = '/usr/share/doc/pdns-backend-mysql/schema.mysql.sql'
+          pgsql_backend_package_name = 'pdns-backend-pgsql'
+          pgsql_schema_file = '/usr/share/doc/pdns-backend-pgsql/schema.pgsql.sql'
           recursor_package_name = 'pdns-recursor'
           recursor_service_name = 'pdns-recursor'
         end
@@ -62,6 +68,19 @@ describe 'powerdns', type: :class do
             it { is_expected.to contain_apt__source('powerdns').with_release(/auth-41/) }
             it { is_expected.to contain_apt__source('powerdns-recursor') }
             it { is_expected.to contain_apt__source('powerdns-recursor').with_release(/rec-41/) }
+
+            # On Ubuntu 17.04 and higher and Debian 9 and higher it expects dirmngr
+            if facts[:operatingsystem] == 'Ubuntu'
+              if facts[:operatingsystemmajrelease].to_i >= 17
+                it { is_expected.to contain_package('dirmngr') }
+              end
+            end
+
+            if facts[:operatingsystem] == 'Debian'
+              if facts[:operatingsystemmajrelease].to_i >= 9
+                it { is_expected.to contain_package('dirmngr') }
+              end
+            end
           end
 
           # Check the authoritative server
@@ -105,7 +124,7 @@ describe 'powerdns', type: :class do
           it { is_expected.to contain_class('powerdns::backends::mysql') }
           it { is_expected.to contain_package('pdns-backend-mysql').with('ensure' => 'installed') }
           it { is_expected.to contain_mysql__db('powerdns').with('user' => 'foo', 'password' => 'bar', 'host' => '127.0.0.1') }
-          it { is_expected.to contain_mysql__db('powerdns').with_sql(/4\.\?\.\?/) }
+          it { is_expected.to contain_mysql__db('powerdns').with_sql(mysql_schema_file) }
 
           # This sets our configuration
           it { is_expected.to contain_powerdns__config('gmysql-host').with('value' => '127.0.0.1') }
@@ -122,64 +141,61 @@ describe 'powerdns', type: :class do
         end
 
         context 'powerdns class with postgresql backend' do
-          context 'with backend_install and backend_create_tables set to false' do
-            let(:params) do
-              {
-                db_root_password: 'foobar',
-                db_username: 'foo',
-                db_password: 'bar',
-                backend: 'postgresql',
-                backend_install: false,
-                backend_create_tables: false
-              }
-            end
-            it { is_expected.to compile.with_all_deps }
-            it { is_expected.to contain_class('powerdns::backends::postgresql') }
-            it { is_expected.to contain_package('pdns-backend-postgresql').with('ensure' => 'installed') }
-
-            it { is_expected.to contain_powerdns__config('launch').with('value' => 'gpgsql') }
-            it { is_expected.to contain_powerdns__config('gpgsql-host').with('value' => 'localhost') }
-            it { is_expected.to contain_powerdns__config('gpgsql-dbname').with('value' => 'powerdns') }
-            it { is_expected.to contain_powerdns__config('gpgsql-password').with('value' => 'bar') }
-            it { is_expected.to contain_powerdns__config('gpgsql-user').with('value' => 'foo') }
-
-            it { is_expected.to contain_file_line(format('powerdns-config-gpgsql-host-%<config>s', config: authoritative_config)) }
-            it { is_expected.to contain_file_line(format('powerdns-config-gpgsql-dbname-%<config>s', config: authoritative_config)) }
-            it { is_expected.to contain_file_line(format('powerdns-config-gpgsql-password-%<config>s', config: authoritative_config)) }
-            it { is_expected.to contain_file_line(format('powerdns-config-gpgsql-user-%<config>s', config: authoritative_config)) }
+          let(:params) do
+            {
+              db_root_password: 'foobar',
+              db_username: 'foo',
+              db_password: 'bar',
+              backend: 'postgresql'
+            }
           end
 
-          context 'with backend_install set to true' do
-            let(:params) do
-              {
-                db_root_password: 'foobar',
-                db_username: 'foo',
-                db_password: 'bar',
-                backend: 'postgresql',
-                backend_install: true,
-                backend_create_tables: false
-              }
-            end
-            it 'fails' do
-              expect { subject.call } .to raise_error(/backend_install isn't supported with postgresql yet/)
-            end
+          it { is_expected.to contain_class('powerdns::backends::postgresql') }
+          it { is_expected.to contain_package(pgsql_backend_package_name).with('ensure' => 'installed') }
+          it { is_expected.to contain_postgresql__server__db('powerdns').with('user' => 'foo') }
+          it { is_expected.to contain_postgresql_psql('Load SQL schema').with('command' => format('\\i %<file>s', file: pgsql_schema_file)) }
+
+          it { is_expected.to contain_powerdns__config('launch').with('value' => 'gpgsql') }
+          it { is_expected.to contain_powerdns__config('gpgsql-host').with('value' => 'localhost') }
+          it { is_expected.to contain_powerdns__config('gpgsql-dbname').with('value' => 'powerdns') }
+          it { is_expected.to contain_powerdns__config('gpgsql-password').with('value' => 'bar') }
+          it { is_expected.to contain_powerdns__config('gpgsql-user').with('value' => 'foo') }
+
+          it { is_expected.to contain_file_line(format('powerdns-config-gpgsql-host-%<config>s', config: authoritative_config)) }
+          it { is_expected.to contain_file_line(format('powerdns-config-gpgsql-dbname-%<config>s', config: authoritative_config)) }
+          it { is_expected.to contain_file_line(format('powerdns-config-gpgsql-password-%<config>s', config: authoritative_config)) }
+          it { is_expected.to contain_file_line(format('powerdns-config-gpgsql-user-%<config>s', config: authoritative_config)) }
+        end
+
+        context 'powerdns class with bind backend' do
+          let(:params) do
+            {
+              backend: 'bind'
+            }
           end
 
-          context 'with backend_create_tables set to true' do
-            let(:params) do
-              {
-                db_root_password: 'foobar',
-                db_username: 'foo',
-                db_password: 'bar',
-                backend: 'postgresql',
-                backend_install: false,
-                backend_create_tables: true
-              }
-            end
-            it 'fails' do
-              expect { subject.call } .to raise_error(/backend_create_tables isn't supported with postgresql yet/)
-            end
+          it { is_expected.to contain_class('powerdns::backends::bind') }
+
+          case facts[:osfamily]
+          when 'RedHat'
+            it { is_expected.to contain_file('/etc/pdns/named.conf').with('ensure' => 'file') }
+            it { is_expected.to contain_file('/etc/pdns/named').with('ensure' => 'directory') }
+            it { is_expected.to contain_file('/etc/pdns/pdns.d/pdns.simplebind.conf').with('ensure' => 'absent') }
+            it { is_expected.to contain_powerdns__config('bind-config').with('value' => '/etc/pdns/named.conf') }
           end
+          case facts[:osfamily]
+          when 'Debian'
+            it { is_expected.to contain_file('/etc/powerdns/named.conf').with('ensure' => 'file') }
+            it { is_expected.to contain_file('/etc/powerdns/named').with('ensure' => 'directory') }
+            it { is_expected.to contain_file('/etc/powerdns/pdns.d/pdns.simplebind.conf').with('ensure' => 'absent') }
+            it { is_expected.to contain_powerdns__config('bind-config').with('value' => '/etc/powerdns/named.conf') }
+          end
+
+          it { is_expected.to contain_powerdns__config('launch').with('value' => 'bind') }
+
+          it { is_expected.to contain_file_line(format('powerdns-config-bind-config-%<config>s', config: authoritative_config)) }
+          it { is_expected.to contain_file_line(format('powerdns-config-launch-%<config>s', config: authoritative_config)) }
+          it { is_expected.to contain_file_line(format('powerdns-bind-baseconfig')) }
         end
 
         context 'powerdns class with backend_create_tables set to false' do
@@ -239,7 +255,7 @@ describe 'powerdns', type: :class do
           end
 
           it 'fails' do
-            expect { subject.call } .to raise_error(/parameter 'db_username' expects a String\[1, default\] value, got String/)
+            expect { subject.call } .to raise_error(/parameter 'db_username' expects a (value of type Undef or )?String\[1, default\]( value)?, got String/)
           end
         end
 
@@ -267,7 +283,7 @@ describe 'powerdns', type: :class do
           end
 
           it 'fails' do
-            expect { subject.call } .to raise_error(/'backend' expects a match for Enum\['mysql', 'postgresql'\]/)
+            expect { subject.call } .to raise_error(/'backend' expects a match for Enum\['bind', 'mysql', 'postgresql'\]/)
           end
         end
       end

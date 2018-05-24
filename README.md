@@ -21,9 +21,10 @@ class { 'powerdns':
 }
 ```
 
-If you want to install both the recursor and the authoritative service on the same
-server it is recommended to have the services listen on their own ip address. The
-example below needs to be adjusted to use the ip addresses of your server.
+If you want to install both the recursor and the authoritative service on the
+same server it is recommended to have the services listen on their own IP
+address. The example below needs to be adjusted to use the ip addresses of your
+server.
 
 This may fail the first time on Debian-based distro's.
 
@@ -45,17 +46,37 @@ class { 'powerdns':
 }
 ```
 
-The module also has limited support for using postgresql as the database backend.
+### Backends
 
-To use postgresql you must set `backend_install` and `backend_create_tables` to false.
-eg
+The default backend is MySQL. It also comes with support for PostgreSQL and
+Bind.
+
+If you don't specify the backend it assumes you will use MySQL.
 
 ```puppet
 class { 'powerdns':
-  backend               => 'postgresql',
+  backend     => 'mysql',
+  db_password => 's0m4r4nd0mp4ssw0rd',
+}
+```
+
+To use PostgreSQL set `backend` to `postgresql`.
+
+```puppet
+class { 'powerdns':
+  backend     => 'postgresql',
+  db_password => 's0m4r4nd0mp4ssw0rd',
+}
+```
+
+To use Bind you must set `backend_install` and `backend_create_tables` to
+false. For example:
+
+```puppet
+class { 'powerdns':
+  backend               => 'bind',
   backend_install       => false,
   backend_create_tables => false,
-  db_password           => 's0m4r4nd0mp4ssw0rd',
 }
 ```
 
@@ -78,7 +99,8 @@ Install the PowerDNS recursor. Defaults to false.
 
 ##### `backend`
 
-Choose a backend for the authoritative server. Valid values are 'mysql' and 'postgresql'. Defaults to 'mysql'.
+Choose a backend for the authoritative server. Valid values are 'mysql',
+'postgresql' and 'bind'. Defaults to 'mysql'.
 
 ##### `backend_install`
 
@@ -87,8 +109,9 @@ you. This requires `db_root_password`. Defaults to true.
 
 ##### `backend_create_tables`
 
-If set to true, it will ensure the required powerdns tables exist in your backend database.
-If your database is on a separate host or you are using the postgresql backend, set `backend_install` and `backend_create_tables` to false.
+If set to true, it will ensure the required powerdns tables exist in your
+backend database. If your database is on a separate host or you are using the
+the Bind backend, set `backend_install` and `backend_create_tables` to false.
 Defaults to true.
 
 ##### `db_root_password`
@@ -122,7 +145,13 @@ Set the PowerDNS version. Defaults to '4.1'.
 
 ##### `mysql_schema_file`
 
-Set the PowerDNS MySQL schema file. Defaults to `/usr/share/doc/pdns-backend-mysql-4.?.?/schema.mysql.sql`.
+Set the PowerDNS MySQL schema file. Defaults to the location provided by
+PowerDNS.
+
+##### `pgsql_schema_file`
+
+Set the PowerDNS PostgreSQL schema file. Defaults to the location provided by
+PowerDNS.
 
 #### powerdns::authoritative and powerdns::recursor
 
@@ -134,9 +163,9 @@ You can set the package version to be installed. Defaults to 'installed'.
 
 #### powerdns::config
 
-All PowerDNS settings can be managed with `powerdns::config`. Depending on the backend we will set a few
-configuration settings by default: `launch`, `gmysql-user`, `gmysql-password`, `gmysql-dbname` and
-`gmysql-supermaster-query`. All other variables can be changed as follows:
+All PowerDNS settings can be managed with `powerdns::config`. Depending on the
+backend we will set a few configuration settings by default. All other
+variables can be changed as follows:
 
 ```puppet
 powerdns::config { 'api':
@@ -157,11 +186,13 @@ The value for the above setting.
 
 ##### `type`
 
-The configuration file you want to change. Valid values are 'authoritative', 'recursor'. Defaults to 'authoritative'.
+The configuration file you want to change. Valid values are 'authoritative',
+'recursor'. Defaults to 'authoritative'.
 
 ##### `ensure`
 
-Specify whether or not this configuration should be present. Valid values are 'present', 'absent'. Defaults to 'present'.
+Specify whether or not this configuration should be present. Valid values are
+'present', 'absent'. Defaults to 'present'.
 
 ### Hiera
 
@@ -194,6 +225,7 @@ This module has been tested on:
 * Ubuntu 14.04
 * Ubuntu 16.04
 * Debian 8
+* Debian 9
 * Oracle Linux 7
 
 We believe it also works on:
@@ -248,7 +280,8 @@ BEAKER_destroy=onpass bundle exec rake beaker:centos7
 BEAKER_destroy=onpass bundle exec rake beaker:ubuntu1404
 BEAKER_destroy=onpass bundle exec rake beaker:ubuntu1604
 BEAKER_destroy=onpass bundle exec rake beaker:debian8
+BEAKER_destroy=onpass bundle exec rake beaker:debian9
 ```
 
-We recommend specifying BEAKER_destroy=onpass as it will keep the
+We recommend specifying `BEAKER_destroy=onpass` as it will keep the
 Vagrant machine running in case something fails.
