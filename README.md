@@ -216,6 +216,30 @@ powerdns::auth::config:
     value: 'yes'
 ```
 
+#### Prevent duplicate declaration
+
+In this example we configure `local-address` to `127.0.0.1`. If you also
+run a recursor on the same server and you would like to configure
+`local-address` via Hiera you need to set `setting` and change the name of
+the parameter in Hiera to a unique value.
+
+For example:
+
+```
+powerdns::auth::config:
+  local-address-auth:
+    setting: 'local-address'
+    value: '127.0.0.1'
+powerdns::recursor::config:
+  local-address-recursor:
+    setting: 'local-address'
+    value: '127.0.0.2'
+```
+
+If you have other settings that share the same name between the recursor and
+authoritative server you would have to use the same approach to prevent
+duplicate declaration errors.
+
 ## Limitations
 
 This module has been tested on:
