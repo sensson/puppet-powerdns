@@ -198,6 +198,69 @@ describe 'powerdns', type: :class do
           it { is_expected.to contain_file_line(format('powerdns-bind-baseconfig')) }
         end
 
+        context 'powerdns class with ldap backend' do
+          context 'with backend_install and backend_create_tables set to false' do
+            let(:params) do
+              {
+                db_root_password: 'foobar',
+                db_username: 'foo',
+                db_password: 'bar',
+                backend: 'ldap',
+                backend_install: false,
+                backend_create_tables: false
+              }
+            end
+            it { is_expected.to compile.with_all_deps }
+            it { is_expected.to contain_class('powerdns::backends::ldap') }
+            it { is_expected.to contain_package('pdns-backend-ldap').with('ensure' => 'installed') }
+
+            it { is_expected.to contain_powerdns__config('launch').with('value' => 'ldap') }
+            it { is_expected.to contain_powerdns__config('ldap-host').with('value' => 'localhost') }
+            it { is_expected.to contain_powerdns__config('ldap-basedn').with('value' => 'powerdns') }
+            it { is_expected.to contain_powerdns__config('ldap-secret').with('value' => 'bar') }
+            it { is_expected.to contain_powerdns__config('ldap-binddn').with('value' => 'foo') }
+            it { is_expected.to contain_powerdns__config('ldap-method').with('value' => 'strict') }
+
+            it { is_expected.to contain_file_line(format('powerdns-config-ldap-host-%<config>s', config: authoritative_config)) }
+            it { is_expected.to contain_file_line(format('powerdns-config-ldap-basedn-%<config>s', config: authoritative_config)) }
+            it { is_expected.to contain_file_line(format('powerdns-config-ldap-secret-%<config>s', config: authoritative_config)) }
+            it { is_expected.to contain_file_line(format('powerdns-config-ldap-binddn-%<config>s', config: authoritative_config)) }
+            it { is_expected.to contain_file_line(format('powerdns-config-ldap-method-%<config>s', config: authoritative_config)) }
+          end
+
+          context 'with backend_install set to true' do
+            let(:params) do
+              {
+                db_root_password: 'foobar',
+                db_username: 'foo',
+                db_password: 'bar',
+                backend: 'ldap',
+                backend_install: true,
+                backend_create_tables: false
+              }
+            end
+            it 'fails' do
+              expect { subject.call } .to raise_error(/backend_install is not supported with ldap/)
+            end
+          end
+
+          context 'with backend_create_tables set to true' do
+            let(:params) do
+              {
+                db_root_password: 'foobar',
+                db_username: 'foo',
+                db_password: 'bar',
+                backend: 'ldap',
+                backend_install: false,
+                backend_create_tables: true
+              }
+            end
+            it 'fails' do
+              expect { subject.call } .to raise_error(/backend_create_tables is not supported with ldap/)
+            end
+          end
+        end
+
         context 'powerdns class with backend_create_tables set to false' do
           let(:params) do
             {
@@ -283,7 +346,7 @@ describe 'powerdns', type: :class do
           end
 
           it 'fails' do
-            expect { subject.call } .to raise_error(/'backend' expects a match for Enum\['bind', 'mysql', 'postgresql'\]/)
+            expect { subject.call } .to raise_error(/'backend' expects a match for Enum\['bind', 'ldap', 'mysql', 'postgresql'\]/)
           end
         end
       end
