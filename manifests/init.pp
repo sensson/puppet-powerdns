@@ -10,6 +10,11 @@ class powerdns (
   Optional[String[1]]        $db_password              = $::powerdns::params::db_password,
   Optional[String[1]]        $db_name                  = $::powerdns::params::db_name,
   Optional[String[1]]        $db_host                  = $::powerdns::params::db_host,
+  Optional[String[1]]        $ldap_host                = $::powerdns::params::ldap_host,
+  Optional[String[1]]        $ldap_basedn              = $::powerdns::params::ldap_basedn,
+  Optional[String[1]]        $ldap_method              = $::powerdns::params::ldap_method,
+  Optional[String[1]]        $ldap_binddn              = $::powerdns::params::ldap_binddn,
+  Optional[String[1]]        $ldap_secret              = $::powerdns::params::ldap_secret,
   Boolean                    $custom_repo              = $::powerdns::params::custom_repo,
   Enum['4.0','4.1']          $version                  = $::powerdns::params::version,
   String[1]                  $mysql_schema_file        = $::powerdns::params::mysql_schema_file,
@@ -18,7 +23,7 @@ class powerdns (
 
   # Do some additional checks. In certain cases, some parameters are no longer optional.
   if $authoritative {
-    if ($::powerdns::backend != 'bind') {
+    if ($::powerdns::backend != 'bind') and ($::powerdns::backend != 'ldap') {
       assert_type(String[1], $db_password) |$expected, $actual| {
         fail("'db_password' must be a non-empty string when 'authoritative' == true")
       }

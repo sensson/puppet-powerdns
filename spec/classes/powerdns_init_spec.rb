@@ -202,9 +202,9 @@ describe 'powerdns', type: :class do
           context 'with backend_install and backend_create_tables set to false' do
             let(:params) do
               {
-                db_root_password: 'foobar',
-                db_username: 'foo',
-                db_password: 'bar',
+                ldap_basedn: 'ou=foo',
+                ldap_binddn: 'foo',
+                ldap_secret: 'bar',
                 backend: 'ldap',
                 backend_install: false,
                 backend_create_tables: false
@@ -215,8 +215,8 @@ describe 'powerdns', type: :class do
             it { is_expected.to contain_package('pdns-backend-ldap').with('ensure' => 'installed') }
 
             it { is_expected.to contain_powerdns__config('launch').with('value' => 'ldap') }
-            it { is_expected.to contain_powerdns__config('ldap-host').with('value' => 'localhost') }
-            it { is_expected.to contain_powerdns__config('ldap-basedn').with('value' => 'powerdns') }
+            it { is_expected.to contain_powerdns__config('ldap-host').with('value' => 'ldap://localhost/') }
+            it { is_expected.to contain_powerdns__config('ldap-basedn').with('value' => 'ou=foo') }
             it { is_expected.to contain_powerdns__config('ldap-secret').with('value' => 'bar') }
             it { is_expected.to contain_powerdns__config('ldap-binddn').with('value' => 'foo') }
             it { is_expected.to contain_powerdns__config('ldap-method').with('value' => 'strict') }
@@ -231,9 +231,9 @@ describe 'powerdns', type: :class do
           context 'with backend_install set to true' do
             let(:params) do
               {
-                db_root_password: 'foobar',
-                db_username: 'foo',
-                db_password: 'bar',
+                ldap_basedn: 'ou=foo',
+                ldap_binddn: 'foo',
+                ldap_secret: 'bar',
                 backend: 'ldap',
                 backend_install: true,
                 backend_create_tables: false
@@ -247,9 +247,9 @@ describe 'powerdns', type: :class do
           context 'with backend_create_tables set to true' do
             let(:params) do
               {
-                db_root_password: 'foobar',
-                db_username: 'foo',
-                db_password: 'bar',
+                ldap_basedn: 'ou=foo',
+                ldap_binddn: 'foo',
+                ldap_secret: 'bar',
                 backend: 'ldap',
                 backend_install: false,
                 backend_create_tables: true
