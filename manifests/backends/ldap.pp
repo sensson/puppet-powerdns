@@ -12,28 +12,28 @@ class powerdns::backends::ldap inherits powerdns {
   powerdns::config { 'ldap-host':
     ensure  => present,
     setting => 'ldap-host',
-    value   => $::powerdns::db_host,
+    value   => $::powerdns::ldap_host,
     type    => 'authoritative',
   }
 
   powerdns::config { 'ldap-binddn':
     ensure  => present,
     setting => 'ldap-binddn',
-    value   => $::powerdns::db_username,
+    value   => $::powerdns::ldap_binddn,
     type    => 'authoritative',
   }
 
   powerdns::config { 'ldap-secret':
     ensure  => present,
     setting => 'ldap-secret',
-    value   => $::powerdns::db_password,
+    value   => $::powerdns::ldap_secret,
     type    => 'authoritative',
   }
 
   powerdns::config { 'ldap-basedn':
     ensure  => present,
     setting => 'ldap-basedn',
-    value   => $::powerdns::db_name,
+    value   => $::powerdns::ldap_basedn,
     type    => 'authoritative',
   }
 

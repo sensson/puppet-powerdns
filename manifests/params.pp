@@ -10,7 +10,11 @@ class powerdns::params {
   $db_password = undef
   $db_name = 'powerdns'
   $db_host = 'localhost'
+  $ldap_host = 'ldap://localhost/'
+  $ldap_basedn = undef
   $ldap_method = 'strict'
+  $ldap_binddn = undef
+  $ldap_secret = undef
   $custom_repo = false
   $default_package_ensure = installed
   $version = '4.1'
