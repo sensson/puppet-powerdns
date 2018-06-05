@@ -1,5 +1,20 @@
 # postgresql backend for powerdns
 class powerdns::backends::postgresql inherits powerdns {
+  if $facts['os']['family'] == 'Debian' {
+    # Remove the debconf gpgsql configuration file auto-generated when using the package
+    # from Debian repository as it interferes with this module's backend configuration.
+    file { "${::powerdns::params::authoritative_configdir}/pdns.d/pdns.local.gpgsql.conf":
+      ensure  => absent,
+      require => Package[$::powerdns::params::pgsql_backend_package_name],
+    }
+
+    # The pdns-server package from the Debian APT repo automatically installs the bind
+    # backend package which we do not want when using another backend such as pgsql.
+    package { 'pdns-backend-bind':
+      ensure  => purged,
+      require => Package[$::powerdns::params::authoritative_package],
+    }
+  }
 
   # set the configuration variables
   powerdns::config { 'launch':
