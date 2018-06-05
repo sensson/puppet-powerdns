@@ -151,6 +151,12 @@ describe 'powerdns', type: :class do
           end
 
           it { is_expected.to contain_class('powerdns::backends::postgresql') }
+
+          if facts[:operatingsystem] == 'Debian'
+            it { is_expected.to contain_file('/etc/powerdns/pdns.d/pdns.local.gpgsql.conf').with('ensure' => 'absent') }
+            it { is_expected.to contain_package('pdns-backend-bind').with('ensure' => 'purged') }
+          end
+
           it { is_expected.to contain_package(pgsql_backend_package_name).with('ensure' => 'installed') }
           it { is_expected.to contain_postgresql__server__db('powerdns').with('user' => 'foo') }
           it { is_expected.to contain_postgresql_psql('Load SQL schema').with('command' => format('\\i %<file>s', file: pgsql_schema_file)) }
