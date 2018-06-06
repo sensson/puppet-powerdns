@@ -1,3 +1,15 @@
+## 1.4.0
+
+This adds support for LDAP as a backend for PowerDNS.
+
+### Features
+- Support for LDAP as backend.
+
+### Bugs
+- Remove duplicate packages and settings when `custom_repo` is `true`.
+- Document duplicate declaration errors when using both the recursor and
+  authoritative service.
+
 ## 1.3.0
 
 ### Summary
