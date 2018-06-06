@@ -48,8 +48,8 @@ class { 'powerdns':
 
 ### Backends
 
-The default backend is MySQL. It also comes with support for PostgreSQL and
-Bind.
+The default backend is MySQL. It also comes with support for PostgreSQL, Bind
+and LDAP.
 
 If you don't specify the backend it assumes you will use MySQL.
 
@@ -75,6 +75,17 @@ false. For example:
 ```puppet
 class { 'powerdns':
   backend               => 'bind',
+  backend_install       => false,
+  backend_create_tables => false,
+}
+```
+
+To use LDAP you must `backend_install` and `backend_create_tables` to false.
+For example:
+
+```puppet
+class { 'powerdns':
+  backend               => 'ldap',
   backend_install       => false,
   backend_create_tables => false,
 }
@@ -134,6 +145,26 @@ The database you want to use for PowerDNS. Defaults to 'powerdns'.
 ##### `db_host`
 
 The host where your database should be created. Defaults to 'localhost'.
+
+##### `ldap_host`
+
+The host where your LDAP server can be found. Defaults to 'ldap://localhost/'.
+
+##### `ldap_basedn`
+
+The path to search for in LDAP. Defaults to undef.
+
+##### `ldap_method`
+
+Defines how LDAP is queried. Defaults to 'strict'.
+
+##### `ldap_binddn`
+
+Path to the object to authenticate against. Defaults to undef.
+
+##### `ldap_secret`
+
+Password for simple authentication against ldap_basedn. Defaults to undef.
 
 ##### `custom_repo`
 
@@ -215,6 +246,30 @@ powerdns::auth::config:
   api:
     value: 'yes'
 ```
+
+#### Prevent duplicate declaration
+
+In this example we configure `local-address` to `127.0.0.1`. If you also
+run a recursor on the same server and you would like to configure
+`local-address` via Hiera you need to set `setting` and change the name of
+the parameter in Hiera to a unique value.
+
+For example:
+
+```
+powerdns::auth::config:
+  local-address-auth:
+    setting: 'local-address'
+    value: '127.0.0.1'
+powerdns::recursor::config:
+  local-address-recursor:
+    setting: 'local-address'
+    value: '127.0.0.2'
+```
+
+If you have other settings that share the same name between the recursor and
+authoritative server you would have to use the same approach to prevent
+duplicate declaration errors.
 
 ## Limitations
 
