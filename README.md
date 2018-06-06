@@ -48,8 +48,8 @@ class { 'powerdns':
 
 ### Backends
 
-The default backend is MySQL. It also comes with support for PostgreSQL and
-Bind.
+The default backend is MySQL. It also comes with support for PostgreSQL, Bind
+and LDAP.
 
 If you don't specify the backend it assumes you will use MySQL.
 
@@ -75,6 +75,17 @@ false. For example:
 ```puppet
 class { 'powerdns':
   backend               => 'bind',
+  backend_install       => false,
+  backend_create_tables => false,
+}
+```
+
+To use LDAP you must `backend_install` and `backend_create_tables` to false.
+For example:
+
+```puppet
+class { 'powerdns':
+  backend               => 'ldap',
   backend_install       => false,
   backend_create_tables => false,
 }
@@ -134,6 +145,26 @@ The database you want to use for PowerDNS. Defaults to 'powerdns'.
 ##### `db_host`
 
 The host where your database should be created. Defaults to 'localhost'.
+
+##### `ldap_host`
+
+The host where your LDAP server can be found. Defaults to 'ldap://localhost/'.
+
+##### `ldap_basedn`
+
+The path to search for in LDAP. Defaults to undef.
+
+##### `ldap_method`
+
+Defines how LDAP is queried. Defaults to 'strict'.
+
+##### `ldap_binddn`
+
+Path to the object to authenticate against. Defaults to undef.
+
+##### `ldap_secret`
+
+Password for simple authentication against ldap_basedn. Defaults to undef.
 
 ##### `custom_repo`
 
