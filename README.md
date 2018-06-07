@@ -80,8 +80,8 @@ class { 'powerdns':
 }
 ```
 
-To use LDAP you must `backend_install` and `backend_create_tables` to false.
-For example:
+To use LDAP you must set `backend_install` and `backend_create_tables` to
+false. For example:
 
 ```puppet
 class { 'powerdns':
