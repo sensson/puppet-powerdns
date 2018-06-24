@@ -13,7 +13,7 @@
         { "operatingsystem": "OracleLinux", "operatingsystemrelease": [ "6", "7" ] },
         { "operatingsystem": "RedHat", "operatingsystemrelease": [ "6", "7" ] },
         { "operatingsystem": "Scientific", "operatingsystemrelease": [ "6", "7" ] },
-        { "operatingsystem": "Ubuntu", "operatingsystemrelease": [ "14.04", "16.04" ] },
+        { "operatingsystem": "Ubuntu", "operatingsystemrelease": [ "14.04", "16.04", "18.04" ] },
         { "operatingsystem": "Debian", "operatingsystemrelease": [ "8", "9" ] }
     ],
     "requirements": [

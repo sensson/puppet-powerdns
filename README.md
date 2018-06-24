@@ -276,7 +276,7 @@ duplicate declaration errors.
 This module has been tested on:
 
 * CentOS 6, 7
-* Ubuntu 14.04, 16.04
+* Ubuntu 14.04, 16.04, 18.04
 * Debian 8, 9
 * Oracle Linux 7
 
@@ -331,6 +331,7 @@ BEAKER_destroy=onpass bundle exec rake beaker:centos6
 BEAKER_destroy=onpass bundle exec rake beaker:centos7
 BEAKER_destroy=onpass bundle exec rake beaker:ubuntu1404
 BEAKER_destroy=onpass bundle exec rake beaker:ubuntu1604
+BEAKER_destroy=onpass BEAKER_PUPPET_COLLECTION=puppet5 bundle exec rake beaker:ubuntu1804
 BEAKER_destroy=onpass bundle exec rake beaker:debian8
 BEAKER_destroy=onpass bundle exec rake beaker:debian9
 ```
