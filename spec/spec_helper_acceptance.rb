@@ -24,6 +24,12 @@ RSpec.configure do |c|
       on host, 'rm -rf /etc/puppetlabs/code/modules'
       on host, 'ln -s /etc/puppet/modules/ /etc/puppetlabs/code/'
 
+      # A workaround for systemd-resolved on Ubuntu 18.04. Thanks, systemd.
+      if host['platform'] == 'ubuntu-1804-amd64'
+        on host, 'systemctl stop systemd-resolved'
+        on host, 'echo "nameserver 1.1.1.1" > /etc/resolv.conf'
+      end
+
       # Synchronise modules
       rsync_to(host, fixture_modules, '/etc/puppet/modules/')
     end
