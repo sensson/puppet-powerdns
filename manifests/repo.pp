@@ -22,10 +22,7 @@ class powerdns::repo {
       Yumrepo['powerdns'] -> Package <| title == $::powerdns::params::authoritative_package |>
       Yumrepo['powerdns-recursor'] -> Package <| title == $::powerdns::params::recursor_package |>
 
-      package { 'yum-plugin-priorities':
-        ensure => installed,
-        before => Yumrepo['powerdns'],
-      }
+      ensure_packages('yum-plugin-priorities', {ensure => installed, before => Yumrepo['powerdns']})
 
       yumrepo { 'powerdns':
         name        => 'powerdns',
