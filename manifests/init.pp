@@ -46,7 +46,7 @@ class powerdns (
 
     # Set up Hiera. Even though it's not necessary to explicitly set $type for the authoritative
     # config, it is added for clarity.
-    $powerdns_auth_config = hiera('powerdns::auth::config', {})
+    $powerdns_auth_config = lookup('powerdns::auth::config', Hash, 'deep', {})
     $powerdns_auth_defaults = { 'type' => 'authoritative' }
     create_resources(powerdns::config, $powerdns_auth_config, $powerdns_auth_defaults)
   }
@@ -55,7 +55,7 @@ class powerdns (
     contain powerdns::recursor
 
     # Set up Hiera for the recursor.
-    $powerdns_recursor_config = hiera('powerdns::recursor::config', {})
+    $powerdns_recursor_config = lookup('powerdns::recursor::config', Hash, 'deep', {})
     $powerdns_recursor_defaults = { 'type' => 'recursor' }
     create_resources(powerdns::config, $powerdns_recursor_config, $powerdns_recursor_defaults)
   }
