@@ -220,6 +220,10 @@ describe 'powerdns', type: :class do
             it { is_expected.to contain_class('powerdns::backends::ldap') }
             it { is_expected.to contain_package('pdns-backend-ldap').with('ensure' => 'installed') }
 
+            if facts[:operatingsystem] == 'Debian'
+              it { is_expected.to contain_package('pdns-backend-bind').with('ensure' => 'purged') }
+            end
+
             it { is_expected.to contain_powerdns__config('launch').with('value' => 'ldap') }
             it { is_expected.to contain_powerdns__config('ldap-host').with('value' => 'ldap://localhost/') }
             it { is_expected.to contain_powerdns__config('ldap-basedn').with('value' => 'ou=foo') }

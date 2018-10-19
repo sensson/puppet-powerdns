@@ -91,8 +91,8 @@ class { 'powerdns':
 }
 ```
 
-To use LDAP you must `backend_install` and `backend_create_tables` to false.
-For example:
+To use LDAP you must set `backend_install` and `backend_create_tables` to
+false. For example:
 
 ```puppet
 class { 'powerdns':
@@ -290,19 +290,16 @@ duplicate declaration errors.
 
 This module has been tested on:
 
-* CentOS 6
-* CentOS 7
-* Ubuntu 14.04
-* Ubuntu 16.04
-* Debian 8
-* Debian 9
+* CentOS 6, 7
+* Ubuntu 14.04, 16.04, 18.04
+* Debian 8, 9
 * Oracle Linux 7
 
 We believe it also works on:
 
 * Oracle Linux 6
-* RedHat Enterprise Linux 6 & 7
-* Scientific Linux 6 & 7
+* RedHat Enterprise Linux 6, 7
+* Scientific Linux 6, 7
 
 ## Development
 
@@ -349,6 +346,7 @@ BEAKER_destroy=onpass bundle exec rake beaker:centos6
 BEAKER_destroy=onpass bundle exec rake beaker:centos7
 BEAKER_destroy=onpass bundle exec rake beaker:ubuntu1404
 BEAKER_destroy=onpass bundle exec rake beaker:ubuntu1604
+BEAKER_destroy=onpass BEAKER_PUPPET_COLLECTION=puppet5 bundle exec rake beaker:ubuntu1804
 BEAKER_destroy=onpass bundle exec rake beaker:debian8
 BEAKER_destroy=onpass bundle exec rake beaker:debian9
 ```
