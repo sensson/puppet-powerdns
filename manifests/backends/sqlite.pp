@@ -32,7 +32,7 @@ class powerdns::backends::sqlite inherits powerdns {
     file { $::powerdns::db_file:
       ensure => present,
       mode   => '0644',
-      user   => 'pdns',
+      owner  => 'pdns',
       group  => 'pdns',
     } ->
     exec { 'powerdns-sqlite3-create-tables':
