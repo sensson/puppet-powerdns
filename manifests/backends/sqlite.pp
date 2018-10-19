@@ -29,6 +29,12 @@ class powerdns::backends::sqlite inherits powerdns {
     }
   }
   if $::powerdns::backend_create_tables {
+    file { $::powerdns::db_file:
+      ensure => present,
+      mode   => '0644',
+      user   => 'pdns',
+      group  => 'pdns',
+    } ->
     exec { 'powerdns-sqlite3-create-tables':
       command => "/usr/bin/sqlite3 ${::powerdns::db_file} < ${::powerdns::sqlite_schema_file}",
       unless  => "/usr/bin/test `echo '.tables domains' | sqlite3 ${::powerdns::db_file} | wc -l` -eq 1",
