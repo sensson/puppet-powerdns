@@ -80,14 +80,13 @@ class { 'powerdns':
 }
 ```
 
-To use SQLite you must set `backend_install` and `backend_create_tables` to false.
+To use SQLite set `backend` to `sqlite`
 For example:
 
 ```puppet
 class { 'powerdns':
-  backend               => 'sqlite',
-  backend_install       => false,
-  backend_create_tables => false,
+  backend => 'sqlite',
+  db_file => '/opt/powerdns.sqlite3',
 }
 ```
 
