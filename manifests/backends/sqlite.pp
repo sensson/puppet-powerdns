@@ -23,7 +23,7 @@ class powerdns::backends::sqlite inherits powerdns {
   }
   if $::powerdns::backend_install {
     if ! defined(Package[$::powerdns::sqlite_package_name]) {
-      package { $::powerdns::sqlite_package_name
+      package { $::powerdns::sqlite_package_name:
         ensure => installed,
       }
     }
