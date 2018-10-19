@@ -10,7 +10,7 @@ class powerdns::params {
   $db_password = undef
   $db_name = 'powerdns'
   $db_host = 'localhost'
-  $db_file = '/opt/powerdns.sqlite3'
+  $db_file = '/var/lib/powerdns/powerdns.sqlite3'
   $ldap_host = 'ldap://localhost/'
   $ldap_basedn = undef
   $ldap_method = 'strict'

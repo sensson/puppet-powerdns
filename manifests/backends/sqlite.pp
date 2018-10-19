@@ -29,6 +29,12 @@ class powerdns::backends::sqlite inherits powerdns {
     }
   }
   if $::powerdns::backend_create_tables {
+    file { '/var/lib/powerdns':
+      ensure => directory,
+      mode   => '0755',
+      owner  => 'pdns',
+      group  => 'pdns',
+    } ->
     file { $::powerdns::db_file:
       ensure => present,
       mode   => '0644',
