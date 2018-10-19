@@ -25,7 +25,7 @@ define powerdns::config(
     $notify_service  = $::powerdns::params::recursor_service
   }
 
-  file_line { "powerdns-config-${setting}-${path}":
+  file_line { "powerdns-config-${type}-${setting}-${path}":
     ensure            => $ensure,
     path              => $path,
     line              => $line,
