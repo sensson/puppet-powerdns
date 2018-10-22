@@ -80,6 +80,17 @@ class { 'powerdns':
 }
 ```
 
+To use SQLite set `backend` to `sqlite`.
+NOTE: Ensure `pdns` user has write permissions to directory holding database file.
+For example:
+
+```puppet
+class { 'powerdns':
+  backend => 'sqlite',
+  db_file => '/opt/powerdns.sqlite3',
+}
+```
+
 To use LDAP you must set `backend_install` and `backend_create_tables` to
 false. For example:
 
@@ -145,6 +156,10 @@ The database you want to use for PowerDNS. Defaults to 'powerdns'.
 ##### `db_host`
 
 The host where your database should be created. Defaults to 'localhost'.
+
+##### `db_file`
+
+The file where database will be stored when using SQLite backend. Defaults to '/var/lib/powerdns/powerdns.sqlite3'
 
 ##### `ldap_host`
 
