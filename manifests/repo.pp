@@ -1,5 +1,5 @@
 # powerdns::repo
-class powerdns::repo {
+class powerdns::repo inherits powerdns {
 
   # The repositories of PowerDNS use a version such as '40' for version 4.0
   # and 41 for version 4.1.
@@ -17,7 +17,9 @@ class powerdns::repo {
 
   case $facts['os']['family'] {
     'RedHat': {
-      include ::epel
+      unless $::powerdns::custom_epel {
+        include ::epel
+      }
 
       Yumrepo['powerdns'] -> Package <| title == $::powerdns::params::authoritative_package |>
       Yumrepo['powerdns-recursor'] -> Package <| title == $::powerdns::params::recursor_package |>

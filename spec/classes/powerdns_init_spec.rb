@@ -97,6 +97,37 @@ describe 'powerdns', type: :class do
           it { is_expected.to contain_service(authoritative_service_name).that_requires(format('Package[%<package>s]', package: authoritative_package_name)) }
         end
 
+        context 'powerdns class with epel' do
+          let(:params) do
+            {
+              db_root_password: 'foobar',
+              db_username: 'foo',
+              db_password: 'bar'
+            }
+          end
+
+          case facts[:osfamily]
+          when 'RedHat'
+            it { is_expected.to contain_class('epel') }
+          end
+        end
+
+        context 'powerdns class with epel' do
+          let(:params) do
+            {
+              db_root_password: 'foobar',
+              db_username: 'foo',
+              db_password: 'bar',
+              custom_epel: true,
+            }
+          end
+
+          case facts[:osfamily]
+          when 'RedHat'
+            it { is_expected.not_to contain_class('epel') }
+          end
+        end
+
         context 'powerdns class with different version' do
           let(:params) do
             {
