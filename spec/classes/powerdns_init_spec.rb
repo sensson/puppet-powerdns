@@ -76,17 +76,8 @@ describe 'powerdns', type: :class do
             it { is_expected.to contain_apt__source('powerdns-recursor').with_release(/rec-41/) }
 
             # On Ubuntu 17.04 and higher and Debian 9 and higher it expects dirmngr
-            if facts[:operatingsystem] == 'Ubuntu'
-              if facts[:operatingsystemmajrelease].to_i >= 17
-                it { is_expected.to contain_package('dirmngr') }
-              end
-            end
-
-            if facts[:operatingsystem] == 'Debian'
-              if facts[:operatingsystemmajrelease].to_i >= 9
-                it { is_expected.to contain_package('dirmngr') }
-              end
-            end
+            it { is_expected.to contain_package('dirmngr') } if facts[:operatingsystem] == 'Ubuntu' && facts[:operatingsystemmajrelease].to_i >= 17
+            it { is_expected.to contain_package('dirmngr') } if facts[:operatingsystem] == 'Debian' && facts[:operatingsystemmajrelease].to_i >= 9
           end
 
           # Check the authoritative server
@@ -224,17 +215,17 @@ describe 'powerdns', type: :class do
           it do
             is_expected.to contain_file('/var/lib/powerdns/db.sqlite3').with(
               'ensure' => 'present',
-              'owner'  => 'pdns',
-              'group'  => 'pdns',
-              'mode'   => '0644'
+              'owner' => 'pdns',
+              'group' => 'pdns',
+              'mode' => '0644'
             )
           end
           it do
             is_expected.to contain_file('/var/lib/powerdns').with(
               'ensure' => 'directory',
-              'owner'  => 'pdns',
-              'group'  => 'pdns',
-              'mode'   => '0755'
+              'owner' => 'pdns',
+              'group' => 'pdns',
+              'mode' => '0755'
             )
           end
 
@@ -299,11 +290,7 @@ describe 'powerdns', type: :class do
             it { is_expected.to compile.with_all_deps }
             it { is_expected.to contain_class('powerdns::backends::ldap') }
             it { is_expected.to contain_package('pdns-backend-ldap').with('ensure' => 'installed') }
-
-            if facts[:operatingsystem] == 'Debian'
-              it { is_expected.to contain_package('pdns-backend-bind').with('ensure' => 'purged') }
-            end
-
+            it { is_expected.to contain_package('pdns-backend-bind').with('ensure' => 'purged') } if facts[:operatingsystem] == 'Debian'
             it { is_expected.to contain_powerdns__config('launch').with('value' => 'ldap') }
             it { is_expected.to contain_powerdns__config('ldap-host').with('value' => 'ldap://localhost/') }
             it { is_expected.to contain_powerdns__config('ldap-basedn').with('value' => 'ou=foo') }
