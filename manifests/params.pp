@@ -17,6 +17,7 @@ class powerdns::params {
   $ldap_binddn = undef
   $ldap_secret = undef
   $custom_repo = false
+  $custom_epel = false
   $default_package_ensure = installed
   $version = '4.1'
 
