@@ -118,7 +118,7 @@ describe 'powerdns', type: :class do
               db_root_password: 'foobar',
               db_username: 'foo',
               db_password: 'bar',
-              custom_epel: true,
+              custom_epel: true
             }
           end
 
