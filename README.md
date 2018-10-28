@@ -48,8 +48,8 @@ class { 'powerdns':
 
 ### Backends
 
-The default backend is MySQL. It also comes with support for PostgreSQL, Bind
-and LDAP.
+The default backend is MySQL. It also comes with support for PostgreSQL, Bind,
+LDAP and SQLite.
 
 If you don't specify the backend it assumes you will use MySQL.
 
@@ -80,17 +80,6 @@ class { 'powerdns':
 }
 ```
 
-To use SQLite set `backend` to `sqlite`.
-NOTE: Ensure `pdns` user has write permissions to directory holding database file.
-For example:
-
-```puppet
-class { 'powerdns':
-  backend => 'sqlite',
-  db_file => '/opt/powerdns.sqlite3',
-}
-```
-
 To use LDAP you must set `backend_install` and `backend_create_tables` to
 false. For example:
 
@@ -99,6 +88,16 @@ class { 'powerdns':
   backend               => 'ldap',
   backend_install       => false,
   backend_create_tables => false,
+}
+```
+
+To use SQLite you must set `backend` to `sqlite`. Ensure that the `pdns` user
+has write permissions to directory holding database file. For example:
+
+```puppet
+class { 'powerdns':
+  backend => 'sqlite',
+  db_file => '/opt/powerdns.sqlite3',
 }
 ```
 
@@ -183,7 +182,11 @@ Password for simple authentication against ldap_basedn. Defaults to undef.
 
 ##### `custom_repo`
 
-Don't manage repo with this module. Defaults to false.
+Don't manage the PowerDNS repo with this module. Defaults to false.
+
+##### `custom_epel`
+
+Don't manage the EPEL repo with this module. Defaults to false.
 
 ##### `version`
 
