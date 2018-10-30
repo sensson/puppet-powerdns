@@ -48,8 +48,8 @@ class { 'powerdns':
 
 ### Backends
 
-The default backend is MySQL. It also comes with support for PostgreSQL, Bind
-and LDAP.
+The default backend is MySQL. It also comes with support for PostgreSQL, Bind,
+LDAP and SQLite.
 
 If you don't specify the backend it assumes you will use MySQL.
 
@@ -80,14 +80,24 @@ class { 'powerdns':
 }
 ```
 
-To use LDAP you must `backend_install` and `backend_create_tables` to false.
-For example:
+To use LDAP you must set `backend_install` and `backend_create_tables` to
+false. For example:
 
 ```puppet
 class { 'powerdns':
   backend               => 'ldap',
   backend_install       => false,
   backend_create_tables => false,
+}
+```
+
+To use SQLite you must set `backend` to `sqlite`. Ensure that the `pdns` user
+has write permissions to directory holding database file. For example:
+
+```puppet
+class { 'powerdns':
+  backend => 'sqlite',
+  db_file => '/opt/powerdns.sqlite3',
 }
 ```
 
@@ -146,6 +156,10 @@ The database you want to use for PowerDNS. Defaults to 'powerdns'.
 
 The host where your database should be created. Defaults to 'localhost'.
 
+##### `db_file`
+
+The file where database will be stored when using SQLite backend. Defaults to '/var/lib/powerdns/powerdns.sqlite3'
+
 ##### `ldap_host`
 
 The host where your LDAP server can be found. Defaults to 'ldap://localhost/'.
@@ -168,7 +182,11 @@ Password for simple authentication against ldap_basedn. Defaults to undef.
 
 ##### `custom_repo`
 
-Don't manage repo with this module. Defaults to false.
+Don't manage the PowerDNS repo with this module. Defaults to false.
+
+##### `custom_epel`
+
+Don't manage the EPEL repo with this module. Defaults to false.
 
 ##### `version`
 
@@ -275,19 +293,16 @@ duplicate declaration errors.
 
 This module has been tested on:
 
-* CentOS 6
-* CentOS 7
-* Ubuntu 14.04
-* Ubuntu 16.04
-* Debian 8
-* Debian 9
+* CentOS 6, 7
+* Ubuntu 14.04, 16.04, 18.04
+* Debian 8, 9
 * Oracle Linux 7
 
 We believe it also works on:
 
 * Oracle Linux 6
-* RedHat Enterprise Linux 6 & 7
-* Scientific Linux 6 & 7
+* RedHat Enterprise Linux 6, 7
+* Scientific Linux 6, 7
 
 ## Development
 
@@ -334,6 +349,7 @@ BEAKER_destroy=onpass bundle exec rake beaker:centos6
 BEAKER_destroy=onpass bundle exec rake beaker:centos7
 BEAKER_destroy=onpass bundle exec rake beaker:ubuntu1404
 BEAKER_destroy=onpass bundle exec rake beaker:ubuntu1604
+BEAKER_destroy=onpass BEAKER_PUPPET_COLLECTION=puppet5 bundle exec rake beaker:ubuntu1804
 BEAKER_destroy=onpass bundle exec rake beaker:debian8
 BEAKER_destroy=onpass bundle exec rake beaker:debian9
 ```

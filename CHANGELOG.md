@@ -1,4 +1,22 @@
+## 1.5.0
+
+### Summary
+
+This release adds support for Ubuntu 18.04, SQLite backend and allows you to
+override the EPEL-repository on RHEL-servers.
+
+### Features
+- Support for Ubuntu 18.04.
+- Support for SQLite.
+- Support for `custom_epel` setting.
+
+### Bugs
+- Correct Rubocop dependency and styling.
+- Remove default Bind-backend on Debian systems.
+
 ## 1.4.0
+
+### Summary
 
 This adds support for LDAP as a backend for PowerDNS.
 

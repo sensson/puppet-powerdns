@@ -19,6 +19,9 @@ describe 'powerdns', type: :class do
           mysql_schema_file = '/usr/share/doc/pdns-backend-mysql-4.?.?/schema.mysql.sql'
           pgsql_backend_package_name = 'pdns-backend-postgresql'
           pgsql_schema_file = '/usr/share/doc/pdns-backend-postgresql-4.?.?/schema.pgsql.sql'
+          sqlite_backend_package_name = 'pdns-backend-sqlite'
+          sqlite_binary_package_name = 'sqlite'
+          sqlite_schema_file = '/usr/share/doc/pdns-backend-sqlite-4.?.?/schema.sqlite.sql'
           recursor_package_name = 'pdns-recursor'
           recursor_service_name = 'pdns-recursor'
         when 'Debian'
@@ -28,6 +31,9 @@ describe 'powerdns', type: :class do
           mysql_schema_file = '/usr/share/doc/pdns-backend-mysql/schema.mysql.sql'
           pgsql_backend_package_name = 'pdns-backend-pgsql'
           pgsql_schema_file = '/usr/share/doc/pdns-backend-pgsql/schema.pgsql.sql'
+          sqlite_backend_package_name = 'pdns-backend-sqlite3'
+          sqlite_schema_file = '/usr/share/doc/pdns-backend-sqlite3/schema.sqlite3.sql'
+          sqlite_binary_package_name = 'sqlite3'
           recursor_package_name = 'pdns-recursor'
           recursor_service_name = 'pdns-recursor'
         end
@@ -70,17 +76,8 @@ describe 'powerdns', type: :class do
             it { is_expected.to contain_apt__source('powerdns-recursor').with_release(/rec-41/) }
 
             # On Ubuntu 17.04 and higher and Debian 9 and higher it expects dirmngr
-            if facts[:operatingsystem] == 'Ubuntu'
-              if facts[:operatingsystemmajrelease].to_i >= 17
-                it { is_expected.to contain_package('dirmngr') }
-              end
-            end
-
-            if facts[:operatingsystem] == 'Debian'
-              if facts[:operatingsystemmajrelease].to_i >= 9
-                it { is_expected.to contain_package('dirmngr') }
-              end
-            end
+            it { is_expected.to contain_package('dirmngr') } if facts[:operatingsystem] == 'Ubuntu' && facts[:operatingsystemmajrelease].to_i >= 17
+            it { is_expected.to contain_package('dirmngr') } if facts[:operatingsystem] == 'Debian' && facts[:operatingsystemmajrelease].to_i >= 9
           end
 
           # Check the authoritative server
@@ -89,6 +86,37 @@ describe 'powerdns', type: :class do
           it { is_expected.to contain_service(authoritative_service_name).with('ensure' => 'running') }
           it { is_expected.to contain_service(authoritative_service_name).with('enable' => 'true') }
           it { is_expected.to contain_service(authoritative_service_name).that_requires(format('Package[%<package>s]', package: authoritative_package_name)) }
+        end
+
+        context 'powerdns class with epel' do
+          let(:params) do
+            {
+              db_root_password: 'foobar',
+              db_username: 'foo',
+              db_password: 'bar'
+            }
+          end
+
+          case facts[:osfamily]
+          when 'RedHat'
+            it { is_expected.to contain_class('epel') }
+          end
+        end
+
+        context 'powerdns class with epel' do
+          let(:params) do
+            {
+              db_root_password: 'foobar',
+              db_username: 'foo',
+              db_password: 'bar',
+              custom_epel: true
+            }
+          end
+
+          case facts[:osfamily]
+          when 'RedHat'
+            it { is_expected.not_to contain_class('epel') }
+          end
         end
 
         context 'powerdns class with different version' do
@@ -173,6 +201,49 @@ describe 'powerdns', type: :class do
           it { is_expected.to contain_file_line(format('powerdns-config-gpgsql-user-%<config>s', config: authoritative_config)) }
         end
 
+        context 'powerdns class with sqlite backend' do
+          let(:params) do
+            {
+              db_file: '/var/lib/powerdns/db.sqlite3',
+              backend: 'sqlite'
+            }
+          end
+
+          it { is_expected.to contain_class('powerdns::backends::sqlite') }
+          it { is_expected.to contain_package(sqlite_backend_package_name).with('ensure' => 'installed') }
+          it { is_expected.to contain_package(sqlite_binary_package_name).with('ensure' => 'installed') }
+          it do
+            is_expected.to contain_file('/var/lib/powerdns/db.sqlite3').with(
+              'ensure' => 'present',
+              'owner' => 'pdns',
+              'group' => 'pdns',
+              'mode' => '0644'
+            )
+          end
+          it do
+            is_expected.to contain_file('/var/lib/powerdns').with(
+              'ensure' => 'directory',
+              'owner' => 'pdns',
+              'group' => 'pdns',
+              'mode' => '0755'
+            )
+          end
+
+          it do
+            is_expected.to contain_exec('powerdns-sqlite3-create-tables').with(
+              'command' => format(
+                '/usr/bin/sqlite3 %<db_file>s < %<schema_file>s',
+                db_file: '/var/lib/powerdns/db.sqlite3',
+                schema_file: sqlite_schema_file
+              )
+            )
+          end
+          it { is_expected.to contain_powerdns__config('launch').with('value' => 'gsqlite3') }
+          it { is_expected.to contain_powerdns__config('gsqlite3-database').with('value' => '/var/lib/powerdns/db.sqlite3') }
+
+          it { is_expected.to contain_file_line(format('powerdns-config-gsqlite3-database-%<config>s', config: authoritative_config)) }
+        end
+
         context 'powerdns class with bind backend' do
           let(:params) do
             {
@@ -219,7 +290,7 @@ describe 'powerdns', type: :class do
             it { is_expected.to compile.with_all_deps }
             it { is_expected.to contain_class('powerdns::backends::ldap') }
             it { is_expected.to contain_package('pdns-backend-ldap').with('ensure' => 'installed') }
-
+            it { is_expected.to contain_package('pdns-backend-bind').with('ensure' => 'purged') } if facts[:operatingsystem] == 'Debian'
             it { is_expected.to contain_powerdns__config('launch').with('value' => 'ldap') }
             it { is_expected.to contain_powerdns__config('ldap-host').with('value' => 'ldap://localhost/') }
             it { is_expected.to contain_powerdns__config('ldap-basedn').with('value' => 'ou=foo') }
@@ -352,7 +423,7 @@ describe 'powerdns', type: :class do
           end
 
           it 'fails' do
-            expect { subject.call } .to raise_error(/'backend' expects a match for Enum\['bind', 'ldap', 'mysql', 'postgresql'\]/)
+            expect { subject.call } .to raise_error(/'backend' expects a match for Enum\['bind', 'ldap', 'mysql', 'postgresql', 'sqlite'\]/)
           end
         end
       end
