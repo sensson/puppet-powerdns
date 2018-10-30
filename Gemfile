@@ -8,7 +8,13 @@ gem 'puppet-lint', '>= 1.0.0'
 gem 'puppetlabs_spec_helper', '>= 1.0.0'
 gem 'rspec-puppet', '~> 2.6.0'
 gem 'rspec-puppet-facts', '~> 1.9.0'
-gem 'rubocop', '>= 0.48.1'
+
+if RUBY_VERSION < '2.3.0'
+  gem 'rubocop', '< 0.58.0'
+else
+  gem 'rubocop'
+end
+
 gem 'safe_yaml', '~> 1.0.4'
 gem 'simplecov', require: false
 gem 'simplecov-console', require: false
