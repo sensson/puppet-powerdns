@@ -23,6 +23,7 @@ group :system_tests do
   gem 'beaker', '<= 2.51.0' if RUBY_VERSION < '2.2.5'
   gem 'beaker-puppet_install_helper'
   gem 'beaker-rspec'
+  gem 'beaker-vagrant'
   gem 'nokogiri', '< 1.7.0' if RUBY_VERSION < '2.1.0'
   gem 'public_suffix', '<= 1.4.6' if RUBY_VERSION < '2.0.0'
 end
