@@ -38,7 +38,7 @@ class powerdns (
   }
 
   # Include the required classes
-  unless $custom_repo {
+  if $custom_repo {
     contain powerdns::repo
   }
 
