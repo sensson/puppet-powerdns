@@ -1,12 +1,12 @@
 source ENV['GEM_SOURCE'] || 'https://rubygems.org'
 
-puppetversion = ENV.key?('PUPPET_VERSION') ? ENV['PUPPET_VERSION'] : ['~> 4.7.0']
+puppetversion = ENV.key?('PUPPET_VERSION') ? ENV['PUPPET_VERSION'] : ['~> 4.8.0']
 gem 'facter', '>= 1.7.0'
 gem 'metadata-json-lint', '< 2.0.0'
 gem 'puppet', puppetversion
 gem 'puppet-lint', '>= 1.0.0'
 gem 'puppetlabs_spec_helper', '>= 1.0.0'
-gem 'rspec-puppet', '~> 2.7.0'
+gem 'rspec-puppet', '~> 2.6.0'
 gem 'rspec-puppet-facts', '~> 1.9.0'
 
 if RUBY_VERSION < '2.3.0'
@@ -24,6 +24,6 @@ group :system_tests do
   gem 'beaker-puppet_install_helper'
   gem 'beaker-rspec'
   gem 'beaker-vagrant'
-  gem 'nokogiri', '< 1.7.0' if RUBY_VERSION < '2.1.0'
+  gem 'nokogiri', '< 1.7.0' if RUBY_VERSION < '2.2.0'
   gem 'public_suffix', '<= 1.4.6' if RUBY_VERSION < '2.0.0'
 end
