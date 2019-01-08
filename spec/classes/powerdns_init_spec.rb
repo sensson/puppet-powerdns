@@ -395,7 +395,7 @@ describe 'powerdns', type: :class do
           end
 
           it 'fails' do
-            expect { subject.call } .to raise_error(/parameter 'db_username' expects a (value of type Undef or )?String\[1, default\]( value)?, got String/)
+            expect { subject.call } .to raise_error(/parameter 'db_username' expects a value of type Undef or String\[1\], got String/)
           end
         end
 
