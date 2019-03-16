@@ -1,3 +1,15 @@
+## 1.6.0
+
+### Summary
+
+This release adds support for Puppet 6 and includes Oracle Linux 7 in our
+acceptance tests. We have dropped tests for Puppet 4.7 due to the required
+Rubygem dependencies. We encourage you to upgrade to Puppet 5.10.
+
+### Features
+- Support for Puppet 6
+- Support for Oracle Linux 7
+
 ## 1.5.0
 
 ### Summary
