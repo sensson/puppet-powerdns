@@ -1,0 +1,11 @@
+HOSTS:
+  oel-75-x64:
+    roles:
+      - master
+    platform: el-7-x86_64
+    box: oracle/oel-7.5-64-nocm
+    box_url: https://yum.oracle.com/boxes/oraclelinux/ol75/ol75.box
+    hypervisor: vagrant
+CONFIG:
+  log_level: verbose
+  type: foss

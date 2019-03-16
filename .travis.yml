@@ -2,13 +2,18 @@
 sudo: false
 language: ruby
 bundler_args: --without development system_tests
-before_install: rm Gemfile.lock || true
+before_install:
+  - rm Gemfile.lock || true
+  - gem install bundler -v '< 2'
 rvm:
   - 2.1.0
   - 2.3.0
 script: bundle exec rake test
 env:
-  - PUPPET_VERSION="~> 4.7.0"
   - PUPPET_VERSION="~> 4.8.0"
   - PUPPET_VERSION="~> 4.9.0"
   - PUPPET_VERSION="~> 5.0.0"
+matrix:
+  include:
+    - rvm: 2.3.0
+      env: PUPPET_VERSION="~> 6.0.0"
