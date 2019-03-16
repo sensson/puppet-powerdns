@@ -30,6 +30,10 @@ RSpec.configure do |c|
         on host, 'echo "nameserver 1.1.1.1" > /etc/resolv.conf'
       end
 
+      # Sorry, it's a symlink, PATH doesn't work
+      on host, 'ln -s /opt/puppetlabs/bin/puppet /usr/bin/puppet'
+      on host, 'puppet --version'
+
       # Synchronise modules
       rsync_to(host, fixture_modules, '/etc/puppet/modules/')
     end
