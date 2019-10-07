@@ -15,6 +15,13 @@ class powerdns::backends::mysql inherits powerdns {
     type    => 'authoritative',
   }
 
+  powerdns::config { 'gmysql-port':
+    ensure  => present,
+    setting => 'gmysql-port',
+    value   => $::powerdns::db_port,
+    type    => 'authoritative',
+  }
+
   powerdns::config { 'gmysql-user':
     ensure  => present,
     setting => 'gmysql-user',
