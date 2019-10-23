@@ -145,6 +145,7 @@ describe 'powerdns', type: :class do
               db_root_password: 'foobar',
               db_username: 'foo',
               db_password: 'bar',
+              db_port: 3307,
               backend: 'mysql'
             }
           end
@@ -159,12 +160,14 @@ describe 'powerdns', type: :class do
           it { is_expected.to contain_powerdns__config('gmysql-dbname').with('value' => 'powerdns') }
           it { is_expected.to contain_powerdns__config('gmysql-password').with('value' => 'bar') }
           it { is_expected.to contain_powerdns__config('gmysql-user').with('value' => 'foo') }
+          it { is_expected.to contain_powerdns__config('gmysql-port').with('value' => 3307) }
           it { is_expected.to contain_powerdns__config('launch').with('value' => 'gmysql') }
 
           it { is_expected.to contain_file_line(format('powerdns-config-gmysql-host-%<config>s', config: authoritative_config)) }
           it { is_expected.to contain_file_line(format('powerdns-config-gmysql-dbname-%<config>s', config: authoritative_config)) }
           it { is_expected.to contain_file_line(format('powerdns-config-gmysql-password-%<config>s', config: authoritative_config)) }
           it { is_expected.to contain_file_line(format('powerdns-config-gmysql-user-%<config>s', config: authoritative_config)) }
+          it { is_expected.to contain_file_line(format('powerdns-config-gmysql-port-%<config>s', config: authoritative_config)) }
           it { is_expected.to contain_file_line(format('powerdns-config-launch-%<config>s', config: authoritative_config)) }
         end
 
