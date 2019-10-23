@@ -1,3 +1,14 @@
+## 1.6.2
+
+### Summary
+
+This release only updates the changelog that was forgotten in the 1.6.1
+release.
+
+### Features
+- Dependencies have been updated
+- Configure the database port in the MySQL-backend
+
 ## 1.6.0
 
 ### Summary
