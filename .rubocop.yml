@@ -30,3 +30,7 @@ Metrics/LineLength:
 # Disable MixinUsage
 Style/MixinUsage:
   Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+

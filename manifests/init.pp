@@ -10,6 +10,7 @@ class powerdns (
   Optional[String[1]]        $db_password                        = $::powerdns::params::db_password,
   Optional[String[1]]        $db_name                            = $::powerdns::params::db_name,
   Optional[String[1]]        $db_host                            = $::powerdns::params::db_host,
+  Optional[Integer[1]]       $db_port                            = $::powerdns::params::db_port,
   Optional[String[1]]        $db_file                            = $::powerdns::params::db_file,
   Optional[String[1]]        $ldap_host                          = $::powerdns::params::ldap_host,
   Optional[String[1]]        $ldap_basedn                        = $::powerdns::params::ldap_basedn,
