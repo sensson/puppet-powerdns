@@ -10,6 +10,9 @@ class powerdns::repo inherits powerdns {
     '4.1': {
       $short_version = '41'
     }
+    '4.2': {
+      $short_version = '42'
+    }
     default: {
       fail("Version ${::powerdns::version} is not supported.")
     }
