@@ -1,13 +1,13 @@
-## 1.6.2
+## 1.7.0
 
 ### Summary
 
-This release only updates the changelog that was forgotten in the 1.6.1
-release.
+This release adds support for PowerDNS 4.2.
 
 ### Features
-- Dependencies have been updated
+- Add support for PowerDNS 4.2
 - Configure the database port in the MySQL-backend
+- Dependencies have been updated
 
 ## 1.6.0
 
