@@ -19,7 +19,7 @@ class powerdns (
   Optional[String[1]]        $ldap_secret                        = $::powerdns::params::ldap_secret,
   Boolean                    $custom_repo                        = $::powerdns::params::custom_repo,
   Boolean                    $custom_epel                        = $::powerdns::params::custom_epel,
-  Enum['4.0','4.1']          $version                            = $::powerdns::params::version,
+  Enum['4.0','4.1','4.2']    $version                            = $::powerdns::params::version,
   String[1]                  $mysql_schema_file                  = $::powerdns::params::mysql_schema_file,
   String[1]                  $pgsql_schema_file                  = $::powerdns::params::pgsql_schema_file,
 ) inherits powerdns::params {

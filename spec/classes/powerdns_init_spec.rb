@@ -62,18 +62,18 @@ describe 'powerdns', type: :class do
           when 'RedHat'
             it { is_expected.to contain_package('yum-plugin-priorities') }
             it { is_expected.to contain_yumrepo('powerdns') }
-            it { is_expected.to contain_yumrepo('powerdns').with('baseurl' => 'http://repo.powerdns.com/centos/$basearch/$releasever/auth-41') }
+            it { is_expected.to contain_yumrepo('powerdns').with('baseurl' => 'http://repo.powerdns.com/centos/$basearch/$releasever/auth-42') }
             it { is_expected.to contain_yumrepo('powerdns-recursor') }
-            it { is_expected.to contain_yumrepo('powerdns-recursor').with('baseurl' => 'http://repo.powerdns.com/centos/$basearch/$releasever/rec-41') }
+            it { is_expected.to contain_yumrepo('powerdns-recursor').with('baseurl' => 'http://repo.powerdns.com/centos/$basearch/$releasever/rec-42') }
           end
           case facts[:osfamily]
           when 'Debian'
             it { is_expected.to contain_apt__key('powerdns') }
             it { is_expected.to contain_apt__pin('powerdns') }
             it { is_expected.to contain_apt__source('powerdns') }
-            it { is_expected.to contain_apt__source('powerdns').with_release(/auth-41/) }
+            it { is_expected.to contain_apt__source('powerdns').with_release(/auth-42/) }
             it { is_expected.to contain_apt__source('powerdns-recursor') }
-            it { is_expected.to contain_apt__source('powerdns-recursor').with_release(/rec-41/) }
+            it { is_expected.to contain_apt__source('powerdns-recursor').with_release(/rec-42/) }
 
             # On Ubuntu 17.04 and higher and Debian 9 and higher it expects dirmngr
             it { is_expected.to contain_package('dirmngr') } if facts[:operatingsystem] == 'Ubuntu' && facts[:operatingsystemmajrelease].to_i >= 17

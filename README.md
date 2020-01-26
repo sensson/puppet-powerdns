@@ -156,6 +156,11 @@ The database you want to use for PowerDNS. Defaults to 'powerdns'.
 
 The host where your database should be created. Defaults to 'localhost'.
 
+##### `db_port`
+
+The port to use when connecting to your database. Defaults to '3306'. Only
+supported in the MySQL backend currently.
+
 ##### `db_file`
 
 The file where database will be stored when using SQLite backend. Defaults to '/var/lib/powerdns/powerdns.sqlite3'
