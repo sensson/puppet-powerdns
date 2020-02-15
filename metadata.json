@@ -1,6 +1,6 @@
 {
     "name": "sensson-powerdns",
-    "version": "1.7.0",
+    "version": "1.7.1",
     "author": "sensson",
     "license": "Apache-2.0",
     "summary": "A module to install and configure PowerDNS 4.x authoritative server and recursor",
@@ -24,6 +24,6 @@
         { "name": "puppetlabs/mysql", "version_requirement": ">=3.4.0 < 9.0.0" },
         { "name": "puppetlabs/postgresql", "version_requirement": ">=4.0.0 < 6.0.0" },
         { "name": "puppetlabs/apt", "version_requirement": ">=2.0.0 < 7.0.0" },
-        { "name": "stahnma/epel", "version_requirement": ">=1.0.0 < 2.0.0" }
+        { "name": "stahnma/epel", "version_requirement": ">=1.0.0 < 3.0.0" }
     ]
 }

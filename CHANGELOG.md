@@ -1,3 +1,13 @@
+## 1.7.1
+
+### Summary
+
+This release updates stahnma/epel to 2.0.0. This is a first step towards
+CentOS 8 support.
+
+### Features
+- Update stahnma/epel to 2.0.0.
+
 ## 1.7.0
 
 ### Summary
