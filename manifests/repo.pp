@@ -3,20 +3,7 @@ class powerdns::repo inherits powerdns {
 
   # The repositories of PowerDNS use a version such as '40' for version 4.0
   # and 41 for version 4.1.
-  case $::powerdns::version {
-    '4.0': {
-      $short_version = '40'
-    }
-    '4.1': {
-      $short_version = '41'
-    }
-    '4.2': {
-      $short_version = '42'
-    }
-    default: {
-      fail("Version ${::powerdns::version} is not supported.")
-    }
-  }
+  $short_version = regsubst($::powerdns::version, /^(\d)\.(\d)$/, '\\1\\2', 'G')
 
   case $facts['os']['family'] {
     'RedHat': {
