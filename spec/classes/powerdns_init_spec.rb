@@ -70,7 +70,7 @@ describe 'powerdns', type: :class do
           when 'Debian'
             it { is_expected.to contain_apt__key('powerdns') }
             it { is_expected.to contain_apt__pin('powerdns') }
-            it { is_expected.to contain_apt__setting('powerdns').with(priority: '600') }
+            it { is_expected.to contain_apt__pin('powerdns').with(priority: '600') }
             it { is_expected.to contain_apt__source('powerdns') }
             it { is_expected.to contain_apt__source('powerdns').with_release(/auth-42/) }
             it { is_expected.to contain_apt__source('powerdns-recursor') }
