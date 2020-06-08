@@ -21,6 +21,7 @@ gem 'simplecov-console', require: false
 
 group :system_tests do
   gem 'beaker', '<= 2.51.0' if RUBY_VERSION < '2.2.5'
+  gem 'beaker', '~> 3' if RUBY_VERSION >= '2.2.5'
   gem 'beaker-puppet_install_helper'
   gem 'beaker-rspec'
   gem 'beaker-vagrant'
