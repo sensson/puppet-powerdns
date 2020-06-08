@@ -19,6 +19,7 @@ class powerdns::params {
   $ldap_secret = undef
   $custom_repo = false
   $custom_epel = false
+  $pin_priority = '600'
   $default_package_ensure = installed
   $version = '4.2'
 
@@ -54,7 +55,6 @@ class powerdns::params {
       $recursor_package = 'pdns-recursor'
       $recursor_service = 'pdns-recursor'
       $recursor_config = '/etc/powerdns/recursor.conf'
-      $pin_priority = '600'
     }
     default: {
       fail("${facts['os']['family']} is not supported yet.")
