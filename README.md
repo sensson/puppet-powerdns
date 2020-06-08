@@ -300,7 +300,7 @@ This module has been tested on:
 
 * CentOS 6, 7
 * Ubuntu 14.04, 16.04, 18.04
-* Debian 8, 9
+* Debian 8, 9, 10
 * Oracle Linux 7
 
 We believe it also works on:
@@ -358,6 +358,7 @@ BEAKER_destroy=onpass bundle exec rake beaker:ubuntu1604
 BEAKER_destroy=onpass BEAKER_PUPPET_COLLECTION=puppet5 bundle exec rake beaker:ubuntu1804
 BEAKER_destroy=onpass bundle exec rake beaker:debian8
 BEAKER_destroy=onpass bundle exec rake beaker:debian9
+BEAKER_destroy=onpass bundle exec rake beaker:debian10
 ```
 
 We recommend specifying `BEAKER_destroy=onpass` as it will keep the
