@@ -1,5 +1,5 @@
 HOSTS:
-  debian-9-x64:
+  debian-10-x64:
     roles:
       - master
     platform: debian-10-amd64
