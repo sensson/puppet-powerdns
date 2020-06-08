@@ -1,5 +1,5 @@
 # powerdns::repo
-class powerdns::repo inherits powerdns {
+class powerdns::repo (Integer $pin_priority = $powerdns::params::pin_priority) inherits powerdns {
 
   # The repositories of PowerDNS use a version such as '40' for version 4.0
   # and 41 for version 4.1.
@@ -86,7 +86,7 @@ class powerdns::repo inherits powerdns {
       }
 
       apt::pin { 'powerdns':
-        priority => 600,
+        priority => $pin_priority,
         packages => 'pdns-*',
         origin   => 'repo.powerdns.com',
         require  => Apt::Source['powerdns'],

@@ -54,6 +54,7 @@ class powerdns::params {
       $recursor_package = 'pdns-recursor'
       $recursor_service = 'pdns-recursor'
       $recursor_config = '/etc/powerdns/recursor.conf'
+      $pin_priority = '600'
     }
     default: {
       fail("${facts['os']['family']} is not supported yet.")
