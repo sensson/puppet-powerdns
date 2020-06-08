@@ -19,7 +19,7 @@ class powerdns::params {
   $ldap_secret = undef
   $custom_repo = false
   $custom_epel = false
-  $pin_priority = '600'
+  $pin_priority = 600
   $default_package_ensure = installed
   $version = '4.2'
 
