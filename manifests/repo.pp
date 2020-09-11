@@ -14,7 +14,20 @@ class powerdns::repo inherits powerdns {
       Yumrepo['powerdns'] -> Package <| title == $::powerdns::params::authoritative_package |>
       Yumrepo['powerdns-recursor'] -> Package <| title == $::powerdns::params::recursor_package |>
 
-      ensure_packages('yum-plugin-priorities', {ensure => installed, before => Yumrepo['powerdns']})
+      if versioncmp($::operatingsystemmajrelease, '7') <= 0 {
+        ensure_packages('yum-plugin-priorities', {ensure => installed, before => Yumrepo['powerdns']})
+      }
+
+      if versioncmp($::operatingsystemmajrelease, '8') <= 0 {
+        yumrepo { 'powertools':
+          ensure     => 'present',
+          descr      => 'PowerTools',
+          mirrorlist => "http://mirrorlist.centos.org/?release=\$releasever&arch=\$basearch&repo=PowerTools&infra=\$infra",
+          enabled    => 'true',
+          gpgkey     => 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-centosofficial',
+          gpgcheck   => 'true',
+        }
+      }
 
       yumrepo { 'powerdns':
         name        => 'powerdns',
