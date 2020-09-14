@@ -18,7 +18,7 @@ class powerdns::repo inherits powerdns {
         ensure_packages('yum-plugin-priorities', {ensure => installed, before => Yumrepo['powerdns']})
       }
 
-      if versioncmp($::operatingsystemmajrelease, '8') <= 0 {
+      if versioncmp($::operatingsystemmajrelease, '8') >= 0 {
         yumrepo { 'powertools':
           ensure     => 'present',
           descr      => 'PowerTools',
