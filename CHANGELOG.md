@@ -1,3 +1,16 @@
+# Changelog
+
+## 1.7.2
+
+### Summary
+
+This release adds PowerDNS 4.3 support and supports CentOS 8.
+
+### Features
+- Update allowed puppetlabs/apt requirement to 7.6.0.
+- Add support for PowerDNS 4.3
+- Add support for CentOS 8
+
 ## 1.7.1
 
 ### Summary
