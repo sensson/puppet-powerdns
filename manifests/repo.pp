@@ -3,20 +3,7 @@ class powerdns::repo inherits powerdns {
 
   # The repositories of PowerDNS use a version such as '40' for version 4.0
   # and 41 for version 4.1.
-  case $::powerdns::version {
-    '4.0': {
-      $short_version = '40'
-    }
-    '4.1': {
-      $short_version = '41'
-    }
-    '4.2': {
-      $short_version = '42'
-    }
-    default: {
-      fail("Version ${::powerdns::version} is not supported.")
-    }
-  }
+  $short_version = regsubst($::powerdns::version, /^(\d)\.(\d)$/, '\\1\\2', 'G')
 
   case $facts['os']['family'] {
     'RedHat': {
@@ -27,7 +14,20 @@ class powerdns::repo inherits powerdns {
       Yumrepo['powerdns'] -> Package <| title == $::powerdns::params::authoritative_package |>
       Yumrepo['powerdns-recursor'] -> Package <| title == $::powerdns::params::recursor_package |>
 
-      ensure_packages('yum-plugin-priorities', {ensure => installed, before => Yumrepo['powerdns']})
+      if versioncmp($::operatingsystemmajrelease, '7') <= 0 {
+        ensure_packages('yum-plugin-priorities', {ensure => installed, before => Yumrepo['powerdns']})
+      }
+
+      if versioncmp($::operatingsystemmajrelease, '8') >= 0 {
+        yumrepo { 'powertools':
+          ensure     => 'present',
+          descr      => 'PowerTools',
+          mirrorlist => "http://mirrorlist.centos.org/?release=\$releasever&arch=\$basearch&repo=PowerTools&infra=\$infra",
+          enabled    => 'true',
+          gpgkey     => 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-centosofficial',
+          gpgcheck   => 'true',
+        }
+      }
 
       yumrepo { 'powerdns':
         name        => 'powerdns',
