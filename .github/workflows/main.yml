@@ -22,4 +22,6 @@ jobs:
     - name: Test code
       env:
         PUPPET_VERSION: ~> ${{ matrix.puppet }}
-      run: bundle exec rake test
+      run: |
+        bundle install --path vendor/bundle --without development
+        bundle exec rake test
