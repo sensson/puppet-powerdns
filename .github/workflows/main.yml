@@ -21,5 +21,5 @@ jobs:
         ruby-version: 2.5.8
     - name: Test code
       env:
-        PUPPET_VERSION: ~ ${{ matrix.puppet }}
+        PUPPET_VERSION: ~> ${{ matrix.puppet }}
       run: bundle exec rake test
