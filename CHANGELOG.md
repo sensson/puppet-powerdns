@@ -1,5 +1,22 @@
 # Changelog
 
+## 2.0.0
+
+### Summary
+
+This release drops support for EOL operating systems and
+Puppet 4. Puppet 5 is now the minimum requirement. It adds
+support for Puppet 7.
+
+CI has been switched from Travis CI to Github Actions.
+
+### Features
+- Support for Puppet 7
+
+### Other
+- Switched from the old stahnma/epel to puppet/epel
+- Switched CI to Github Actions
+
 ## 1.7.2
 
 ### Summary

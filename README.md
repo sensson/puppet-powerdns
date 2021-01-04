@@ -1,10 +1,9 @@
 # PowerDNS
 
-[![Build Status](https://travis-ci.org/sensson/puppet-powerdns.svg?branch=master)](https://travis-ci.org/sensson/puppet-powerdns) [![Puppet Forge](https://img.shields.io/puppetforge/v/sensson/powerdns.svg?maxAge=2592000?style=plastic)](https://forge.puppet.com/sensson/powerdns)
+[![Build Status](https://github.com/sensson/puppet-powerdns/workflows/CI/badge.svg)](https://github.com/sensson/puppet-powerdns/actions) [![Puppet Forge](https://img.shields.io/puppetforge/v/sensson/powerdns.svg?maxAge=2592000?style=plastic)](https://forge.puppet.com/sensson/powerdns)
 
 This module can be used to configure both the recursor and authoritative
-PowerDNS 4 server. It doesn't intend to support PowerDNS 2 or 3 but the
-module supports Puppet 4 and 5.
+PowerDNS 4 server. It supports Puppet 5 and higher.
 
 ## Examples
 
@@ -253,7 +252,7 @@ Specify whether or not this configuration should be present. Valid values are
 This module supports Hiera and uses create_resources to configure PowerDNS
 if you want to. An example can be found below:
 
-```
+```puppet
 powerdns::db_root_password: 's0m4r4nd0mp4ssw0rd'
 powerdns::db_username: 'powerdns'
 powerdns::db_password: 's0m4r4nd0mp4ssw0rd'
@@ -279,7 +278,7 @@ the parameter in Hiera to a unique value.
 
 For example:
 
-```
+```puppet
 powerdns::auth::config:
   local-address-auth:
     setting: 'local-address'
@@ -298,24 +297,20 @@ duplicate declaration errors.
 
 This module has been tested on:
 
-* CentOS 6, 7
+* CentOS 6, 7, 8
 * Ubuntu 14.04, 16.04, 18.04
 * Debian 8, 9
-* Oracle Linux 7
 
-We believe it also works on:
+We believe it also on other operating systems such as:
 
-* Oracle Linux 6
-* RedHat Enterprise Linux 6, 7
-* Scientific Linux 6, 7
+* Oracle Linux
+* RedHat Enterprise Linux
+* Scientific Linux
 
 ## Development
 
 We strongly believe in the power of open source. This module is our way
 of saying thanks.
-
-This module is tested against the Ruby versions from Puppet's support
-matrix. Please make sure you have a supported version of Ruby installed.
 
 If you want to contribute please:
 
@@ -329,13 +324,13 @@ We can only accept pull requests with passing tests.
 
 To install all of its dependencies please run:
 
-```
+```bash
 bundle install --path vendor/bundle --without development
 ```
 
 ### Running unit tests
 
-```
+```bash
 bundle exec rake test
 ```
 
@@ -348,7 +343,7 @@ simple tests.
 
 You can run Beaker tests with:
 
-```
+```bash
 bundle exec rake spec_prep
 BEAKER_destroy=onpass bundle exec rake beaker:centos6
 BEAKER_destroy=onpass bundle exec rake beaker:centos7
