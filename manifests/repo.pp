@@ -93,6 +93,10 @@ class powerdns::repo inherits powerdns {
       }
     }
 
+    'FreeBSD': {
+      # Use the official pkg repository
+    }
+
     default: {
       fail("${facts['os']['family']} is not supported yet.")
     }
