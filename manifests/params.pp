@@ -3,7 +3,6 @@ class powerdns::params {
   $authoritative = true
   $recursor = false
   $backend = 'mysql'
-  $backend_install = true
   $backend_create_tables = true
   $db_root_password = undef
   $db_username = 'powerdns'
@@ -11,7 +10,6 @@ class powerdns::params {
   $db_name = 'powerdns'
   $db_host = 'localhost'
   $db_port = 3306
-  $db_file = '/var/lib/powerdns/powerdns.sqlite3'
   $ldap_host = 'ldap://localhost/'
   $ldap_basedn = undef
   $ldap_method = 'strict'
@@ -27,6 +25,9 @@ class powerdns::params {
       $authoritative_package = 'pdns'
       $authoritative_service = 'pdns'
       $authoritative_config = '/etc/pdns/pdns.conf'
+      $backend_install = true
+      $db_dir  = '/var/lib/powerdns'
+      $db_file = "${db_dir}/powerdns.sqlite3"
       $ldap_backend_package_name = 'pdns-backend-ldap'
       $pgsql_backend_package_name = 'pdns-backend-postgresql'
       $sqlite_backend_package_name = 'pdns-backend-sqlite'
@@ -43,6 +44,9 @@ class powerdns::params {
       $authoritative_package = 'pdns-server'
       $authoritative_service = 'pdns'
       $authoritative_config = '/etc/powerdns/pdns.conf'
+      $backend_install = true
+      $db_dir  = '/var/lib/powerdns'
+      $db_file = "${db_dir}/powerdns.sqlite3"
       $ldap_backend_package_name = 'pdns-backend-ldap'
       $pgsql_backend_package_name = 'pdns-backend-pgsql'
       $sqlite_backend_package_name = 'pdns-backend-sqlite3'
@@ -54,6 +58,25 @@ class powerdns::params {
       $recursor_package = 'pdns-recursor'
       $recursor_service = 'pdns-recursor'
       $recursor_config = '/etc/powerdns/recursor.conf'
+    }
+    'FreeBSD': {
+      $authoritative_package = 'powerdns'
+      $authoritative_service = 'pdns'
+      $authoritative_config = '/usr/local/etc/pdns/pdns.conf'
+      $backend_install = false
+      $db_dir  = '/var/db/powerdns'
+      $db_file = "${db_dir}/powerdns.sqlite3"
+      $ldap_backend_package_name = undef
+      $pgsql_backend_package_name = undef
+      $sqlite_backend_package_name = undef
+      $mysql_schema_file = '/usr/local/share/doc/powerdns/schema.mysql.sql'
+      $pgsql_schema_file = '/usr/local/share/doc/powerdns/schema.pgsql.sql'
+      $sqlite_schema_file = '/usr/local/share/doc/powerdns/schema.sqlite3.sql'
+      $sqlite_package_name = 'sqlite3'
+      $authoritative_configdir = '/usr/local/etc/pdns'
+      $recursor_package = 'powerdns-recursor'
+      $recursor_service = 'pdns-recursor'
+      $recursor_config = '/usr/local/etc/pdns/recursor.conf'
     }
     default: {
       fail("${facts['os']['family']} is not supported yet.")
