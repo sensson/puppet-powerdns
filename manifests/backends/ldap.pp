@@ -52,11 +52,13 @@ class powerdns::backends::ldap inherits powerdns {
     type    => 'authoritative',
   }
 
-  # set up the powerdns backend
-  package { $::powerdns::params::ldap_backend_package_name:
-    ensure  => installed,
-    before  => Service[$::powerdns::params::authoritative_service],
-    require => Package[$::powerdns::params::authoritative_package],
+  if $::powerdns::params::ldap_backend_package_name {
+    # set up the powerdns backend
+    package { $::powerdns::params::ldap_backend_package_name:
+      ensure  => installed,
+      before  => Service[$::powerdns::params::authoritative_service],
+      require => Package[$::powerdns::params::authoritative_package],
+    }
   }
 
   if $::powerdns::backend_install {
