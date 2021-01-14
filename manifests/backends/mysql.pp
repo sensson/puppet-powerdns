@@ -43,13 +43,14 @@ class powerdns::backends::mysql inherits powerdns {
     type    => 'authoritative',
   }
 
-  # set up the powerdns backend
-  package { 'pdns-backend-mysql':
-    ensure  => installed,
-    before  => Service[$::powerdns::params::authoritative_service],
-    require => Package[$::powerdns::params::authoritative_package],
+  if $::powerdns::params::mysql_backend_package_name {
+    # set up the powerdns backend
+    package { $::powerdns::params::mysql_backend_package_name:
+      ensure  => installed,
+      before  => Service[$::powerdns::params::authoritative_service],
+      require => Package[$::powerdns::params::authoritative_package],
+    }
   }
-
   if $::powerdns::backend_install {
     # mysql database
     if ! defined(Class['::mysql::server']) {
@@ -72,7 +73,7 @@ class powerdns::backends::mysql inherits powerdns {
       host     => $::powerdns::db_host,
       grant    => [ 'ALL' ],
       sql      => $::powerdns::mysql_schema_file,
-      require  => Package['pdns-backend-mysql'],
+      require  => Package[$::powerdns::params::mysql_backend_package_name],
     }
   }
 }
