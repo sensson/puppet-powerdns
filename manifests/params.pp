@@ -63,7 +63,7 @@ class powerdns::params {
       $authoritative_package = 'powerdns'
       $authoritative_service = 'pdns'
       $authoritative_config = '/usr/local/etc/pdns/pdns.conf'
-      $backend_install = false
+      $backend_install = true
       $db_dir  = '/var/db/powerdns'
       $db_file = "${db_dir}/powerdns.sqlite3"
       $ldap_backend_package_name = undef
