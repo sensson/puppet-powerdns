@@ -18,6 +18,7 @@ class powerdns (
   Optional[String[1]]        $ldap_method                        = $::powerdns::params::ldap_method,
   Optional[String[1]]        $ldap_binddn                        = $::powerdns::params::ldap_binddn,
   Optional[String[1]]        $ldap_secret                        = $::powerdns::params::ldap_secret,
+  Optional[String[1]]        $service_provider                   = $::powerdns::params::service_provider,
   Boolean                    $custom_repo                        = $::powerdns::params::custom_repo,
   Boolean                    $custom_epel                        = $::powerdns::params::custom_epel,
   Pattern[/4\.(0|1|2|3)/]    $version                            = $::powerdns::params::version,
