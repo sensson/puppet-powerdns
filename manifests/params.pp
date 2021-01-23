@@ -26,8 +26,9 @@ class powerdns::params {
       $authoritative_service = 'pdns'
       $authoritative_config = '/etc/pdns/pdns.conf'
       $backend_install = true
-      $db_dir  = '/var/lib/powerdns'
+      $db_dir = '/var/lib/powerdns'
       $db_file = "${db_dir}/powerdns.sqlite3"
+      $mysql_backend_package_name = 'pdns-backend-mysql'
       $ldap_backend_package_name = 'pdns-backend-ldap'
       $pgsql_backend_package_name = 'pdns-backend-postgresql'
       $service_provider = 'systemd'
@@ -46,8 +47,9 @@ class powerdns::params {
       $authoritative_service = 'pdns'
       $authoritative_config = '/etc/powerdns/pdns.conf'
       $backend_install = true
-      $db_dir  = '/var/lib/powerdns'
+      $db_dir = '/var/lib/powerdns'
       $db_file = "${db_dir}/powerdns.sqlite3"
+      $mysql_backend_package_name = 'pdns-backend-mysql'
       $ldap_backend_package_name = 'pdns-backend-ldap'
       $pgsql_backend_package_name = 'pdns-backend-pgsql'
       $sqlite_backend_package_name = 'pdns-backend-sqlite3'
@@ -66,8 +68,9 @@ class powerdns::params {
       $authoritative_service = 'pdns'
       $authoritative_config = '/usr/local/etc/pdns/pdns.conf'
       $backend_install = true
-      $db_dir  = '/var/db/powerdns'
+      $db_dir = '/var/db/powerdns'
       $db_file = "${db_dir}/powerdns.sqlite3"
+      $mysql_backend_package_name = 'pdns-backend-mysql'
       $ldap_backend_package_name = undef
       $pgsql_backend_package_name = undef
       $sqlite_backend_package_name = undef
