@@ -235,7 +235,7 @@ describe 'powerdns', type: :class do
           it do
             is_expected.to contain_exec('powerdns-sqlite3-create-tables').with(
               'command' => format(
-                '/usr/bin/sqlite3 %<db_file>s < %<schema_file>s',
+                '/usr/bin/env sqlite3 %<db_file>s < %<schema_file>s',
                 db_file: '/var/lib/powerdns/db.sqlite3',
                 schema_file: sqlite_schema_file
               )
