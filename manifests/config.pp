@@ -10,7 +10,8 @@ define powerdns::config(
     'gmysql-dnssec',
     'only-notify',
     'allow-notify-from',
-    'security-poll-suffix'
+    'security-poll-suffix',
+    'local-ipv6'
   ]
   unless $ensure == 'absent' or ($setting in $empty_value_allowed) {
     assert_type(Variant[String[1], Integer], $value) |$_expected, $_actual| {
