@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.1.1
+
+### Summary
+
+Nothing was changed, but due to an incorrect merge
+the data in 2.1.0 became invalid.
+
 ## 2.1.0
 
 ### Summary
