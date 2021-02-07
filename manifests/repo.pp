@@ -57,10 +57,6 @@ class powerdns::repo inherits powerdns {
 
       $os = downcase($facts['os']['name'])
 
-      # Make sure the repo's are added before we're managing packages
-      # puppet-lint seems to error out on spaces here (bug?) so it looks a bit dodgy
-      Class['apt::update']->Package<||>
-
       apt::key { 'powerdns':
         ensure => present,
         id     => '9FAAA5577E8FCF62093D036C1B0C6205FD380FBB',
@@ -82,15 +78,18 @@ class powerdns::repo inherits powerdns {
         repos        => 'main',
         release      => "${::lsbdistcodename}-rec-${short_version}",
         architecture => 'amd64',
-        require      => Apt::Key['powerdns'],
+        require      => Apt::Source['powerdns'],
       }
 
       apt::pin { 'powerdns':
         priority => 600,
         packages => 'pdns-*',
         origin   => 'repo.powerdns.com',
-        require  => Apt::Source['powerdns'],
+        require  => Apt::Source['powerdns-recursor'],
       }
+
+      Apt::Pin['powerdns'] -> Package <| title == $::powerdns::params::authoritative_package |>
+      Apt::Pin['powerdns'] -> Package <| title == $::powerdns::params::recursor_package |>
     }
 
     'FreeBSD': {
