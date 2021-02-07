@@ -53,12 +53,13 @@ class powerdns::backends::postgresql inherits powerdns {
   }
 
   # set up the powerdns backend
-  package { $::powerdns::params::pgsql_backend_package_name:
-    ensure  => installed,
-    before  => Service[$::powerdns::params::authoritative_service],
-    require => Package[$::powerdns::params::authoritative_package],
+  if $::powerdns::params::pgsql_backend_package_name {
+    package { $::powerdns::params::pgsql_backend_package_name:
+      ensure  => installed,
+      before  => Service[$::powerdns::params::authoritative_service],
+      require => Package[$::powerdns::params::authoritative_package],
+    }
   }
-
   if $::powerdns::backend_install {
     if ! defined(Class['::postgresql::server']) {
       class { '::postgresql::server':

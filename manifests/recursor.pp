@@ -5,8 +5,9 @@ class powerdns::recursor ($package_ensure = $powerdns::params::default_package_e
   }
 
   service { $::powerdns::params::recursor_service:
-    ensure  => running,
-    enable  => true,
-    require => Package[$::powerdns::params::recursor_package],
+    ensure   => running,
+    enable   => true,
+    provider => [$::powerdns::params::service_provider],
+    require  => Package[$::powerdns::params::recursor_package],
   }
 }
