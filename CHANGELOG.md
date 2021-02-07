@@ -1,5 +1,21 @@
 # Changelog
 
+## 2.1.0
+
+### Summary
+
+This release adds preliminary support for FreeBSD and
+also adds support for PowerDNS 4.4.
+
+### Features
+
+- Preliminary support for FreeBSD.
+- Allow additional values to be empty in the config.
+
+### Bugs
+
+- Authoritative and recursor package depend on apt repo (#80)
+
 ## 2.0.0
 
 ### Summary
