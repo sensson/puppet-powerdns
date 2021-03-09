@@ -24,6 +24,7 @@ class powerdns (
   Pattern[/4\.(0|1|2|3|4)/]  $version                            = $::powerdns::params::version,
   String[1]                  $mysql_schema_file                  = $::powerdns::params::mysql_schema_file,
   String[1]                  $pgsql_schema_file                  = $::powerdns::params::pgsql_schema_file,
+  String[1]                  $sqlite_schema_file                 = $::powerdns::params::sqlite_schema_file,
 ) inherits powerdns::params {
 
   # Do some additional checks. In certain cases, some parameters are no longer optional.
