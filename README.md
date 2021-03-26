@@ -206,11 +206,6 @@ PowerDNS.
 Set the PowerDNS PostgreSQL schema file. Defaults to the location provided by
 PowerDNS.
 
-##### `sqlite_schema_file`
-
-Set the PowerDNS Sqlite schema file. Defaults to the location provided by
-PowerDNS.
-
 #### powerdns::authoritative and powerdns::recursor
 
 ##### `package_ensure`
