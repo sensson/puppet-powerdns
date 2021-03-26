@@ -35,7 +35,20 @@ class powerdns::params {
       $sqlite_backend_package_name = 'pdns-backend-sqlite'
       $mysql_schema_file = '/usr/share/doc/pdns-backend-mysql-4.?.?/schema.mysql.sql'
       $pgsql_schema_file = '/usr/share/doc/pdns-backend-postgresql-4.?.?/schema.pgsql.sql'
-      $sqlite_schema_file = '/usr/share/doc/pdns-backend-sqlite*/schema.sqlite3.sql'
+      case $facts['os']['release']['major'] {
+          '5': {
+      	      $sqlite_schema_file = '/usr/share/doc/pdns-backend-sqlite-4.?.?/schema.sqlite3.sql'
+	   }
+          '6': {
+      	      $sqlite_schema_file = '/usr/share/doc/pdns-backend-sqlite-4.?.?/schema.sqlite3.sql'
+	   }
+          '7': {
+      	      $sqlite_schema_file = '/usr/share/doc/pdns-backend-sqlite-4.?.?/schema.sqlite3.sql'
+	   }
+	   default : {
+      	      $sqlite_schema_file = '/usr/share/doc/pdns-backend-sqlite/schema.sqlite3.sql'
+	   }
+      }
       $sqlite_package_name = 'sqlite'
       $authoritative_configdir = '/etc/pdns'
       $recursor_package = 'pdns-recursor'
