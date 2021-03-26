@@ -21,7 +21,7 @@ describe 'powerdns', type: :class do
           pgsql_schema_file = '/usr/share/doc/pdns-backend-postgresql-4.?.?/schema.pgsql.sql'
           sqlite_backend_package_name = 'pdns-backend-sqlite'
           sqlite_binary_package_name = 'sqlite'
-          sqlite_schema_file = '/usr/share/doc/pdns-backend-sqlite-4.?.?/schema.sqlite3.sql'
+          sqlite_schema_file = '/usr/share/doc/pdns-backend-sqlite-4.?.?/schema.sqlite.sql'
           recursor_package_name = 'pdns-recursor'
           recursor_service_name = 'pdns-recursor'
         when 'Debian'
