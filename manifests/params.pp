@@ -42,7 +42,7 @@ class powerdns::params {
         '8': {
           $sqlite_schema_file = '/usr/share/doc/pdns-backend-sqlite/schema.sqlite3.sql'
         }
-      default: {
+        default: {
           $sqlite_schema_file = '/usr/share/doc/pdns-backend-sqlite/schema.sqlite3.sql'
         }
       }
