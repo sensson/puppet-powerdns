@@ -45,7 +45,7 @@ class powerdns::params {
         }
         default: {
           $sqlite_schema_file = '/usr/share/doc/pdns-backend-sqlite/schema.sqlite3.sql'
-	}
+        }
       }
       $sqlite_package_name = 'sqlite'
       $authoritative_configdir = '/etc/pdns'
