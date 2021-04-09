@@ -23,7 +23,7 @@ describe 'powerdns', type: :class do
           sqlite_binary_package_name = 'sqlite'
 
           case facts[:operatingsystemmajrelease]
-          when '5','6','7'
+          when '5', '6', '7'
             sqlite_schema_file = '/usr/share/doc/pdns-backend-sqlite-4.?.?/schema.sqlite3.sql'
           else
             sqlite_schema_file = '/usr/share/doc/pdns-backend-sqlite/schema.sqlite3.sql'
