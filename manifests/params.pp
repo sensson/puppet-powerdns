@@ -36,6 +36,12 @@ class powerdns::params {
       $mysql_schema_file = '/usr/share/doc/pdns-backend-mysql-4.?.?/schema.mysql.sql'
       $pgsql_schema_file = '/usr/share/doc/pdns-backend-postgresql-4.?.?/schema.pgsql.sql'
       case $facts['os']['release']['major'] {
+        '5': {
+          $sqlite_schema_file = '/usr/share/doc/pdns-backend-sqlite-4.?.?/schema.sqlite3.sql'
+        }
+        '6': {
+          $sqlite_schema_file = '/usr/share/doc/pdns-backend-sqlite-4.?.?/schema.sqlite3.sql'
+        }
         '7': {
           $sqlite_schema_file = '/usr/share/doc/pdns-backend-sqlite-4.?.?/schema.sqlite3.sql'
         }
