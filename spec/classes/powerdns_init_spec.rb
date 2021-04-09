@@ -22,11 +22,10 @@ describe 'powerdns', type: :class do
           sqlite_backend_package_name = 'pdns-backend-sqlite'
           sqlite_binary_package_name = 'sqlite'
 
-          case facts[:operatingsystemmajrelease]
-          when '7'
-            sqlite_schema_file = '/usr/share/doc/pdns-backend-sqlite-4.?.?/schema.sqlite3.sql'
+          sqlite_schema_file = if facts[:operatingsystemmajrelease] === '7'
+            '/usr/share/doc/pdns-backend-sqlite-4.?.?/schema.sqlite3.sql'
           else
-            sqlite_schema_file = '/usr/share/doc/pdns-backend-sqlite/schema.sqlite3.sql'
+            '/usr/share/doc/pdns-backend-sqlite/schema.sqlite3.sql'
           end
 
           recursor_package_name = 'pdns-recursor'
