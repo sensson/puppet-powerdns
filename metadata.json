@@ -20,7 +20,7 @@
         { "name": "puppet", "version_requirement": ">= 5.0.0 < 8.0.0" }
     ],
     "dependencies": [
-        { "name": "puppetlabs/stdlib", "version_requirement": ">=4.3.2 < 6.0.0" },
+        { "name": "puppetlabs/stdlib", "version_requirement": ">=4.3.2 < 8.0.0" },
         { "name": "puppetlabs/mysql", "version_requirement": ">=3.4.0 < 11.0.0" },
         { "name": "puppetlabs/postgresql", "version_requirement": ">=6.4.0 < 7.0.0" },
         { "name": "puppetlabs/apt", "version_requirement": ">=2.0.0 < 7.6.0" },
