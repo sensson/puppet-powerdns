@@ -1,5 +1,15 @@
 # Changelog
 
+## 2.1.2
+
+### Summary
+
+A number of dependency version bumps and a fix for the
+sqlite schema on RHEL servers has been added. At the same
+time, we're dropping the `develop` branch from this
+repository as it confusing for a lot of people and
+serves no real purpose here.
+
 ## 2.1.1
 
 ### Summary
