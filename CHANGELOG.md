@@ -1,5 +1,14 @@
 # Changelog
 
+## 2.1.3
+
+This release updates the dependencies and adds support
+for PowerDNS 4.5.
+
+### Features
+
+- Add support for PowerDNS 4.5.
+
 ## 2.1.2
 
 ### Summary
