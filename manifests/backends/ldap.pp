@@ -1,5 +1,5 @@
 # ldap backend for powerdns
-class powerdns::backends::ldap inherits powerdns {
+class powerdns::backends::ldap ($package_ensure = $powerdns::params::default_package_ensure) inherits powerdns {
   if $facts['os']['family'] == 'Debian' {
     # The pdns-server package from the Debian APT repo automatically installs the bind
     # backend package which we do not want when using another backend such as ldap.
@@ -55,7 +55,7 @@ class powerdns::backends::ldap inherits powerdns {
   if $::powerdns::params::ldap_backend_package_name {
     # set up the powerdns backend
     package { $::powerdns::params::ldap_backend_package_name:
-      ensure  => installed,
+      ensure  => $package_ensure,
       before  => Service[$::powerdns::params::authoritative_service],
       require => Package[$::powerdns::params::authoritative_package],
     }
