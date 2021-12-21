@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.1.4
+
+This release adds package_ensure to all backends.
+
 ## 2.1.3
 
 This release updates the dependencies and adds support
