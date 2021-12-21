@@ -1,5 +1,5 @@
 # sqlite backend for powerdns
-class powerdns::backends::sqlite inherits powerdns {
+class powerdns::backends::sqlite ($package_ensure = $powerdns::params::default_package_ensure) inherits powerdns {
   # set the configuration variables
   powerdns::config { 'launch':
     ensure  => present,
@@ -18,7 +18,7 @@ class powerdns::backends::sqlite inherits powerdns {
   # set up the powerdns backend
   if $::powerdns::params::sqlite_backend_package_name {
     package { $::powerdns::params::sqlite_backend_package_name:
-      ensure  => installed,
+      ensure  => $package_ensure,
       before  => Service[$::powerdns::params::authoritative_service],
       require => Package[$::powerdns::params::authoritative_package],
     }
@@ -26,7 +26,7 @@ class powerdns::backends::sqlite inherits powerdns {
   if $::powerdns::backend_install {
     if ! defined(Package[$::powerdns::sqlite_package_name]) {
       package { $::powerdns::sqlite_package_name:
-        ensure => installed,
+        ensure => $package_ensure,
       }
     }
   }
