@@ -19,12 +19,20 @@ class powerdns::repo inherits powerdns {
       }
 
       if versioncmp($::operatingsystemmajrelease, '8') >= 0 {
+        if ($facts['os']['name'] == 'Rocky') {
+          $mirrorlist = "https://mirrors.rockylinux.org/mirrorlist?arch=\$basearch&repo=PowerTools-\$releasever"
+          $gpgkey = 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-rockyofficial'
+        } else {
+          $mirrorlist = "http://mirrorlist.centos.org/?release=\$releasever&arch=\$basearch&repo=PowerTools&infra=\$infra"
+          $gpgkey = 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-centosofficial'
+        }
+
         yumrepo { 'powertools':
           ensure     => 'present',
           descr      => 'PowerTools',
-          mirrorlist => "http://mirrorlist.centos.org/?release=\$releasever&arch=\$basearch&repo=PowerTools&infra=\$infra",
+          mirrorlist => $mirrorlist,
           enabled    => 'true',
-          gpgkey     => 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-centosofficial',
+          gpgkey     => $gpgkey,
           gpgcheck   => 'true',
         }
       }
