@@ -60,6 +60,9 @@ describe 'powerdns', type: :class do
           case facts[:osfamily]
           when 'RedHat'
             it { is_expected.to contain_package('yum-plugin-priorities') } if facts[:operatingsystemmajrelease].to_i < 8
+            it { is_expected.to contain_yumrepo('powertools') } if facts[:operatingsystemmajrelease].to_i >= 8
+            it { is_expected.to contain_yumrepo('powertools').with('mirrorlist' => 'http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=PowerTools&infra=$infra') } if facts[:operatingsystem] != 'Rocky' && facts[:operatingsystemmajrelease].to_i >= 8
+            it { is_expected.to contain_yumrepo('powertools').with('mirrorlist' => 'https://mirrors.rockylinux.org/mirrorlist?arch=$basearch&repo=PowerTools-$releasever') } if facts[:operatingsystem] == 'Rocky' && facts[:operatingsystemmajrelease].to_i >= 8
             it { is_expected.to contain_yumrepo('powerdns') }
             it { is_expected.to contain_yumrepo('powerdns').with('baseurl' => 'http://repo.powerdns.com/centos/$basearch/$releasever/auth-42') }
             it { is_expected.to contain_yumrepo('powerdns-recursor') }
