@@ -85,9 +85,10 @@ describe 'powerdns', type: :class do
           # Check the authoritative server
           it { is_expected.to contain_class('powerdns::authoritative') }
           it { is_expected.to contain_package(authoritative_package_name).with('ensure' => 'installed') }
-          it { is_expected.to contain_service(authoritative_service_name).with('ensure' => 'running') }
-          it { is_expected.to contain_service(authoritative_service_name).with('enable' => 'true') }
-          it { is_expected.to contain_service(authoritative_service_name).that_requires(format('Package[%<package>s]', package: authoritative_package_name)) }
+          it { is_expected.to contain_service('pdns').with('ensure' => 'running') }
+          it { is_expected.to contain_service('pdns').with('enable' => 'true') }
+          it { is_expected.to contain_service('pdns').with('name' => authoritative_service_name) }
+          it { is_expected.to contain_service('pdns').that_requires(format('Package[%<package>s]', package: authoritative_package_name)) }
         end
 
         context 'powerdns class with epel' do
@@ -384,9 +385,10 @@ describe 'powerdns', type: :class do
           # Check the authoritative server
           it { is_expected.to contain_class('powerdns::recursor') }
           it { is_expected.to contain_package(recursor_package_name).with('ensure' => 'installed') }
-          it { is_expected.to contain_service(recursor_service_name).with('ensure' => 'running') }
-          it { is_expected.to contain_service(recursor_service_name).with('enable' => 'true') }
-          it { is_expected.to contain_service(recursor_service_name).that_requires(format('Package[%<package>s]', package: recursor_package_name)) }
+          it { is_expected.to contain_service('pdns-recursor').with('ensure' => 'running') }
+          it { is_expected.to contain_service('pdns-recursor').with('enable' => 'true') }
+          it { is_expected.to contain_service('pdns-recursor').with('name' => recursor_service_name) }
+          it { is_expected.to contain_service('pdns-recursor').that_requires(format('Package[%<package>s]', package: recursor_package_name)) }
         end
 
         # Test errors

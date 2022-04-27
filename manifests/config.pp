@@ -25,11 +25,11 @@ define powerdns::config(
   if $type == 'authoritative' {
     $path            = $::powerdns::params::authoritative_config
     $require_package = $::powerdns::params::authoritative_package
-    $notify_service  = $::powerdns::params::authoritative_service
+    $notify_service  = 'pdns'
   } else {
     $path            = $::powerdns::params::recursor_config
     $require_package = $::powerdns::params::recursor_package
-    $notify_service  = $::powerdns::params::recursor_service
+    $notify_service  = 'pdns-recursor'
   }
 
   file_line { "powerdns-config-${setting}-${path}":

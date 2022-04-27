@@ -28,11 +28,9 @@ describe 'powerdns::config' do
         when 'RedHat'
           authoritative_config = '/etc/pdns/pdns.conf'
           recursor_config = '/etc/pdns-recursor/recursor.conf'
-          authoritative_service_name = 'pdns'
         when 'Debian'
           authoritative_config = '/etc/powerdns/pdns.conf'
           recursor_config = '/etc/powerdns/recursor.conf'
-          authoritative_service_name = 'pdns'
         end
 
         context 'powerdns::config with parameters' do
@@ -49,7 +47,7 @@ describe 'powerdns::config' do
           it { is_expected.to contain_file_line(format('powerdns-config-foo-%<config>s', config: authoritative_config)).with_line('foo=bar') }
           it { is_expected.to contain_file_line(format('powerdns-config-foo-%<config>s', config: authoritative_config)).with_match('^foo=') }
           it { is_expected.to contain_file_line(format('powerdns-config-foo-%<config>s', config: authoritative_config)).with_match_for_absence(true) }
-          it { is_expected.to contain_file_line(format('powerdns-config-foo-%<config>s', config: authoritative_config)).that_notifies(format('Service[%<service>s]', service: authoritative_service_name)) }
+          it { is_expected.to contain_file_line(format('powerdns-config-foo-%<config>s', config: authoritative_config)).that_notifies('Service[pdns]') }
         end
 
         context 'powerdns::config with recursor type' do

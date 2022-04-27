@@ -19,7 +19,7 @@ class powerdns::backends::sqlite ($package_ensure = $powerdns::params::default_p
   if $::powerdns::params::sqlite_backend_package_name {
     package { $::powerdns::params::sqlite_backend_package_name:
       ensure  => $package_ensure,
-      before  => Service[$::powerdns::params::authoritative_service],
+      before  => Service['pdns'],
       require => Package[$::powerdns::params::authoritative_package],
     }
   }
@@ -46,7 +46,7 @@ class powerdns::backends::sqlite ($package_ensure = $powerdns::params::default_p
     -> exec { 'powerdns-sqlite3-create-tables':
       command => "/usr/bin/env sqlite3 ${::powerdns::db_file} < ${::powerdns::sqlite_schema_file}",
       unless  => "/usr/bin/env test `echo '.tables domains' | sqlite3 ${::powerdns::db_file} | wc -l` -eq 1",
-      before  => Service[$::powerdns::params::authoritative_service],
+      before  => Service['pdns'],
       require => Package[$::powerdns::params::authoritative_package],
     }
   }

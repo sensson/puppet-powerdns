@@ -56,7 +56,7 @@ class powerdns::backends::ldap ($package_ensure = $powerdns::params::default_pac
     # set up the powerdns backend
     package { $::powerdns::params::ldap_backend_package_name:
       ensure  => $package_ensure,
-      before  => Service[$::powerdns::params::authoritative_service],
+      before  => Service['pdns'],
       require => Package[$::powerdns::params::authoritative_package],
     }
   }

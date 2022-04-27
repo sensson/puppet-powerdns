@@ -3,10 +3,8 @@ require 'spec_helper_acceptance'
 case default['platform']
 when /debian|ubuntu/
   authoritative_config = '/etc/powerdns/pdns.conf'
-  authoritative_service = 'pdns'
 when /el|centos/
   authoritative_config = '/etc/pdns/pdns.conf'
-  authoritative_service = 'pdns'
 else
   logger.notify("Cannot manage PowerDNS on #{default['platform']}")
 end
@@ -41,7 +39,7 @@ describe 'powerdns class' do
       its(:content) { should match 'gmysql-host=localhost' }
     end
 
-    describe service(authoritative_service) do
+    describe service('pdns') do
       it { should be_running }
     end
 
