@@ -13,7 +13,7 @@ RSpec.configure do |c|
   # Configure all nodes in nodeset
   c.before :suite do
     hosts.each do |host|
-      run_puppet_install_helper unless ENV['BEAKER_provision'] == 'no'
+      run_puppet_install_helper unless ENV['BEAKER_provision'] == 'no' # rubocop:disable Style/FetchEnvVar
 
       # Install rsync
       install_package(host, 'rsync')
