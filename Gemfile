@@ -1,4 +1,4 @@
-source ENV['GEM_SOURCE'] || 'https://rubygems.org'
+source ENV['GEM_SOURCE'] || 'https://rubygems.org' # rubocop:disable Style/FetchEnvVar
 
 puppetversion = ENV.key?('PUPPET_VERSION') ? ENV['PUPPET_VERSION'] : ['~> 5.0.0']
 gem 'facter', '>= 1.7.0'
