@@ -6,9 +6,7 @@ Puppet::Type.newtype(:powerdns_zone) do
     desc 'name of the zone name as namevar'
 
     validate do |value|
-      unless value.is_a?(String)
-        raise ArgumentError, 'The name of the zone needs to be a string'
-      end
+      raise ArgumentError, 'The name of the zone needs to be a string' unless value.is_a?(String)
     end
   end
 
@@ -22,9 +20,7 @@ Puppet::Type.newtype(:powerdns_zone) do
     defaultto ''
 
     validate do |value|
-      unless value.is_a?(String)
-        raise ArgumentError, 'config_name needs to be a string'
-      end
+      raise ArgumentError, 'config_name needs to be a string' unless value.is_a?(String)
     end
   end
 
@@ -32,16 +28,14 @@ Puppet::Type.newtype(:powerdns_zone) do
     desc "Location directory of pdns.conf file for pdnsutil --config-dir parameter, defaults to '' which will ignore and take the system default."
     defaultto ''
     validate do |value|
-      unless value.is_a?(String)
-        raise ArgumentError, 'config_dir needs to be a string'
-      end
+      raise ArgumentError, 'config_dir needs to be a string' unless value.is_a?(String)
     end
   end
 
   newparam(:show_diff, boolean: true, parent: Puppet::Parameter::Boolean) do
     desc "Whether to display differences when the zone changes, defaulting to
         false. Since zones can be huge, use this only for debugging"
-    defaultto :false
+    defaultto :false # rubocop:disable Lint/BooleanSymbol
   end
 
   newparam(:manage_records, boolean: true, parent: Puppet::Parameter::Boolean) do
@@ -50,16 +44,14 @@ Puppet::Type.newtype(:powerdns_zone) do
          If set to false, ensurance of zone creation is done only and the administration of zone records can be done through
          web Interface or any other preferred method.
          '
-    defaultto :true
+    defaultto :true # rubocop:disable Lint/BooleanSymbol
   end
 
   newparam(:soa_ttl) do
     desc 'ttl for SOA record'
     defaultto '3600'
     validate do |value|
-      unless value.is_a?(String)
-        raise ArgumentError, 'config_dir needs to be a string'
-      end
+      raise ArgumentError, 'config_dir needs to be a string' unless value.is_a?(String)
     end
   end
 
@@ -67,9 +59,7 @@ Puppet::Type.newtype(:powerdns_zone) do
     desc 'zone class for SOA record'
     defaultto 'IN'
     validate do |value|
-      unless value.is_a?(String)
-        raise ArgumentError, 'config_dir needs to be a string'
-      end
+      raise ArgumentError, 'config_dir needs to be a string' unless value.is_a?(String)
     end
   end
 
@@ -77,9 +67,7 @@ Puppet::Type.newtype(:powerdns_zone) do
     desc 'primary master name server for the zone for SOA record'
     defaultto 'a.powerdns.server'
     validate do |value|
-      unless value.is_a?(String)
-        raise ArgumentError, 'config_dir needs to be a string'
-      end
+      raise ArgumentError, 'config_dir needs to be a string' unless value.is_a?(String)
     end
   end
 
@@ -87,9 +75,7 @@ Puppet::Type.newtype(:powerdns_zone) do
     desc 'Email address of the administrator responsible for this zone for SOA record'
     defaultto 'hostmaster'
     validate do |value|
-      unless value.is_a?(String)
-        raise ArgumentError, 'config_dir needs to be a string'
-      end
+      raise ArgumentError, 'config_dir needs to be a string' unless value.is_a?(String)
     end
   end
 
@@ -97,9 +83,7 @@ Puppet::Type.newtype(:powerdns_zone) do
     desc 'Number of seconds after which secondary name servers should query the master for the SOA record, to detect zone changes'
     defaultto '10800'
     validate do |value|
-      unless value.is_a?(String)
-        raise ArgumentError, 'config_dir needs to be a string'
-      end
+      raise ArgumentError, 'config_dir needs to be a string' unless value.is_a?(String)
     end
   end
 
@@ -107,9 +91,7 @@ Puppet::Type.newtype(:powerdns_zone) do
     desc 'Number of seconds after which secondary name servers should retry to request the serial number from the master if the master does not respond'
     defaultto '3600'
     validate do |value|
-      unless value.is_a?(String)
-        raise ArgumentError, 'config_dir needs to be a string'
-      end
+      raise ArgumentError, 'config_dir needs to be a string' unless value.is_a?(String)
     end
   end
 
@@ -117,9 +99,7 @@ Puppet::Type.newtype(:powerdns_zone) do
     desc 'Number of seconds after which secondary name servers should stop answering request for this zone if the master does not respond.'
     defaultto '604800'
     validate do |value|
-      unless value.is_a?(String)
-        raise ArgumentError, 'config_dir needs to be a string'
-      end
+      raise ArgumentError, 'config_dir needs to be a string' unless value.is_a?(String)
     end
   end
 
@@ -127,9 +107,7 @@ Puppet::Type.newtype(:powerdns_zone) do
     desc 'Minimum ttl in seconds, negativ response caching ttl'
     defaultto '3600'
     validate do |value|
-      unless value.is_a?(String)
-        raise ArgumentError, 'config_dir needs to be a string'
-      end
+      raise ArgumentError, 'config_dir needs to be a string' unless value.is_a?(String)
     end
   end
 
@@ -141,13 +119,11 @@ Puppet::Type.newtype(:powerdns_zone) do
 
   def records
     # Collect records that target this zone.
-    @records ||= catalog.resources.map { |resource|
+    @records ||= catalog.resources.map do |resource|
       next unless resource.is_a?(Puppet::Type.type(:powerdns_record))
 
-      if resource[:target_zone] == title
-        resource
-      end
-    }.compact
+      resource if resource[:target_zone] == title
+    end.compact
   end
 
   def should_content
@@ -155,11 +131,13 @@ Puppet::Type.newtype(:powerdns_zone) do
     content = [].push(soa_record)
 
     records.each do |r|
-      content.push([r[:rname] + '.' + r[:target_zone], r[:rttl], r[:rclass], r[:rtype], r[:rcontent]].join("\t"))
+      content.push([r[:rname] + '.' + r[:target_zone], r[:rttl], r[:rclass], r[:rtype], r[:rcontent]].join("\t")) # rubocop:disable Style/StringConcatenation
     end
     content.sort.join("\n")
   end
 
+  # rubocop:disable Metrics/MethodLength
+  # rubocop:disable Metrics/AbcSize
   def generate
     # create the powerdns_zone_private resource as a copy of this resource
     # without content
@@ -177,13 +155,13 @@ Puppet::Type.newtype(:powerdns_zone) do
     excluded_metaparams = [:before, :notify, :require, :subscribe, :tag]
 
     Puppet::Type.metaparams.each do |metaparam|
-      unless self[metaparam].nil? || excluded_metaparams.include?(metaparam)
-        powerdns_zone_private_opts[metaparam] = self[metaparam]
-      end
+      powerdns_zone_private_opts[metaparam] = self[metaparam] unless self[metaparam].nil? || excluded_metaparams.include?(metaparam)
     end
 
     [Puppet::Type.type(:powerdns_zone_private).new(powerdns_zone_private_opts)]
   end
+  # rubocop:enable Metrics/AbcSize
+  # rubocop:enable Metrics/MethodLength
 
   def eval_generate
     # add the content to the powerdns_zone_private resource containing
@@ -199,7 +177,9 @@ Puppet::Type.newtype(:powerdns_zone) do
     ['pdns']
   end
 
+  # rubocop:disable Lint/EmptyBlock
   # autorequire the powerdns_records
   autorequire(:powerdns_record) do
   end
+  # rubocop:enable Lint/EmptyBlock
 end

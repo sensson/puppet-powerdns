@@ -5,9 +5,7 @@ Puppet::Type.newtype(:powerdns_record) do
     desc 'name of the record as namevar'
 
     validate do |value|
-      unless value.is_a?(String)
-        raise ArgumentError, 'The name of the zone needs to be a string'
-      end
+      raise ArgumentError, 'The name of the zone needs to be a string' unless value.is_a?(String)
     end
   end
 
@@ -16,9 +14,7 @@ Puppet::Type.newtype(:powerdns_record) do
     defaultto { @resource[:name].split('.').drop(1).join('.') }
 
     validate do |value|
-      unless value.is_a?(String)
-        raise ArgumentError, 'target_zone needs to be a string'
-      end
+      raise ArgumentError, 'target_zone needs to be a string' unless value.is_a?(String)
     end
   end
 
@@ -28,9 +24,7 @@ Puppet::Type.newtype(:powerdns_record) do
          '
     defaultto { @resource[:name].split('.')[0] }
     validate do |value|
-      unless value.is_a?(String)
-        raise ArgumentError, 'target_zone needs to be a string'
-      end
+      raise ArgumentError, 'target_zone needs to be a string' unless value.is_a?(String)
     end
   end
 
@@ -38,9 +32,7 @@ Puppet::Type.newtype(:powerdns_record) do
     desc "the class of record (defaults to 'IN')"
     defaultto 'IN'
     validate do |value|
-      unless value.is_a?(String)
-        raise ArgumentError, 'target_zone needs to be a string'
-      end
+      raise ArgumentError, 'target_zone needs to be a string' unless value.is_a?(String)
     end
   end
 
@@ -48,9 +40,7 @@ Puppet::Type.newtype(:powerdns_record) do
     desc 'the record type'
     defaultto 'A'
     validate do |value|
-      unless value.is_a?(String)
-        raise ArgumentError, 'target_zone needs to be a string'
-      end
+      raise ArgumentError, 'target_zone needs to be a string' unless value.is_a?(String)
     end
   end
 
@@ -58,9 +48,7 @@ Puppet::Type.newtype(:powerdns_record) do
     desc 'the ttl of the record'
     defaultto '3600'
     validate do |value|
-      unless value.is_a?(String)
-        raise ArgumentError, 'target_zone needs to be a string'
-      end
+      raise ArgumentError, 'target_zone needs to be a string' unless value.is_a?(String)
     end
   end
 
