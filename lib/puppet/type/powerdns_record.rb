@@ -19,9 +19,10 @@ Puppet::Type.newtype(:powerdns_record) do
   end
 
   newparam(:rname) do
-    desc 'the name of the record to add (remark target zone will be added)
-          defaults to the first characters of the title until the first .)
-         '
+    desc "the name of the record to add (remark target zone will be added)
+          defaults to the first characters of the title until the first '.'.
+          to add a record equal the taget_zone, add a '.' only.
+         "
     defaultto { @resource[:name].split('.')[0] }
     validate do |value|
       raise ArgumentError, 'target_zone needs to be a string' unless value.is_a?(String)

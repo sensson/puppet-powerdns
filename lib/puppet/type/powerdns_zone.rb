@@ -39,9 +39,9 @@ Puppet::Type.newtype(:powerdns_zone) do
   end
 
   newparam(:manage_records, boolean: true, parent: Puppet::Parameter::Boolean) do
-    desc 'If we manage the all zone records for the domain (any records not managed with puppet will be purged).
+    desc 'If puppet shall manage all zone records for the domain (any records not managed with puppet will be purged).
          The default is true, to manage the SOA record and all zone records through puppet for the zone.
-         If set to false, ensurance of zone creation is done only and the administration of zone records can be done through
+         If set to false, ensurance of zone creation is done only and the administration of zone records needs to be done through
          web Interface or any other preferred method.
          '
     defaultto :true # rubocop:disable Lint/BooleanSymbol
@@ -126,15 +126,23 @@ Puppet::Type.newtype(:powerdns_zone) do
     end.compact
   end
 
+  # rubocop:disable Metrics/AbcSize
   def should_content
     # collect and sort all records for content
     content = [].push(soa_record)
 
     records.each do |r|
-      content.push([r[:rname] + '.' + r[:target_zone], r[:rttl], r[:rclass], r[:rtype], r[:rcontent]].join("\t")) # rubocop:disable Style/StringConcatenation
+      # rubocop:disable Style/StringConcatenation
+      if r[:rname] == '.'
+        content.push([r[:target_zone], r[:rttl], r[:rclass], r[:rtype], r[:rcontent]].join("\t"))
+      else
+        content.push([r[:rname] + '.' + r[:target_zone], r[:rttl], r[:rclass], r[:rtype], r[:rcontent]].join("\t"))
+      end
+      # rubocop:enable Style/StringConcatenation
     end
     content.sort.join("\n")
   end
+  # rubocop:enable Metrics/AbcSize
 
   # rubocop:disable Metrics/MethodLength
   # rubocop:disable Metrics/AbcSize
