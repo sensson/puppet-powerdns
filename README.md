@@ -123,17 +123,19 @@ The zone records can be managed through the powerdns\_record resource. As an exa
 ``` puppet
  powerdns_record{'nameserver1':
    target_zone => 'example.org',
-   rname       => 'example.org',
+   rname       => '.',  # a dot takes the target_zone only as rname
    rtype       => 'NS',
    rttl        => '4242',
-   rcontent    => 'ns1.example.org'
+   rcontent    => 'ns1.example.org.' # pay attention to the dot at the end !
  }
  powerdns_record{'ns1.example.org':
    rcontent => '127.0.0.1',
  }
- powerdns_record{'ns1.example.org':
-   rtype    => 'AAAA',
-   rcontent => '::1',
+ powerdns_record{'ipv6-ns1.example.org':
+   target_zone => 'example.org',
+   rname       => 'ns1',  # for the full record, the target_zone will be amended
+   rtype       => 'AAAA',
+   rcontent    => '::1',
  }
  powerdns_record{'www-server':
    target_zone => 'example.org',
