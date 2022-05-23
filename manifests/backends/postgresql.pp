@@ -56,7 +56,7 @@ class powerdns::backends::postgresql ($package_ensure = $powerdns::params::defau
   if $::powerdns::params::pgsql_backend_package_name {
     package { $::powerdns::params::pgsql_backend_package_name:
       ensure  => $package_ensure,
-      before  => Service[$::powerdns::params::authoritative_service],
+      before  => Service['pdns'],
       require => Package[$::powerdns::params::authoritative_package],
     }
   }

@@ -37,7 +37,7 @@ class powerdns::backends::bind inherits powerdns {
     path    => "${::powerdns::params::authoritative_configdir}/named.conf",
     line    => "options { directory \"${::powerdns::params::authoritative_configdir}/named\"; };",
     match   => 'options',
-    notify  => Service[$::powerdns::params::authoritative_service],
+    notify  => Service['pdns'],
     require => File["${::powerdns::params::authoritative_configdir}/named.conf"],
   }
 

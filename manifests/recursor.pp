@@ -4,8 +4,9 @@ class powerdns::recursor ($package_ensure = $powerdns::params::default_package_e
     ensure => $package_ensure,
   }
 
-  service { $::powerdns::params::recursor_service:
+  service { 'pdns-recursor':
     ensure   => running,
+    name     => $::powerdns::params::recursor_service,
     enable   => true,
     provider => [$::powerdns::params::service_provider],
     require  => Package[$::powerdns::params::recursor_package],

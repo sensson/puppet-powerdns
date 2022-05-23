@@ -100,6 +100,51 @@ class { 'powerdns':
 }
 ```
 
+### Manage zones with this module
+With this module you can manage zones if you use a backend that is capable of doing so (eg. sqllite, postgres or mysql).
+
+You can add a zone 'example.org' by using:
+``` puppet
+ powerdns_zone{'example.org': }
+```
+This will add the zone which is then managed through puppet any records not added 
+through puppet will be deleted additionaly a SOA record is generated. To just ensure the
+zone is available, but not manage any records use (and do not add any powerdns\_record
+resources with target this domain): 
+``` puppet
+ powerdns_zone{'example.org':
+   manage_records => false,
+ }
+```
+
+To addjust the SOA record (if add\_soa is set to true), use the soa\_\* parameters documented in the powerdns\_record resource.
+
+The zone records can be managed through the powerdns\_record resource. As an example we add a NS an A and an AAAA record:
+``` puppet
+ powerdns_record{'nameserver1':
+   target_zone => 'example.org',
+   rname       => '.',  # a dot takes the target_zone only as rname
+   rtype       => 'NS',
+   rttl        => '4242',
+   rcontent    => 'ns1.example.org.' # pay attention to the dot at the end !
+ }
+ powerdns_record{'ns1.example.org':
+   rcontent => '127.0.0.1',
+ }
+ powerdns_record{'ipv6-ns1.example.org':
+   target_zone => 'example.org',
+   rname       => 'ns1',  # for the full record, the target_zone will be amended
+   rtype       => 'AAAA',
+   rcontent    => '::1',
+ }
+ powerdns_record{'www-server':
+   target_zone => 'example.org',
+   rname       => 'www',
+   rcontent    => '127.0.0.1'
+ }
+```
+Remark: if the target\_zone is not managed with powerdns\_zone resource, powerdns\_record does not change anything !
+
 ## Reference
 
 ### Parameters
