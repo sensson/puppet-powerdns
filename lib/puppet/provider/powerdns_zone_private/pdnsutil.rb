@@ -73,7 +73,7 @@ Puppet::Type.type(:powerdns_zone_private).provide(
     soarec[-5] = '_SERIAL_'
     records[soanr] = soarec[0..3].join("\t") + "\t" + soarec[4..10].join(' ') # rubocop:disable Style/StringConcatenation
 
-    records.join("\n") + "\n" # rubocop:disable Style/StringConcatenation
+    records.sort.join("\n") + "\n" # rubocop:disable Style/StringConcatenation
   end
   # rubocop:enable Metrics/AbcSize
   # rubocop:enable Metrics/MethodLength
