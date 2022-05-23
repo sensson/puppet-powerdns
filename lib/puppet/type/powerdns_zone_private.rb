@@ -45,11 +45,11 @@ Puppet::Type.newtype(:powerdns_zone_private) do
   end
 
   newproperty(:content) do
-    desc "Content (records) of the zone. This must match the output of 'pdnsutil list-zone ZONE'."
+    desc "Content (records) of the zone. This must match the output of 'pdnsutil list-zone ZONE|sort'."
 
     munge do |value|
       if @resource[:manage_records]
-        ("$ORIGIN .\n" + value).to_s.gsub(/\n+$/, '') + "\n" # rubocop:disable Style/StringConcatenation
+        value.to_s.gsub(/\n+$/, '') + "\n" # rubocop:disable Style/StringConcatenation
       else
         ''
       end

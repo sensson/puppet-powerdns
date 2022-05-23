@@ -140,6 +140,7 @@ Puppet::Type.newtype(:powerdns_zone) do
       end
       # rubocop:enable Style/StringConcatenation
     end
+    content.push("$ORIGIN .\n") # add this, since it's always in the output..
     content.sort.join("\n")
   end
   # rubocop:enable Metrics/AbcSize
