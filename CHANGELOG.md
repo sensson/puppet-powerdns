@@ -1,5 +1,15 @@
 # Changelog
 
+## 2.2.0
+
+This release adds support for PowerDNS resources.
+
+### Features
+
+- Add support for PowerDNS resources.
+- Support Rocky Linux
+- Support PowerDNS 4.6
+
 ## 2.1.4
 
 This release adds package_ensure to all backends.
