@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.2.1
+
+This only fixes the version in the metadata file.
+
 ## 2.2.0
 
 This release adds support for PowerDNS resources.
