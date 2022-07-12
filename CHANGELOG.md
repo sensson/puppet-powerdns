@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.2.2
+
+Bumps PostgreSQL requirement.
+
+## 2.2.1
+
+Incorrect tag.
+
 ## 2.2.0
 
 This release adds support for PowerDNS resources.
