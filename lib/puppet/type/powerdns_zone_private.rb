@@ -1,4 +1,6 @@
 # private resource which collected all the records through powerdns_zone
+require 'puppet/parameter/boolean'
+
 Puppet::Type.newtype(:powerdns_zone_private) do
   @doc = 'ensure a zone exists. This is a private class do NOT use it in your mannifests instead use powerdns_zone which will
          call this resource with the zone records added.'

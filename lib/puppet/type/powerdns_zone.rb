@@ -1,3 +1,5 @@
+require 'puppet/parameter/boolean'
+
 Puppet::Type.newtype(:powerdns_zone) do
   @doc = 'ensure a zone exists. The zone is managed using the
          resource powerdns_zone_private'
