@@ -139,13 +139,14 @@ describe 'powerdns::config' do
             {
               setting: 'webserver',
               value: true,
-              type: 'recursor',
+              type: 'recursor'
             }
           end
 
-          it { is_expected.to contain_file_line(format('powerdns-config-webserver-%<config>s',
-            config: recursor_config)
-          ).with_line('webserver=true') }
+          it {
+            is_expected.to contain_file_line(format('powerdns-config-webserver-%<config>s',
+                                                    config: recursor_config)).with_line('webserver=true')
+          }
         end
       end
     end
