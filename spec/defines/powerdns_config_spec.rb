@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 override_facts = {
   root_home: '/root'
 }
@@ -130,6 +132,20 @@ describe 'powerdns::config' do
           it 'fails' do
             expect { subject.call }.to raise_error(/expects a match for Enum\['authoritative', 'recursor'\], got/)
           end
+        end
+
+        context 'powerdns::config with boolean' do
+          let(:params) do
+            {
+              setting: 'webserver',
+              value: true,
+              type: 'recursor',
+            }
+          end
+
+          it { is_expected.to contain_file_line(format('powerdns-config-webserver-%<config>s',
+            config: recursor_config)
+          ).with_line('webserver=true') }
         end
       end
     end
