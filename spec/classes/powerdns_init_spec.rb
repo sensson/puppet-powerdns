@@ -433,6 +433,34 @@ describe 'powerdns', type: :class do
             expect { subject.call }.to raise_error(/'backend' expects a match for Enum\['bind', 'ldap', 'mysql', 'postgresql', 'sqlite'\]/)
           end
         end
+
+        context 'powerdns version 4.7' do
+          let(:params) do
+            {
+              db_root_password: 'foobar',
+              db_username: 'foo',
+              db_password: 'bar',
+              version: '4.7'
+            }
+          end
+
+          case facts[:osfamily]
+          when 'RedHat'
+            it {
+              is_expected.to contain_yumrepo('powerdns') \
+                .with('baseurl' => 'http://repo.powerdns.com/centos/$basearch/$releasever/auth-47')
+            }
+            it {
+              is_expected.to contain_yumrepo('powerdns-recursor') \
+                .with('baseurl' => 'http://repo.powerdns.com/centos/$basearch/$releasever/rec-47')
+            }
+          when 'Debian'
+            it { is_expected.to contain_apt__source('powerdns').with_release(/auth-47/) }
+            it { is_expected.to contain_apt__source('powerdns-recursor').with_release(/rec-47/) }
+          end
+
+          it { is_expected.to contain_package(authoritative_package_name).with('ensure' => 'installed') }
+        end
       end
     end
   end

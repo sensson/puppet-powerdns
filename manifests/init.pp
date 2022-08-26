@@ -21,7 +21,7 @@ class powerdns (
   Optional[String[1]]        $service_provider                   = $::powerdns::params::service_provider,
   Boolean                    $custom_repo                        = $::powerdns::params::custom_repo,
   Boolean                    $custom_epel                        = $::powerdns::params::custom_epel,
-  Pattern[/4\.(0|1|2|3|4|5|6)/] $version                         = $::powerdns::params::version,
+  Pattern[/4\.[0-7]/]        $version                            = $::powerdns::params::version,
   String[1]                  $mysql_schema_file                  = $::powerdns::params::mysql_schema_file,
   String[1]                  $pgsql_schema_file                  = $::powerdns::params::pgsql_schema_file,
 ) inherits powerdns::params {
