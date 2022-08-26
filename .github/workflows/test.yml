@@ -13,7 +13,7 @@ jobs:
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1.60.1
       with:
-        ruby-version: 2.6.10
+        ruby-version: 2.6.6
     - name: Test code
       env:
         PUPPET_VERSION: ~> ${{ matrix.puppet }}
