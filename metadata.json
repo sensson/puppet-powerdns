@@ -1,29 +1,87 @@
 {
-    "name": "sensson-powerdns",
-    "version": "2.2.2",
-    "author": "sensson",
-    "license": "Apache-2.0",
-    "summary": "A module to install and configure PowerDNS 4.x authoritative server and recursor",
-    "source": "https://github.com/sensson/puppet-powerdns",
-    "project_page": "https://github.com/sensson/puppet-powerdns",
-    "issues_url": "https://github.com/sensson/puppet-powerdns/issues",
-    "tags": [ "powerdns" ],
-    "operatingsystem_support": [
-        { "operatingsystem": "CentOS", "operatingsystemrelease": [ "7", "8" ] },
-        { "operatingsystem": "OracleLinux", "operatingsystemrelease": [ "6", "7" ] },
-        { "operatingsystem": "RedHat", "operatingsystemrelease": [ "6", "7" ] },
-        { "operatingsystem": "Scientific", "operatingsystemrelease": [ "7" ] },
-        { "operatingsystem": "Ubuntu", "operatingsystemrelease": [ "16.04", "18.04" ] },
-        { "operatingsystem": "Debian", "operatingsystemrelease": [ "9", "10" ] }
-    ],
-    "requirements": [
-        { "name": "puppet", "version_requirement": ">= 5.0.0 < 8.0.0" }
-    ],
-    "dependencies": [
-        { "name": "puppetlabs/stdlib", "version_requirement": ">=4.3.2 < 9.0.0" },
-        { "name": "puppetlabs/mysql", "version_requirement": ">=3.4.0 < 13.0.0" },
-        { "name": "puppetlabs/postgresql", "version_requirement": ">=6.4.0 < 9.0.0" },
-        { "name": "puppetlabs/apt", "version_requirement": ">=2.0.0 < 9.0.0" },
-        { "name": "puppet/epel", "version_requirement": ">=1.0.0 < 4.0.0" }
-    ]
+  "name": "sensson-powerdns",
+  "version": "2.2.2",
+  "author": "sensson",
+  "summary": "A module to install and configure PowerDNS 4.x authoritative server and recursor",
+  "license": "Apache-2.0",
+  "source": "https://github.com/sensson/puppet-powerdns",
+  "project_page": "https://github.com/sensson/puppet-powerdns",
+  "issues_url": "https://github.com/sensson/puppet-powerdns/issues",
+  "dependencies": [
+    {
+      "name": "puppetlabs/stdlib",
+      "version_requirement": ">=4.3.2 < 9.0.0"
+    },
+    {
+      "name": "puppetlabs/mysql",
+      "version_requirement": ">=3.4.0 < 13.0.0"
+    },
+    {
+      "name": "puppetlabs/postgresql",
+      "version_requirement": ">=6.4.0 < 9.0.0"
+    },
+    {
+      "name": "puppetlabs/apt",
+      "version_requirement": ">=2.0.0 < 9.0.0"
+    },
+    {
+      "name": "puppet/epel",
+      "version_requirement": ">=1.0.0 < 4.0.0"
+    }
+  ],
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "CentOS",
+      "operatingsystemrelease": [
+        "7",
+        "8"
+      ]
+    },
+    {
+      "operatingsystem": "OracleLinux",
+      "operatingsystemrelease": [
+        "6",
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": [
+        "6",
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "Scientific",
+      "operatingsystemrelease": [
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "Ubuntu",
+      "operatingsystemrelease": [
+        "16.04",
+        "18.04"
+      ]
+    },
+    {
+      "operatingsystem": "Debian",
+      "operatingsystemrelease": [
+        "9",
+        "10"
+      ]
+    }
+  ],
+  "requirements": [
+    {
+      "name": "puppet",
+      "version_requirement": ">= 5.0.0 < 8.0.0"
+    }
+  ],
+  "tags": [
+    "powerdns"
+  ],
+  "pdk-version": "2.5.0",
+  "template-url": "pdk-default#2.5.0",
+  "template-ref": "tags/2.5.0-0-g369d483"
 }
