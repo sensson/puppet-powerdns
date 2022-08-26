@@ -7,13 +7,13 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        puppet: [5.0.0, 6.0.0, 7.0.0]
+        puppet: [6.0.0, 7.0.0]
     steps:
     - uses: actions/checkout@v2
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1.60.1
       with:
-        ruby-version: 2.5.8
+        ruby-version: 2.6.10
     - name: Test code
       env:
         PUPPET_VERSION: ~> ${{ matrix.puppet }}
