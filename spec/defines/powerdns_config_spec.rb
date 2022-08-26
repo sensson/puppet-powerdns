@@ -43,13 +43,13 @@ describe 'powerdns::config' do
             }
           end
 
-          it { is_expected.to contain_file_line(format('powerdns-config-foo-%<config>s', config: authoritative_config)) }
-          it { is_expected.to contain_file_line(format('powerdns-config-foo-%<config>s', config: authoritative_config)).with_ensure('present') }
-          it { is_expected.to contain_file_line(format('powerdns-config-foo-%<config>s', config: authoritative_config)).with_path(authoritative_config) }
-          it { is_expected.to contain_file_line(format('powerdns-config-foo-%<config>s', config: authoritative_config)).with_line('foo=bar') }
-          it { is_expected.to contain_file_line(format('powerdns-config-foo-%<config>s', config: authoritative_config)).with_match('^foo=') }
-          it { is_expected.to contain_file_line(format('powerdns-config-foo-%<config>s', config: authoritative_config)).with_match_for_absence(true) }
-          it { is_expected.to contain_file_line(format('powerdns-config-foo-%<config>s', config: authoritative_config)).that_notifies('Service[pdns]') }
+          it { is_expected.to contain_file_line('powerdns-config-foo-%{config}' % { config: authoritative_config }) }
+          it { is_expected.to contain_file_line('powerdns-config-foo-%{config}' % { config: authoritative_config }).with_ensure('present') }
+          it { is_expected.to contain_file_line('powerdns-config-foo-%{config}' % { config: authoritative_config }).with_path(authoritative_config) }
+          it { is_expected.to contain_file_line('powerdns-config-foo-%{config}' % { config: authoritative_config }).with_line('foo=bar') }
+          it { is_expected.to contain_file_line('powerdns-config-foo-%{config}' % { config: authoritative_config }).with_match('^foo=') }
+          it { is_expected.to contain_file_line('powerdns-config-foo-%{config}' % { config: authoritative_config }).with_match_for_absence(true) }
+          it { is_expected.to contain_file_line('powerdns-config-foo-%{config}' % { config: authoritative_config }).that_notifies('Service[pdns]') }
         end
 
         context 'powerdns::config with recursor type' do
@@ -61,7 +61,7 @@ describe 'powerdns::config' do
             }
           end
 
-          it { is_expected.to contain_file_line(format('powerdns-config-foo-%<config>s', config: recursor_config)) }
+          it { is_expected.to contain_file_line('powerdns-config-foo-%{config}' % { config: recursor_config }) }
         end
 
         context 'powerdns::config with integers' do
@@ -72,7 +72,7 @@ describe 'powerdns::config' do
             }
           end
 
-          it { is_expected.to contain_file_line(format('powerdns-config-local-port-%<config>s', config: authoritative_config)) }
+          it { is_expected.to contain_file_line('powerdns-config-local-port-%{config}' % { config: authoritative_config }) }
         end
 
         # Test for empty values
@@ -83,7 +83,7 @@ describe 'powerdns::config' do
             }
           end
 
-          it { is_expected.to contain_file_line(format('powerdns-config-gmysql-dnssec-%<config>s', config: authoritative_config)) }
+          it { is_expected.to contain_file_line('powerdns-config-gmysql-dnssec-%{config}' % { config: authoritative_config }) }
         end
 
         context 'powerdns::config with empty value for only-notify' do
@@ -93,7 +93,7 @@ describe 'powerdns::config' do
             }
           end
 
-          it { is_expected.to contain_file_line(format('powerdns-config-only-notify-%<config>s', config: authoritative_config)) }
+          it { is_expected.to contain_file_line('powerdns-config-only-notify-%{config}' % { config: authoritative_config }) }
         end
 
         context 'powerdns::config with empty value' do
@@ -104,7 +104,7 @@ describe 'powerdns::config' do
           end
 
           it 'fails' do
-            expect { subject.call }.to raise_error(/Value for empty can't be empty./)
+            is_expected.to raise_error(%r{Value for empty can't be empty.})
           end
         end
 
@@ -116,7 +116,7 @@ describe 'powerdns::config' do
             }
           end
 
-          it { is_expected.to contain_file_line(format('powerdns-config-foo-%<config>s', config: authoritative_config)) }
+          it { is_expected.to contain_file_line('powerdns-config-foo-%{config}' % { config: authoritative_config }) }
         end
 
         # Test incorrect service type
@@ -129,9 +129,11 @@ describe 'powerdns::config' do
             }
           end
 
-          it 'fails' do
-            expect { subject.call }.to raise_error(/expects a match for Enum\['authoritative', 'recursor'\], got/)
-          end
+          it {
+            is_expected.to raise_error(
+              %r{expects a match for Enum\['authoritative', 'recursor'\], got},
+            )
+          }
         end
 
         context 'powerdns::config with boolean' do
@@ -144,8 +146,7 @@ describe 'powerdns::config' do
           end
 
           it {
-            is_expected.to contain_file_line(format('powerdns-config-webserver-%<config>s',
-                                                    config: recursor_config)).with_line('webserver=true')
+            is_expected.to contain_file_line('powerdns-config-webserver-%{config}' % { config: recursor_config }).with_line('webserver=true')
           }
         end
       end

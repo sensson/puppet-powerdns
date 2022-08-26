@@ -39,9 +39,11 @@ describe 'powerdns', type: :class do
         end
 
         context 'powerdns class without parameters' do
-          it 'fails' do
-            expect { subject.call }.to raise_error(/'db_password' must be a non-empty string when 'authoritative' == true/)
-          end
+          it {
+            is_expected.to raise_error(
+              %r{'db_password' must be a non-empty string when 'authoritative' == true},
+            )
+          }
         end
 
         context 'powerdns class with parameters' do
@@ -61,8 +63,16 @@ describe 'powerdns', type: :class do
           when 'RedHat'
             it { is_expected.to contain_package('yum-plugin-priorities') } if facts[:operatingsystemmajrelease].to_i < 8
             it { is_expected.to contain_yumrepo('powertools') } if facts[:operatingsystemmajrelease].to_i >= 8
-            it { is_expected.to contain_yumrepo('powertools').with('mirrorlist' => 'http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=PowerTools&infra=$infra') } if facts[:operatingsystem] != 'Rocky' && facts[:operatingsystemmajrelease].to_i >= 8
-            it { is_expected.to contain_yumrepo('powertools').with('mirrorlist' => 'https://mirrors.rockylinux.org/mirrorlist?arch=$basearch&repo=PowerTools-$releasever') } if facts[:operatingsystem] == 'Rocky' && facts[:operatingsystemmajrelease].to_i >= 8
+            if facts[:operatingsystem] != 'Rocky' && facts[:operatingsystemmajrelease].to_i >= 8
+              it {
+                is_expected.to contain_yumrepo('powertools').with('mirrorlist' => 'http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=PowerTools&infra=$infra')
+              }
+            end
+            if facts[:operatingsystem] == 'Rocky' && facts[:operatingsystemmajrelease].to_i >= 8
+              it {
+                is_expected.to contain_yumrepo('powertools').with('mirrorlist' => 'https://mirrors.rockylinux.org/mirrorlist?arch=$basearch&repo=PowerTools-$releasever')
+              }
+            end
             it { is_expected.to contain_yumrepo('powerdns') }
             it { is_expected.to contain_yumrepo('powerdns').with('baseurl' => 'http://repo.powerdns.com/centos/$basearch/$releasever/auth-42') }
             it { is_expected.to contain_yumrepo('powerdns-recursor') }
@@ -73,13 +83,15 @@ describe 'powerdns', type: :class do
             it { is_expected.to contain_apt__key('powerdns') }
             it { is_expected.to contain_apt__pin('powerdns') }
             it { is_expected.to contain_apt__source('powerdns') }
-            it { is_expected.to contain_apt__source('powerdns').with_release(/auth-42/) }
+            it { is_expected.to contain_apt__source('powerdns').with_release(%r{auth-42}) }
             it { is_expected.to contain_apt__source('powerdns-recursor') }
-            it { is_expected.to contain_apt__source('powerdns-recursor').with_release(/rec-42/) }
+            it { is_expected.to contain_apt__source('powerdns-recursor').with_release(%r{rec-42}) }
 
             # On Ubuntu 17.04 and higher and Debian 9 and higher it expects dirmngr
-            it { is_expected.to contain_package('dirmngr') } if facts[:operatingsystem] == 'Ubuntu' && facts[:operatingsystemmajrelease].to_i >= 17
-            it { is_expected.to contain_package('dirmngr') } if facts[:operatingsystem] == 'Debian' && facts[:operatingsystemmajrelease].to_i >= 9
+            if (facts[:operatingsystem] == 'Ubuntu' && facts[:operatingsystemmajrelease].to_i >= 17) ||
+               (facts[:operatingsystem] == 'Debian' && facts[:operatingsystemmajrelease].to_i >= 9)
+              it { is_expected.to contain_package('dirmngr') }
+            end
           end
 
           # Check the authoritative server
@@ -88,7 +100,7 @@ describe 'powerdns', type: :class do
           it { is_expected.to contain_service('pdns').with('ensure' => 'running') }
           it { is_expected.to contain_service('pdns').with('enable' => 'true') }
           it { is_expected.to contain_service('pdns').with('name' => authoritative_service_name) }
-          it { is_expected.to contain_service('pdns').that_requires(format('Package[%<package>s]', package: authoritative_package_name)) }
+          it { is_expected.to contain_service('pdns').that_requires("Package[#{authoritative_package_name}]") }
         end
 
         context 'powerdns class with epel' do
@@ -99,6 +111,8 @@ describe 'powerdns', type: :class do
               db_password: 'bar'
             }
           end
+
+          it { is_expected.to compile.with_all_deps }
 
           case facts[:osfamily]
           when 'RedHat'
@@ -116,6 +130,8 @@ describe 'powerdns', type: :class do
             }
           end
 
+          it { is_expected.to compile.with_all_deps }
+
           case facts[:osfamily]
           when 'RedHat'
             it { is_expected.not_to contain_class('epel') }
@@ -131,13 +147,16 @@ describe 'powerdns', type: :class do
               version: '4.0'
             }
           end
+
+          it { is_expected.to compile.with_all_deps }
+
           case facts[:osfamily]
           when 'RedHat'
             it { is_expected.to contain_yumrepo('powerdns').with('baseurl' => 'http://repo.powerdns.com/centos/$basearch/$releasever/auth-40') }
             it { is_expected.to contain_yumrepo('powerdns-recursor').with('baseurl' => 'http://repo.powerdns.com/centos/$basearch/$releasever/rec-40') }
           when 'Debian'
-            it { is_expected.to contain_apt__source('powerdns').with_release(/auth-40/) }
-            it { is_expected.to contain_apt__source('powerdns-recursor').with_release(/rec-40/) }
+            it { is_expected.to contain_apt__source('powerdns').with_release(%r{auth-40}) }
+            it { is_expected.to contain_apt__source('powerdns-recursor').with_release(%r{rec-40}) }
           end
         end
 
@@ -166,12 +185,12 @@ describe 'powerdns', type: :class do
           it { is_expected.to contain_powerdns__config('gmysql-port').with('value' => 3307) }
           it { is_expected.to contain_powerdns__config('launch').with('value' => 'gmysql') }
 
-          it { is_expected.to contain_file_line(format('powerdns-config-gmysql-host-%<config>s', config: authoritative_config)) }
-          it { is_expected.to contain_file_line(format('powerdns-config-gmysql-dbname-%<config>s', config: authoritative_config)) }
-          it { is_expected.to contain_file_line(format('powerdns-config-gmysql-password-%<config>s', config: authoritative_config)) }
-          it { is_expected.to contain_file_line(format('powerdns-config-gmysql-user-%<config>s', config: authoritative_config)) }
-          it { is_expected.to contain_file_line(format('powerdns-config-gmysql-port-%<config>s', config: authoritative_config)) }
-          it { is_expected.to contain_file_line(format('powerdns-config-launch-%<config>s', config: authoritative_config)) }
+          it { is_expected.to contain_file_line('powerdns-config-gmysql-host-%{config}' % { config: authoritative_config }) }
+          it { is_expected.to contain_file_line('powerdns-config-gmysql-dbname-%{config}' % { config: authoritative_config }) }
+          it { is_expected.to contain_file_line('powerdns-config-gmysql-password-%{config}' % { config: authoritative_config }) }
+          it { is_expected.to contain_file_line('powerdns-config-gmysql-user-%{config}' % { config: authoritative_config }) }
+          it { is_expected.to contain_file_line('powerdns-config-gmysql-port-%{config}' % { config: authoritative_config }) }
+          it { is_expected.to contain_file_line('powerdns-config-launch-%{config}' % { config: authoritative_config }) }
         end
 
         context 'powerdns class with postgresql backend' do
@@ -193,7 +212,7 @@ describe 'powerdns', type: :class do
 
           it { is_expected.to contain_package(pgsql_backend_package_name).with('ensure' => 'installed') }
           it { is_expected.to contain_postgresql__server__db('powerdns').with('user' => 'foo') }
-          it { is_expected.to contain_postgresql_psql('Load SQL schema').with('command' => format('\\i %<file>s', file: pgsql_schema_file)) }
+          it { is_expected.to contain_postgresql_psql('Load SQL schema').with('command' => "\\i #{pgsql_schema_file}") }
 
           it { is_expected.to contain_powerdns__config('launch').with('value' => 'gpgsql') }
           it { is_expected.to contain_powerdns__config('gpgsql-host').with('value' => 'localhost') }
@@ -201,10 +220,10 @@ describe 'powerdns', type: :class do
           it { is_expected.to contain_powerdns__config('gpgsql-password').with('value' => 'bar') }
           it { is_expected.to contain_powerdns__config('gpgsql-user').with('value' => 'foo') }
 
-          it { is_expected.to contain_file_line(format('powerdns-config-gpgsql-host-%<config>s', config: authoritative_config)) }
-          it { is_expected.to contain_file_line(format('powerdns-config-gpgsql-dbname-%<config>s', config: authoritative_config)) }
-          it { is_expected.to contain_file_line(format('powerdns-config-gpgsql-password-%<config>s', config: authoritative_config)) }
-          it { is_expected.to contain_file_line(format('powerdns-config-gpgsql-user-%<config>s', config: authoritative_config)) }
+          it { is_expected.to contain_file_line("powerdns-config-gpgsql-host-#{authoritative_config}") }
+          it { is_expected.to contain_file_line("powerdns-config-gpgsql-dbname-#{authoritative_config}") }
+          it { is_expected.to contain_file_line("powerdns-config-gpgsql-password-#{authoritative_config}") }
+          it { is_expected.to contain_file_line("powerdns-config-gpgsql-user-#{authoritative_config}") }
         end
 
         context 'powerdns class with sqlite backend' do
@@ -223,7 +242,7 @@ describe 'powerdns', type: :class do
               'ensure' => 'present',
               'owner' => 'pdns',
               'group' => 'pdns',
-              'mode' => '0644'
+              'mode' => '0644',
             )
           end
           it do
@@ -231,23 +250,19 @@ describe 'powerdns', type: :class do
               'ensure' => 'directory',
               'owner' => 'pdns',
               'group' => 'pdns',
-              'mode' => '0755'
+              'mode' => '0755',
             )
           end
 
           it do
             is_expected.to contain_exec('powerdns-sqlite3-create-tables').with(
-              'command' => format(
-                '/usr/bin/env sqlite3 %<db_file>s < %<schema_file>s',
-                db_file: '/var/lib/powerdns/db.sqlite3',
-                schema_file: sqlite_schema_file
-              )
+              'command' => "/usr/bin/env sqlite3 /var/lib/powerdns/db.sqlite3 < #{sqlite_schema_file}",
             )
           end
           it { is_expected.to contain_powerdns__config('launch').with('value' => 'gsqlite3') }
           it { is_expected.to contain_powerdns__config('gsqlite3-database').with('value' => '/var/lib/powerdns/db.sqlite3') }
 
-          it { is_expected.to contain_file_line(format('powerdns-config-gsqlite3-database-%<config>s', config: authoritative_config)) }
+          it { is_expected.to contain_file_line('powerdns-config-gsqlite3-database-%{config}' % { config: authoritative_config }) }
         end
 
         context 'powerdns class with bind backend' do
@@ -276,8 +291,8 @@ describe 'powerdns', type: :class do
 
           it { is_expected.to contain_powerdns__config('launch').with('value' => 'bind') }
 
-          it { is_expected.to contain_file_line(format('powerdns-config-bind-config-%<config>s', config: authoritative_config)) }
-          it { is_expected.to contain_file_line(format('powerdns-config-launch-%<config>s', config: authoritative_config)) }
+          it { is_expected.to contain_file_line('powerdns-config-bind-config-%{config}' % { config: authoritative_config }) }
+          it { is_expected.to contain_file_line('powerdns-config-launch-%{config}' % { config: authoritative_config }) }
           it { is_expected.to contain_file_line(format('powerdns-bind-baseconfig')) }
         end
 
@@ -293,6 +308,7 @@ describe 'powerdns', type: :class do
                 backend_create_tables: false
               }
             end
+
             it { is_expected.to compile.with_all_deps }
             it { is_expected.to contain_class('powerdns::backends::ldap') }
             it { is_expected.to contain_package('pdns-backend-ldap').with('ensure' => 'installed') }
@@ -304,11 +320,11 @@ describe 'powerdns', type: :class do
             it { is_expected.to contain_powerdns__config('ldap-binddn').with('value' => 'foo') }
             it { is_expected.to contain_powerdns__config('ldap-method').with('value' => 'strict') }
 
-            it { is_expected.to contain_file_line(format('powerdns-config-ldap-host-%<config>s', config: authoritative_config)) }
-            it { is_expected.to contain_file_line(format('powerdns-config-ldap-basedn-%<config>s', config: authoritative_config)) }
-            it { is_expected.to contain_file_line(format('powerdns-config-ldap-secret-%<config>s', config: authoritative_config)) }
-            it { is_expected.to contain_file_line(format('powerdns-config-ldap-binddn-%<config>s', config: authoritative_config)) }
-            it { is_expected.to contain_file_line(format('powerdns-config-ldap-method-%<config>s', config: authoritative_config)) }
+            it { is_expected.to contain_file_line('powerdns-config-ldap-host-%{config}' % { config: authoritative_config }) }
+            it { is_expected.to contain_file_line('powerdns-config-ldap-basedn-%{config}' % { config: authoritative_config }) }
+            it { is_expected.to contain_file_line('powerdns-config-ldap-secret-%{config}' % { config: authoritative_config }) }
+            it { is_expected.to contain_file_line('powerdns-config-ldap-binddn-%{config}' % { config: authoritative_config }) }
+            it { is_expected.to contain_file_line('powerdns-config-ldap-method-%{config}' % { config: authoritative_config }) }
           end
 
           context 'with backend_install set to true' do
@@ -322,8 +338,9 @@ describe 'powerdns', type: :class do
                 backend_create_tables: false
               }
             end
-            it 'fails' do
-              expect { subject.call }.to raise_error(/backend_install is not supported with ldap/)
+
+            it 'fails with backend_install' do
+              is_expected.to raise_error(%r{backend_install is not supported with ldap})
             end
           end
 
@@ -338,8 +355,9 @@ describe 'powerdns', type: :class do
                 backend_create_tables: true
               }
             end
+
             it 'fails' do
-              expect { subject.call }.to raise_error(/backend_create_tables is not supported with ldap/)
+              is_expected.to raise_error(%r{backend_create_tables is not supported with ldap})
             end
           end
         end
@@ -388,7 +406,7 @@ describe 'powerdns', type: :class do
           it { is_expected.to contain_service('pdns-recursor').with('ensure' => 'running') }
           it { is_expected.to contain_service('pdns-recursor').with('enable' => 'true') }
           it { is_expected.to contain_service('pdns-recursor').with('name' => recursor_service_name) }
-          it { is_expected.to contain_service('pdns-recursor').that_requires(format('Package[%<package>s]', package: recursor_package_name)) }
+          it { is_expected.to contain_service('pdns-recursor').that_requires('Package[%{package}]' % { package: recursor_package_name }) }
         end
 
         # Test errors
@@ -401,9 +419,7 @@ describe 'powerdns', type: :class do
             }
           end
 
-          it 'fails' do
-            expect { subject.call }.to raise_error(/parameter 'db_username' expects a(.*)String/)
-          end
+          it { is_expected.to raise_error(%r{parameter 'db_username' expects a(.*)String}) }
         end
 
         context 'powerdns class without database password' do
@@ -414,9 +430,11 @@ describe 'powerdns', type: :class do
             }
           end
 
-          it 'fails' do
-            expect { subject.call }.to raise_error(/'db_password' must be a non-empty string when 'authoritative' == true/)
-          end
+          it {
+            is_expected.to raise_error(
+              %r{'db_password' must be a non-empty string when 'authoritative' == true},
+            )
+          }
         end
 
         context 'powerdns class with an unsupported backend' do
@@ -429,9 +447,11 @@ describe 'powerdns', type: :class do
             }
           end
 
-          it 'fails' do
-            expect { subject.call }.to raise_error(/'backend' expects a match for Enum\['bind', 'ldap', 'mysql', 'postgresql', 'sqlite'\]/)
-          end
+          it {
+            is_expected.to raise_error(
+              %r{'backend' expects a match for Enum\['bind', 'ldap', 'mysql', 'postgresql', 'sqlite'\]},
+            )
+          }
         end
 
         context 'powerdns version 4.7' do
@@ -455,8 +475,8 @@ describe 'powerdns', type: :class do
                 .with('baseurl' => 'http://repo.powerdns.com/centos/$basearch/$releasever/rec-47')
             }
           when 'Debian'
-            it { is_expected.to contain_apt__source('powerdns').with_release(/auth-47/) }
-            it { is_expected.to contain_apt__source('powerdns-recursor').with_release(/rec-47/) }
+            it { is_expected.to contain_apt__source('powerdns').with_release(%r{auth-47}) }
+            it { is_expected.to contain_apt__source('powerdns-recursor').with_release(%r{rec-47}) }
           end
 
           it { is_expected.to contain_package(authoritative_package_name).with('ensure' => 'installed') }

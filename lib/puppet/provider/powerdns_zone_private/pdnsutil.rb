@@ -2,7 +2,7 @@
 #
 require 'tempfile'
 Puppet::Type.type(:powerdns_zone_private).provide(
-  :pdnsutil
+  :pdnsutil,
 ) do
   desc "A provider for the resource type `powerdns_zone`,
         which manages a zone on powerdns
@@ -41,7 +41,7 @@ Puppet::Type.type(:powerdns_zone_private).provide(
 
   def pdnsutil_set_records(serial)
     tmpfile = Tempfile.new(resource[:name])
-    tmpfile.write(resource[:content].gsub(/_SERIAL_/, serial))
+    tmpfile.write(resource[:content].gsub(%r{_SERIAL_}, serial))
     tmpfile.rewind
     pdnsutil(pdnsutil_options, 'load-zone', resource[:name], tmpfile.path)
   ensure
@@ -51,13 +51,11 @@ Puppet::Type.type(:powerdns_zone_private).provide(
 
   def find_soa(records)
     records.each_with_index do |r, idx|
-      return idx if r.match?(/\tSOA\t/)
+      return idx if r.include?('SOA')
     end
     'notfound'
   end
 
-  # rubocop:disable Metrics/MethodLength
-  # rubocop:disable Metrics/AbcSize
   def content
     return '' unless resource[:manage_records]
 
@@ -68,13 +66,11 @@ Puppet::Type.type(:powerdns_zone_private).provide(
       @serial = '1'
       return c
     end
-    soarec = records[soanr].split(' ') # rubocop:disable Style/RedundantArgument
+    soarec = records[soanr].split(' ')
     @serial = soarec[-5]
     soarec[-5] = '_SERIAL_'
-    records[soanr] = soarec[0..3].join("\t") + "\t" + soarec[4..10].join(' ') # rubocop:disable Style/StringConcatenation
-
-    records.sort.join("\n") + "\n" # rubocop:disable Style/StringConcatenation
-  end
+    records[soanr] = soarec[0..3].join("\t") + "\t" + soarec[4..10].join(' ')
+    records.sort.join("\n") + "\n" end
   # rubocop:enable Metrics/AbcSize
   # rubocop:enable Metrics/MethodLength
 

@@ -8,9 +8,13 @@ describe provider_class do
   let(:resource) do
     Puppet::Type::Powerdns_zone_private.new(
       name: 'example.com',
-      provider: described_class.name
+      provider: described_class.name,
     )
   end
 
   let(:provider) { provider_class.new(resource) }
+
+  it 'has its name set' do
+    expect(resource[:name]).to eq('example.com')
+  end
 end
