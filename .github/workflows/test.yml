@@ -18,5 +18,5 @@ jobs:
       env:
         PUPPET_VERSION: ~> ${{ matrix.puppet }}
       run: |
-        bundle install --path vendor/bundle --without development
-        bundle exec rake test
+        bundle install
+        bundle exec rake spec
