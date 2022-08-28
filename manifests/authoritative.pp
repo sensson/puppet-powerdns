@@ -1,9 +1,14 @@
 # powerdns::authoritative
-class powerdns::authoritative ($package_ensure = $powerdns::params::default_package_ensure) inherits powerdns {
+class powerdns::authoritative (
+  $package_ensure = $powerdns::params::default_package_ensure,
+  Optional[Array[String]] $install_packages = $powerdns::install_packages,
+  ) inherits powerdns {
   # install the powerdns package
   package { $::powerdns::params::authoritative_package:
     ensure => $package_ensure,
   }
+
+  ensure_packages($install_packages)
 
   # install the right backend
   case $::powerdns::backend {

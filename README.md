@@ -45,6 +45,24 @@ class { 'powerdns':
 }
 ```
 
+### Recursor forward zones
+
+Multiple forward zones can be configured using `powerdns::forward_zones`.
+
+```puppet
+include powerdns::recursor
+```
+
+The configuration will be serialized into `forward-zones-file` config file.
+
+```yaml
+powerdns::forward_zones:
+  'example.com': 10.0.0.1
+  'foo': 192.168.1.1
+   # recurse queries
+  '+.': 1.1.1.1;8.8.8.8;8.8.4.4
+```
+
 ### Backends
 
 The default backend is MySQL. It also comes with support for PostgreSQL, Bind,

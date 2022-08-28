@@ -461,6 +461,41 @@ describe 'powerdns', type: :class do
 
           it { is_expected.to contain_package(authoritative_package_name).with('ensure' => 'installed') }
         end
+
+        context 'powerdns class with the recursor with forward zones' do
+          let(:params) do
+            {
+              recursor: true,
+              authoritative: false,
+              forward_zones: {
+                'example.com': '1.1.1.1',
+                '+.': '8.8.8.8'
+              }
+            }
+          end
+
+          case facts[:osfamily]
+          when 'RedHat'
+            recursor_dir = '/etc/pdns-recursor'
+          when 'Debian'
+            recursor_dir = '/etc/powerdns'
+          end
+
+          it { is_expected.to compile.with_all_deps }
+
+          # Check the authoritative server
+          it { is_expected.to contain_class('powerdns::recursor') }
+          it { is_expected.to contain_file("#{recursor_dir}/forward_zones.conf").with_ensure('file') }
+          it {
+            is_expected.to contain_powerdns__config('forward-zones-file') \
+              .with(value: "#{recursor_dir}/forward_zones.conf")
+          }
+
+          it {
+            is_expected.to contain_file("#{recursor_dir}/forward_zones.conf") \
+              .with_content(/^example.com=1.1.1.1/)
+          }
+        end
       end
     end
   end
