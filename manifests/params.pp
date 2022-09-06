@@ -1,22 +1,5 @@
 # powerdns::params
 class powerdns::params {
-  $authoritative = true
-  $recursor = false
-  $backend = 'mysql'
-  $backend_create_tables = true
-  $db_root_password = undef
-  $db_username = 'powerdns'
-  $db_password = undef
-  $db_name = 'powerdns'
-  $db_host = 'localhost'
-  $db_port = 3306
-  $ldap_host = 'ldap://localhost/'
-  $ldap_basedn = undef
-  $ldap_method = 'strict'
-  $ldap_binddn = undef
-  $ldap_secret = undef
-  $custom_repo = false
-  $custom_epel = false
   $default_package_ensure = installed
   $version = '4.2'
 
