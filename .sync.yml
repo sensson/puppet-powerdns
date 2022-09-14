@@ -1,0 +1,19 @@
+appveyor.yml:
+  delete: true
+.travis.yml:
+  delete: true
+.gitlab-ci.yml:
+  delete: true
+.editorconfig:
+  unmanaged: true
+.gitignore:
+  paths:
+    - '/.vscode/'
+    - '/.devcontainer/'
+.gitignore:
+  paths:
+    - '.tmp/'
+    - 'Puppetfile.lock'
+spec/spec_helper.rb:
+  mock_with: ':rspec'
+  coverage_report: true

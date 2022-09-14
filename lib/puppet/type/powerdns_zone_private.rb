@@ -37,13 +37,13 @@ Puppet::Type.newtype(:powerdns_zone_private) do
 
   newparam(:manage_records, boolean: true, parent: Puppet::Parameter::Boolean) do
     desc 'if we manage the all zone records for the domain (any records not managed with puppet will be purged).'
-    defaultto :true # rubocop:disable Lint/BooleanSymbol
+    defaultto :true
   end
 
   newparam(:show_diff, boolean: true, parent: Puppet::Parameter::Boolean) do
     desc "Whether to display differences when the zone changes, defaulting to
         false. Since zones can be huge, use this only for debugging"
-    defaultto :false # rubocop:disable Lint/BooleanSymbol
+    defaultto :false
   end
 
   newproperty(:content) do
@@ -51,7 +51,7 @@ Puppet::Type.newtype(:powerdns_zone_private) do
 
     munge do |value|
       if @resource[:manage_records]
-        value.to_s.gsub(/\n+$/, '') + "\n" # rubocop:disable Style/StringConcatenation
+        value.to_s.gsub(%r{\n+$}, '') + "\n"
       else
         ''
       end
@@ -59,17 +59,17 @@ Puppet::Type.newtype(:powerdns_zone_private) do
 
     def should_to_s(value)
       if @resource[:show_diff]
-        ":\n" + value # rubocop:disable Style/StringConcatenation
+        ":\n" + value
       else
-        '{md5}' + Digest::MD5.hexdigest(value.to_s) # rubocop:disable Style/StringConcatenation
+        '{md5}' + Digest::MD5.hexdigest(value.to_s)
       end
     end
 
     def is_to_s(value) # rubocop:disable Naming/PredicateName
       if @resource[:show_diff]
-        ":\n" + value # rubocop:disable Style/StringConcatenation
+        ":\n" + value
       else
-        '{md5}' + Digest::MD5.hexdigest(value.to_s) # rubocop:disable Style/StringConcatenation
+        '{md5}' + Digest::MD5.hexdigest(value.to_s)
       end
     end
   end
@@ -78,7 +78,6 @@ Puppet::Type.newtype(:powerdns_zone_private) do
   autorequire(:service) do
     ['pdns']
   end
-  # rubocop:disable Lint/EmptyBlock
   autorequire(:powerdns_zone) do
   end
   # rubocop:enable Lint/EmptyBlock

@@ -1,9 +1,9 @@
 require 'spec_helper_acceptance'
 
 case default['platform']
-when /debian|ubuntu/
+when %r{debian|ubuntu}
   authoritative_config = '/etc/powerdns/pdns.conf'
-when /el|centos/
+when %r{el|centos}
   authoritative_config = '/etc/pdns/pdns.conf'
 else
   logger.notify("Cannot manage PowerDNS on #{default['platform']}")
@@ -12,7 +12,7 @@ end
 describe 'powerdns class' do
   context 'authoritative server' do
     # Using puppet_apply as a helper
-    it 'should work idempotently with no errors' do
+    it 'works idempotently with no errors' do
       pp = <<-PUPPET
       class { 'powerdns':
         db_password => 's0m4r4nd0mp4ssw0rd',
@@ -35,21 +35,21 @@ describe 'powerdns class' do
     end
 
     describe file(authoritative_config) do
-      it { should be_file }
-      its(:content) { should match 'gmysql-host=localhost' }
+      it { is_expected.to be_file }
+      its(:content) { is_expected.to match 'gmysql-host=localhost' }
     end
 
     describe service('pdns') do
-      it { should be_running }
+      it { is_expected.to be_running }
     end
 
     describe command('/usr/bin/pdns_control version') do
-      its(:stdout) { should match '4.1' }
+      its(:stdout) { is_expected.to match '4.1' }
     end
   end
 
   context 'recursor server' do
-    it 'should work idempotently with no errors' do
+    it 'works idempotently with no errors' do
       pp = <<-PUPPET
       class { 'powerdns':
         authoritative => false,
