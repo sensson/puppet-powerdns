@@ -13,6 +13,7 @@ class powerdns (
   Integer[1]                 $db_port                            = 3306,
   String[1]                  $db_dir                             = $::powerdns::params::db_dir,
   String[1]                  $db_file                            = $::powerdns::params::db_file,
+  Boolean                    $require_db_password                = true,
   String[1]                  $ldap_host                          = 'ldap://localhost/',
   Optional[String[1]]        $ldap_basedn                        = undef,
   String[1]                  $ldap_method                        = 'strict',
@@ -27,7 +28,7 @@ class powerdns (
 ) inherits powerdns::params {
   # Do some additional checks. In certain cases, some parameters are no longer optional.
   if $authoritative {
-    if ($::powerdns::backend != 'bind') and ($::powerdns::backend != 'ldap') and ($::powerdns::backend != 'sqlite') {
+    if ($::powerdns::backend != 'bind') and ($::powerdns::backend != 'ldap') and ($::powerdns::backend != 'sqlite') and $require_db_password {
       assert_type(String[1], $db_password) |$expected, $actual| {
         fail("'db_password' must be a non-empty string when 'authoritative' == true")
       }
@@ -35,6 +36,11 @@ class powerdns (
         assert_type(String[1], $db_root_password) |$expected, $actual| {
           fail("'db_root_password' must be a non-empty string when 'backend_install' == true")
         }
+      }
+    }
+    if $backend_create_tables and $backend == 'mysql' {
+      assert_type(String[1], $db_root_password) |$expected, $actual| {
+        fail("On MySQL 'db_root_password' must be a non-empty string when 'backend_create_tables' == true")
       }
     }
   }

@@ -29,11 +29,13 @@ class powerdns::backends::mysql ($package_ensure = $powerdns::params::default_pa
     type    => 'authoritative',
   }
 
-  powerdns::config { 'gmysql-password':
-    ensure  => present,
-    setting => 'gmysql-password',
-    value   => $::powerdns::db_password,
-    type    => 'authoritative',
+  if $powerdns::db_password {
+    powerdns::config { 'gmysql-password':
+      ensure  => present,
+      setting => 'gmysql-password',
+      value   => $::powerdns::db_password,
+      type    => 'authoritative',
+    }
   }
 
   powerdns::config { 'gmysql-dbname':
@@ -65,7 +67,7 @@ class powerdns::backends::mysql ($package_ensure = $powerdns::params::default_pa
     }
   }
 
-  if $::powerdns::backend_create_tables {
+  if $::powerdns::backend_create_tables and $powerdns::db_password {
     # make sure the database exists
     mysql::db { $::powerdns::db_name:
       user     => $::powerdns::db_username,
