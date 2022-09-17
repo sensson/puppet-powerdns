@@ -3,7 +3,7 @@ class powerdns (
   Boolean                    $authoritative                      = true,
   Boolean                    $recursor                           = false,
   Enum['ldap', 'mysql', 'bind', 'postgresql', 'sqlite'] $backend = 'mysql',
-  Boolean                    $backend_install                    = $::powerdns::params::backend_install,
+  Boolean                    $backend_install                    = true,
   Boolean                    $backend_create_tables              = true,
   Optional[String[1]]        $db_root_password                   = undef,
   Optional[String[1]]        $db_username                        = 'powerdns',
