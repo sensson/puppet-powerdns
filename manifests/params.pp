@@ -101,6 +101,28 @@ class powerdns::params {
       $recursor_config = "${recursor_dir}/recursor.conf"
       $install_packages = []
     }
+    'Archlinux': {
+      $authoritative_package = 'powerdns'
+      $authoritative_service = 'pdns'
+      $recursor_package = 'powerdns-recursor'
+      $recursor_service = 'pdns-recursor'
+      $mysql_schema_file = '/usr/share/doc/powerdns/schema.mysql.sql'
+      $pgsql_schema_file = '/usr/share/doc/powerdns/schema.pgsql.sql'
+      $sqlite_schema_file = '/usr/share/doc/powerdns/schema.sqlite3.sql'
+      $db_dir = '/var/lib/powerdns'
+      $db_file = "${db_dir}/powerdns.sqlite3"
+      $service_provider = 'systemd'
+      $install_packages = []
+      $mysql_backend_package_name = undef
+      $ldap_backend_package_name = undef
+      $pgsql_backend_package_name = undef
+      $sqlite_backend_package_name = undef
+      $authoritative_config = '/etc/powerdns/pdns.conf'
+      $recursor_dir = '/etc/powerdns'
+      $recursor_config = "${recursor_dir}/recursor.conf"
+      $sqlite_package_name = 'sqlite'
+      $authoritative_configdir = '/etc/powerdns'
+    }
     default: {
       fail("${facts['os']['family']} is not supported yet.")
     }

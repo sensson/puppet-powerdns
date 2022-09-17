@@ -43,6 +43,16 @@ describe 'powerdns', type: :class do
           sqlite_binary_package_name = 'sqlite3'
           recursor_package_name = 'pdns-recursor'
           recursor_service_name = 'pdns-recursor'
+        when 'Archlinux'
+          authoritative_package_name = 'powerdns'
+          authoritative_service_name = 'pdns'
+          authoritative_config = '/etc/powerdns/pdns.conf'
+          mysql_schema_file = '/usr/share/doc/powerdns/schema.mysql.sql'
+          pgsql_schema_file = '/usr/share/doc/powerdns/schema.pgsql.sql'
+          sqlite_schema_file = '/usr/share/doc/powerdns/schema.sqlite3.sql'
+          recursor_package_name = 'powerdns-recursor'
+          recursor_service_name = 'pdns-recursor'
+          recursor_dir = '/etc/powerdns'
         end
 
         context 'powerdns class without parameters' do
@@ -159,7 +169,7 @@ describe 'powerdns', type: :class do
 
           it { is_expected.to compile.with_all_deps }
 
-          case facts[:osfamily]
+          case facts[:os]['family']
           when 'RedHat'
             it { is_expected.to contain_class('epel') }
           end
@@ -218,7 +228,9 @@ describe 'powerdns', type: :class do
           end
 
           it { is_expected.to contain_class('powerdns::backends::mysql') }
-          it { is_expected.to contain_package('pdns-backend-mysql').with('ensure' => 'installed') }
+          if facts[:os]['name'] != 'Archlinux'
+            it { is_expected.to contain_package('pdns-backend-mysql').with('ensure' => 'installed') }
+          end
           it { is_expected.to contain_mysql__db('powerdns').with('user' => 'foo', 'password' => 'bar', 'host' => '127.0.0.1') }
           it { is_expected.to contain_mysql__db('powerdns').with_sql([ mysql_schema_file ]) }
 
@@ -250,12 +262,14 @@ describe 'powerdns', type: :class do
 
           it { is_expected.to contain_class('powerdns::backends::postgresql') }
 
-          if facts[:operatingsystem] == 'Debian'
+          if facts[:os]['name'] == 'Debian'
             it { is_expected.to contain_file('/etc/powerdns/pdns.d/pdns.local.gpgsql.conf').with('ensure' => 'absent') }
             it { is_expected.to contain_package('pdns-backend-bind').with('ensure' => 'purged') }
           end
 
-          it { is_expected.to contain_package(pgsql_backend_package_name).with('ensure' => 'installed') }
+          if facts[:os]['name'] != 'Archlinux'
+            it { is_expected.to contain_package(pgsql_backend_package_name).with('ensure' => 'installed') }
+          end
           it { is_expected.to contain_postgresql__server__db('powerdns').with('user' => 'foo') }
           it { is_expected.to contain_postgresql_psql('Load SQL schema').with('command' => "\\i #{pgsql_schema_file}") }
 
@@ -280,8 +294,10 @@ describe 'powerdns', type: :class do
           end
 
           it { is_expected.to contain_class('powerdns::backends::sqlite') }
-          it { is_expected.to contain_package(sqlite_backend_package_name).with('ensure' => 'installed') }
-          it { is_expected.to contain_package(sqlite_binary_package_name).with('ensure' => 'installed') }
+          if facts[:os]['name'] != 'Archlinux'
+            it { is_expected.to contain_package(sqlite_backend_package_name).with('ensure' => 'installed') }
+            it { is_expected.to contain_package(sqlite_binary_package_name).with('ensure' => 'installed') }
+          end
           it do
             is_expected.to contain_file('/var/lib/powerdns/db.sqlite3').with(
               'ensure' => 'file',
@@ -319,14 +335,12 @@ describe 'powerdns', type: :class do
 
           it { is_expected.to contain_class('powerdns::backends::bind') }
 
-          case facts[:osfamily]
+          case facts[:os]['family']
           when 'RedHat'
             it { is_expected.to contain_file('/etc/pdns/named.conf').with('ensure' => 'file') }
             it { is_expected.to contain_file('/etc/pdns/named').with('ensure' => 'directory') }
             it { is_expected.to contain_file('/etc/pdns/pdns.d/pdns.simplebind.conf').with('ensure' => 'absent') }
             it { is_expected.to contain_powerdns__config('bind-config').with('value' => '/etc/pdns/named.conf') }
-          end
-          case facts[:osfamily]
           when 'Debian'
             it { is_expected.to contain_file('/etc/powerdns/named.conf').with('ensure' => 'file') }
             it { is_expected.to contain_file('/etc/powerdns/named').with('ensure' => 'directory') }
@@ -356,8 +370,8 @@ describe 'powerdns', type: :class do
 
             it { is_expected.to compile.with_all_deps }
             it { is_expected.to contain_class('powerdns::backends::ldap') }
-            it { is_expected.to contain_package('pdns-backend-ldap').with('ensure' => 'installed') }
-            it { is_expected.to contain_package('pdns-backend-bind').with('ensure' => 'purged') } if facts[:operatingsystem] == 'Debian'
+            it { is_expected.to contain_package('pdns-backend-ldap').with('ensure' => 'installed') } if facts[:os]['name'] != 'Archlinux'
+            it { is_expected.to contain_package('pdns-backend-bind').with('ensure' => 'purged') } if facts[:os]['family'] == 'Debian'
             it { is_expected.to contain_powerdns__config('launch').with('value' => 'ldap') }
             it { is_expected.to contain_powerdns__config('ldap-host').with('value' => 'ldap://localhost/') }
             it { is_expected.to contain_powerdns__config('ldap-basedn').with('value' => 'ou=foo') }
