@@ -36,7 +36,6 @@ class powerdns::authoritative (
     ensure   => running,
     name     => $::powerdns::params::authoritative_service,
     enable   => true,
-    provider => [$::powerdns::params::service_provider],
     require  => Package[$::powerdns::params::authoritative_package],
   }
 }
