@@ -513,7 +513,7 @@ describe 'powerdns', type: :class do
 
           it {
             is_expected.to contain_file("#{recursor_dir}/forward_zones.conf") \
-              .with_content(/^example.com=1.1.1.1/)
+              .with_content(%r{^example.com=1.1.1.1})
           }
         end
       end
