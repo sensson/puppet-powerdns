@@ -8,7 +8,6 @@ class powerdns::params {
       $authoritative_package = 'pdns'
       $authoritative_service = 'pdns'
       $authoritative_config = '/etc/pdns/pdns.conf'
-      $backend_install = true
       $db_dir = '/var/lib/powerdns'
       $db_file = "${db_dir}/powerdns.sqlite3"
       $mysql_backend_package_name = 'pdns-backend-mysql'
@@ -31,7 +30,6 @@ class powerdns::params {
       $authoritative_package = 'pdns-server'
       $authoritative_service = 'pdns'
       $authoritative_config = '/etc/powerdns/pdns.conf'
-      $backend_install = true
       $db_dir = '/var/lib/powerdns'
       $db_file = "${db_dir}/powerdns.sqlite3"
       $mysql_backend_package_name = 'pdns-backend-mysql'
@@ -79,7 +77,6 @@ class powerdns::params {
       $authoritative_package = 'powerdns'
       $authoritative_service = 'pdns'
       $authoritative_config = '/usr/local/etc/pdns/pdns.conf'
-      $backend_install = true
       $db_dir = '/var/db/powerdns'
       $db_file = "${db_dir}/powerdns.sqlite3"
       $mysql_backend_package_name = 'pdns-backend-mysql'
