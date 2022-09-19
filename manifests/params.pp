@@ -13,7 +13,6 @@ class powerdns::params {
       $mysql_backend_package_name = 'pdns-backend-mysql'
       $ldap_backend_package_name = 'pdns-backend-ldap'
       $pgsql_backend_package_name = 'pdns-backend-postgresql'
-      $service_provider = 'systemd'
       $sqlite_backend_package_name = 'pdns-backend-sqlite'
       $mysql_schema_file = '/usr/share/doc/pdns-backend-mysql-4.?.?/schema.mysql.sql'
       $pgsql_schema_file = '/usr/share/doc/pdns-backend-postgresql-4.?.?/schema.pgsql.sql'
@@ -38,7 +37,6 @@ class powerdns::params {
       $sqlite_backend_package_name = 'pdns-backend-sqlite3'
       $mysql_schema_file = '/usr/share/doc/pdns-backend-mysql/schema.mysql.sql'
       $pgsql_schema_file = '/usr/share/doc/pdns-backend-pgsql/schema.pgsql.sql'
-      $service_provider = 'systemd'
       $sqlite_schema_file = '/usr/share/doc/pdns-backend-sqlite3/schema.sqlite3.sql'
       $sqlite_package_name = 'sqlite3'
       $authoritative_configdir = '/etc/powerdns'
@@ -85,7 +83,6 @@ class powerdns::params {
       $sqlite_backend_package_name = undef
       $mysql_schema_file = '/usr/local/share/doc/powerdns/schema.mysql.sql'
       $pgsql_schema_file = '/usr/local/share/doc/powerdns/schema.pgsql.sql'
-      $service_provider = 'freebsd'
       $sqlite_schema_file = '/usr/local/share/doc/powerdns/schema.sqlite3.sql'
       $sqlite_package_name = 'sqlite3'
       $authoritative_configdir = '/usr/local/etc/pdns'

@@ -18,7 +18,6 @@ class powerdns (
   String[1]                  $ldap_method                        = 'strict',
   Optional[String[1]]        $ldap_binddn                        = undef,
   Optional[String[1]]        $ldap_secret                        = undef,
-  String[1]                  $service_provider                   = $::powerdns::params::service_provider,
   Boolean                    $custom_repo                        = false,
   Boolean                    $custom_epel                        = false,
   Pattern[/4\.[0-9]+/]       $version                            = $::powerdns::params::version,

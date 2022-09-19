@@ -35,7 +35,6 @@ class powerdns::recursor (
     ensure   => running,
     name     => $powerdns::params::recursor_service,
     enable   => true,
-    provider => [$powerdns::params::service_provider],
     require  => Package[$powerdns::params::recursor_package],
   }
 }
