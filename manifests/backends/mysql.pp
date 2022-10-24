@@ -72,7 +72,7 @@ class powerdns::backends::mysql ($package_ensure = $powerdns::params::default_pa
       password => $::powerdns::db_password,
       host     => $::powerdns::db_host,
       grant    => [ 'ALL' ],
-      sql      => $::powerdns::mysql_schema_file,
+      sql      => [ $::powerdns::mysql_schema_file ],
       require  => Package[$::powerdns::params::mysql_backend_package_name],
     }
   }
