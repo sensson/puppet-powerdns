@@ -38,11 +38,13 @@ class powerdns::backends::postgresql ($package_ensure = $powerdns::params::defau
     type    => 'authoritative',
   }
 
-  powerdns::config { 'gpgsql-password':
-    ensure  => present,
-    setting => 'gpgsql-password',
-    value   => $::powerdns::db_password,
-    type    => 'authoritative',
+  if $powerdns::db_password {
+    powerdns::config { 'gpgsql-password':
+      ensure  => present,
+      setting => 'gpgsql-password',
+      value   => $::powerdns::db_password,
+      type    => 'authoritative',
+    }
   }
 
   powerdns::config { 'gpgsql-dbname':

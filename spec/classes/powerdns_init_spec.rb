@@ -46,6 +46,44 @@ describe 'powerdns', type: :class do
           }
         end
 
+        context 'powerdns class with require_db_password at false' do
+          let :params do
+            {
+              require_db_password: false
+            }
+          end
+
+          it {
+            is_expected.to raise_error(
+              %r{On MySQL 'db_root_password' must be a non-empty string when 'backend_create_tables' == true},
+            )
+          }
+        end
+
+        context 'powerdns class with require_db_password at false and backend postgresql' do
+          let :params do
+            {
+              require_db_password: false,
+              backend: 'postgresql'
+            }
+          end
+
+          it { is_expected.to compile.with_all_deps }
+          it { is_expected.not_to contain_powerdns__config('gpgsql-password') }
+        end
+
+        context 'powerdns class with require_db_password at false and backend_create_tables at false' do
+          let :params do
+            {
+              require_db_password: false,
+              backend_create_tables: false
+            }
+          end
+
+          it { is_expected.to compile.with_all_deps }
+          it { is_expected.not_to contain_powerdns__config('gmysql-password') }
+        end
+
         context 'powerdns class with parameters' do
           let(:params) do
             {
