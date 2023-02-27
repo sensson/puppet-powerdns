@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.3.0 and onwards
+
+Our changelog will be published on our [releases page](https://github.com/sensson/puppet-powerdns/releases).
+
 ## 2.2.2
 
 Bumps PostgreSQL requirement.
