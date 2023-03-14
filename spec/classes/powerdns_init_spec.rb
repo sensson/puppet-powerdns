@@ -423,6 +423,35 @@ describe 'powerdns', type: :class do
           it { is_expected.not_to contain_powerdns__backends__mysql__create_table('tsigkeys') }
         end
 
+        context 'powerdns with mysql backend and Sensitive password' do
+          let(:params) do
+            {
+              db_root_password: 'foobar',
+              db_username: 'foo',
+              db_password: sensitive('TopSecret'),
+              backend: 'mysql',
+              backend_create_tables: true
+            }
+          end
+
+          it { is_expected.to contain_mysql__db('powerdns').with('user' => 'foo', 'password' => 'TopSecret', 'host' => 'localhost') }
+        end
+
+        context 'powerdns with postgresql backend and Sensitive password' do
+          let(:params) do
+            {
+              db_root_password: 'foobar',
+              db_username: 'foo',
+              db_password: sensitive('TopSecret'),
+              backend: 'postgresql',
+              backend_create_tables: true
+            }
+          end
+
+          it { is_expected.to contain_powerdns__config('gpgsql-password').with(value: 'TopSecret') }
+          it { is_expected.to contain_postgresql__server__db('powerdns').with('user' => 'foo') }
+        end
+
         # Test the recursor
         context 'powerdns class with the recursor enabled and the authoritative server disabled' do
           let(:params) do

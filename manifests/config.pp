@@ -1,7 +1,7 @@
 # powerdns::config
 define powerdns::config(
   String                            $setting = $title,
-  Variant[String, Integer, Boolean] $value   = '',
+  Powerdns::ConfigValue             $value   = '',
   Enum['present', 'absent']         $ensure  = 'present',
   Enum['authoritative', 'recursor'] $type    = 'authoritative'
 ) {
@@ -14,13 +14,19 @@ define powerdns::config(
     'local-ipv6'
   ]
   unless $ensure == 'absent' or ($setting in $empty_value_allowed) {
-    assert_type(Variant[String[1], Integer, Boolean], $value) |$_expected, $_actual| {
+    assert_type(Variant[String[1], Integer, Boolean, Sensitive[String]], $value) |$_expected, $_actual| {
       fail("Value for ${setting} can't be empty.")
     }
   }
 
-  if $setting == 'gmysql-dnssec' { $line = $setting }
-  else { $line = "${setting}=${value}" }
+  if $setting == 'gmysql-dnssec' {
+    $line = $setting
+  } else {
+    $line = $value =~ Sensitive ? {
+      true => "${setting}=${value.unwrap}",
+      false => "${setting}=${value}"
+    }
+  }
 
   if $type == 'authoritative' {
     $path            = $::powerdns::params::authoritative_config

@@ -5,9 +5,9 @@ class powerdns (
   Enum['ldap', 'mysql', 'bind', 'postgresql', 'sqlite'] $backend = 'mysql',
   Boolean                    $backend_install                    = true,
   Boolean                    $backend_create_tables              = true,
-  Optional[String[1]]        $db_root_password                   = undef,
+  Powerdns::Secret           $db_root_password                   = undef,
   String[1]                  $db_username                        = 'powerdns',
-  Optional[String[1]]        $db_password                        = undef,
+  Powerdns::Secret           $db_password                        = undef,
   String[1]                  $db_name                            = 'powerdns',
   String[1]                  $db_host                            = 'localhost',
   Integer[1]                 $db_port                            = 3306,
@@ -18,7 +18,7 @@ class powerdns (
   Optional[String[1]]        $ldap_basedn                        = undef,
   String[1]                  $ldap_method                        = 'strict',
   Optional[String[1]]        $ldap_binddn                        = undef,
-  Optional[String[1]]        $ldap_secret                        = undef,
+  Powerdns::Secret           $ldap_secret                        = undef,
   Boolean                    $custom_repo                        = false,
   Boolean                    $custom_epel                        = false,
   Pattern[/4\.[0-9]+/]       $version                            = $::powerdns::params::version,
@@ -29,17 +29,17 @@ class powerdns (
   # Do some additional checks. In certain cases, some parameters are no longer optional.
   if $authoritative {
     if ($::powerdns::backend != 'bind') and ($::powerdns::backend != 'ldap') and ($::powerdns::backend != 'sqlite') and $require_db_password {
-      assert_type(String[1], $db_password) |$expected, $actual| {
+      assert_type(Variant[String[1], Sensitive[String[1]]], $db_password) |$expected, $actual| {
         fail("'db_password' must be a non-empty string when 'authoritative' == true")
       }
       if $backend_install {
-        assert_type(String[1], $db_root_password) |$expected, $actual| {
+        assert_type(Variant[String[1], Sensitive[String[1]]], $db_root_password) |$expected, $actual| {
           fail("'db_root_password' must be a non-empty string when 'backend_install' == true")
         }
       }
     }
     if $backend_create_tables and $backend == 'mysql' {
-      assert_type(String[1], $db_root_password) |$expected, $actual| {
+      assert_type(Variant[String[1], Sensitive[String[1]]], $db_root_password) |$expected, $actual| {
         fail("On MySQL 'db_root_password' must be a non-empty string when 'backend_create_tables' == true")
       }
     }
