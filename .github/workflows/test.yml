@@ -27,6 +27,7 @@ jobs:
       with:
         ruby-version: ${{ matrix.ruby }}
         bundler-cache: true
+        rubygems: 3.2.3
 
     - name: Rubocop
       run: bundle exec rake rubocop
