@@ -161,7 +161,11 @@ The zone records can be managed through the powerdns\_record resource. As an exa
    rcontent    => '127.0.0.1'
  }
 ```
-Remark: if the target\_zone is not managed with powerdns\_zone resource, powerdns\_record does not change anything !
+Remark: if the target\_zone is not managed with powerdns\_zone resource, powerdns\_record does not change anything!
+
+### Sensitive secrets
+
+Passwords can be passed either as plain-text strings or as [Puppet's Sensitive type](https://www.puppet.com/docs/puppet/7/lang_data_sensitive.html) when appropriate encrypted backend is configured on Puppet server.
 
 ## Reference
 
@@ -200,7 +204,7 @@ Defaults to true.
 ##### `db_root_password`
 
 If you set `backend_install` to true you are asked to specify a root
-password for your database.
+password for your database. Accepts either `String` or `Sensitive` type.
 
 ##### `db_username`
 
@@ -208,7 +212,7 @@ Set the database username. Defaults to 'powerdns'.
 
 ##### `db_password`
 
-Set the database password. Default is empty.
+Set the database password. Accepts either `String` or `Sensitive` type. Default is empty.
 
 ##### `db_name`
 
@@ -245,7 +249,7 @@ Path to the object to authenticate against. Defaults to undef.
 
 ##### `ldap_secret`
 
-Password for simple authentication against ldap_basedn. Defaults to undef.
+Password for simple authentication against ldap_basedn. Accepts either `String` or `Sensitive` type. Defaults to undef.
 
 ##### `custom_repo`
 

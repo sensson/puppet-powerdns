@@ -14,7 +14,7 @@ define powerdns::config(
     'local-ipv6'
   ]
   unless $ensure == 'absent' or ($setting in $empty_value_allowed) {
-    assert_type(Variant[String[1], Integer, Boolean, Sensitive[String]], $value) |$_expected, $_actual| {
+    assert_type(Variant[String[1], Integer, Boolean, Sensitive[String[1]]], $value) |$_expected, $_actual| {
       fail("Value for ${setting} can't be empty.")
     }
   }

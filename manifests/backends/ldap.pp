@@ -31,10 +31,15 @@ class powerdns::backends::ldap ($package_ensure = $powerdns::params::default_pac
     type    => 'authoritative',
   }
 
+  $_ldap_secret = $::powerdns::ldap_secret =~ Sensitive ? {
+    true => $::powerdns::ldap_secret.unwrap,
+    false => $::powerdns::ldap_secret
+  }
+
   powerdns::config { 'ldap-secret':
     ensure  => present,
     setting => 'ldap-secret',
-    value   => $::powerdns::ldap_secret,
+    value   => $_ldap_secret,
     type    => 'authoritative',
   }
 

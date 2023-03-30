@@ -365,6 +365,21 @@ describe 'powerdns', type: :class do
             it { is_expected.to contain_file_line('powerdns-config-ldap-method-%{config}' % { config: authoritative_config }) }
           end
 
+          context 'with Sensitive password' do
+            let(:params) do
+              {
+                ldap_basedn: 'ou=foo',
+                ldap_binddn: 'foo',
+                ldap_secret: sensitive('secret_bar'),
+                backend: 'ldap',
+                backend_install: false,
+                backend_create_tables: false
+              }
+            end
+
+            it { is_expected.to contain_powerdns__config('ldap-secret').with('value' => 'secret_bar') }
+          end
+
           context 'with backend_install set to true' do
             let(:params) do
               {
