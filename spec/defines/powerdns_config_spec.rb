@@ -149,6 +149,20 @@ describe 'powerdns::config' do
             is_expected.to contain_file_line('powerdns-config-webserver-%{config}' % { config: recursor_config }).with_line('webserver=true')
           }
         end
+
+        context 'powerdns::config with Sensitive' do
+          let(:params) do
+            {
+              setting: 'webserver-password',
+              value: sensitive('S3cr3t'),
+              type: 'recursor'
+            }
+          end
+
+          it {
+            is_expected.to contain_file_line('powerdns-config-webserver-password-%{config}' % { config: recursor_config }).with_line('webserver-password=S3cr3t')
+          }
+        end
       end
     end
   end

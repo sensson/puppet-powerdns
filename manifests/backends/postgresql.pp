@@ -38,11 +38,16 @@ class powerdns::backends::postgresql ($package_ensure = $powerdns::params::defau
     type    => 'authoritative',
   }
 
-  if $powerdns::db_password {
+  $_db_password = $powerdns::db_password =~ Sensitive ? {
+    true => $powerdns::db_password.unwrap,
+    false => $powerdns::db_password
+  }
+
+  if $_db_password {
     powerdns::config { 'gpgsql-password':
       ensure  => present,
       setting => 'gpgsql-password',
-      value   => $::powerdns::db_password,
+      value   => $_db_password,
       type    => 'authoritative',
     }
   }
@@ -64,8 +69,13 @@ class powerdns::backends::postgresql ($package_ensure = $powerdns::params::defau
   }
   if $::powerdns::backend_install {
     if ! defined(Class['::postgresql::server']) {
+      $_db_root_password = $powerdns::db_root_password =~ Sensitive ? {
+        true => $powerdns::db_root_password.unwrap,
+        false => $powerdns::db_root_password
+      }
+
       class { '::postgresql::server':
-        postgres_password => $::powerdns::db_root_password,
+        postgres_password => $_db_root_password,
       }
     }
   }
@@ -73,14 +83,14 @@ class powerdns::backends::postgresql ($package_ensure = $powerdns::params::defau
   if $::powerdns::backend_create_tables {
     postgresql::server::db { $::powerdns::db_name:
       user     => $::powerdns::db_username,
-      password => postgresql_password($::powerdns::db_username, $::powerdns::db_password),
+      password => postgresql_password($::powerdns::db_username, $_db_password),
       require  => Package[$::powerdns::params::pgsql_backend_package_name],
     }
 
     # define connection settings for powerdns user in order to create tables
     $connection_settings_powerdns = {
       'PGUSER'     => $::powerdns::db_username,
-      'PGPASSWORD' => $::powerdns::db_password,
+      'PGPASSWORD' => $_db_password,
       'PGHOST'     => $::powerdns::db_host,
       'PGDATABASE' => $::powerdns::db_name,
     }

@@ -29,11 +29,16 @@ class powerdns::backends::mysql ($package_ensure = $powerdns::params::default_pa
     type    => 'authoritative',
   }
 
-  if $powerdns::db_password {
+  $_db_password = $powerdns::db_password =~ Sensitive ? {
+    true => $powerdns::db_password.unwrap,
+    false => $powerdns::db_password
+  }
+
+  if $_db_password {
     powerdns::config { 'gmysql-password':
       ensure  => present,
       setting => 'gmysql-password',
-      value   => $::powerdns::db_password,
+      value   => $_db_password,
       type    => 'authoritative',
     }
   }
@@ -56,8 +61,13 @@ class powerdns::backends::mysql ($package_ensure = $powerdns::params::default_pa
   if $::powerdns::backend_install {
     # mysql database
     if ! defined(Class['::mysql::server']) {
+      $_db_root_password = $powerdns::db_root_password =~ Sensitive ? {
+        true => $powerdns::db_root_password.unwrap,
+        false => $powerdns::db_root_password
+      }
+
       class { '::mysql::server':
-        root_password      => $::powerdns::db_root_password,
+        root_password      => $_db_root_password,
         create_root_my_cnf => true,
       }
     }
@@ -67,11 +77,11 @@ class powerdns::backends::mysql ($package_ensure = $powerdns::params::default_pa
     }
   }
 
-  if $::powerdns::backend_create_tables and $powerdns::db_password {
+  if $::powerdns::backend_create_tables and $_db_password {
     # make sure the database exists
     mysql::db { $::powerdns::db_name:
       user     => $::powerdns::db_username,
-      password => $::powerdns::db_password,
+      password => $_db_password,
       host     => $::powerdns::db_host,
       grant    => [ 'ALL' ],
       sql      => [ $::powerdns::mysql_schema_file ],
