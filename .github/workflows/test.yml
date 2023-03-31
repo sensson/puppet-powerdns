@@ -14,7 +14,7 @@ jobs:
       BUNDLE_WITH: "development"
     strategy:
       matrix:
-        puppet: [6.0, 7.0]
+        puppet: [7.0]
         ruby: [2.6, 2.7]
     steps:
     - name: Checkout Source
