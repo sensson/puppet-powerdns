@@ -1,5 +1,11 @@
 # Changelog
 
+## v3.0.1 - 2023-04-01
+
+This release ensures the changelog is updated at Puppet Forge.
+
+**Full Changelog**: https://github.com/sensson/puppet-powerdns/compare/v3.0.0...v3.0.1
+
 ## v3.0.0 - 2023-03-31
 
 ### What's Changed
