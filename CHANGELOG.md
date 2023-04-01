@@ -1,5 +1,13 @@
 # Changelog
 
+## v3.0.2 - 2023-04-01
+
+### What's Changed
+
+- chore: update metadata & readme for puppet 7 by @ju5t in https://github.com/sensson/puppet-powerdns/pull/149
+
+**Full Changelog**: https://github.com/sensson/puppet-powerdns/compare/v3.0.1...v3.0.2
+
 ## v3.0.1 - 2023-04-01
 
 This release ensures the changelog is updated at Puppet Forge.
