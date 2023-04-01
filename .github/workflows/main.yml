@@ -1,0 +1,116 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+  release:
+    types: [released]
+
+jobs:
+  test:
+    name: "Static & Spec Tests (Ruby ${{ matrix.ruby }}, Puppet ${{ matrix.puppet }})"
+    runs-on: ubuntu-latest
+    env:
+      BUNDLE_JOBS: 4
+      BUNDLE_WITH: "development"
+    strategy:
+      matrix:
+        puppet: [7.0]
+        ruby: [2.6, 2.7]
+    steps:
+    - name: Checkout Source
+      uses: actions/checkout@v2
+
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      env:
+        PUPPET_GEM_VERSION: ~> ${{ matrix.puppet }}
+      with:
+        ruby-version: ${{ matrix.ruby }}
+        bundler-cache: true
+        rubygems: 3.2.3
+
+    - name: Rubocop
+      run: bundle exec rake rubocop
+
+    - name: Test code
+      run: bundle exec rake spec
+  changelog:
+    name: changelog
+    runs-on: ubuntu-latest
+    needs: test
+    if: |
+      always() &&
+      startsWith(github.ref, 'refs/tags/v') &&
+      (needs.test.result == 'success')
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          ref: main
+
+      - name: Update Changelog
+        uses: stefanzweifel/changelog-updater-action@v1
+        with:
+          latest-version: ${{ github.event.release.tag_name }}
+          release-notes: ${{ github.event.release.body }}
+
+      - name: Commit updated CHANGELOG
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          branch: main
+          commit_message: 'chore: update changelog'
+          file_pattern: CHANGELOG.md
+  tag:
+    name: metadata
+    runs-on: ubuntu-latest
+    needs: test
+    if: |
+      always() &&
+      startsWith(github.ref, 'refs/tags/v') &&
+      (needs.test.result == 'success')
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          ref: main
+      - name: Get Version
+        id: get_version
+        uses: battila7/get-version-action@v2
+      - name: Update metadata.json
+        uses: jossef/action-set-json-field@v2.1
+        with:
+          file: metadata.json
+          field: version
+          value: ${{ steps.get_version.outputs.version-without-v }}
+      - name: Commit updated metadata.json
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          branch: main
+          commit_message: 'chore(release): prepare metadata.json'
+          file_pattern: metadata.json
+
+  release:
+    name: release
+    runs-on: ubuntu-latest
+    needs:
+      - tag
+      - changelog
+    if: |
+      always() &&
+      startsWith(github.ref, 'refs/tags/v') &&
+      (needs.changelog.result == 'success') &&
+      (needs.tag.result == 'success')
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build and publish Puppet module
+      uses: barnumbirr/action-forge-publish@v2.7.0
+      env:
+       FORGE_API_KEY: ${{ secrets.FORGE_API_KEY }}
+       REPOSITORY_URL: https://forgeapi.puppet.com/v3/releases
