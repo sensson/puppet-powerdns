@@ -3,7 +3,7 @@
 [![Build Status](https://github.com/sensson/puppet-powerdns/workflows/CI/badge.svg)](https://github.com/sensson/puppet-powerdns/actions) [![Puppet Forge](https://img.shields.io/puppetforge/v/sensson/powerdns.svg?maxAge=2592000?style=plastic)](https://forge.puppet.com/sensson/powerdns)
 
 This module can be used to configure both the recursor and authoritative
-PowerDNS 4 server. It supports Puppet 5 and higher.
+PowerDNS 4 server. It officially supports Puppet 7 and higher.
 
 ## Examples
 
@@ -125,10 +125,10 @@ You can add a zone 'example.org' by using:
 ``` puppet
  powerdns_zone{'example.org': }
 ```
-This will add the zone which is then managed through puppet any records not added 
+This will add the zone which is then managed through puppet any records not added
 through puppet will be deleted additionaly a SOA record is generated. To just ensure the
 zone is available, but not manage any records use (and do not add any powerdns\_record
-resources with target this domain): 
+resources with target this domain):
 ``` puppet
  powerdns_zone{'example.org':
    manage_records => false,
