@@ -109,6 +109,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+      with:
+        ref: main
     - name: Build and publish Puppet module
       uses: barnumbirr/action-forge-publish@v2.7.0
       env:
