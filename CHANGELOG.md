@@ -1,5 +1,13 @@
 # Changelog
 
+## v3.0.3 - 2023-05-27
+
+### What's Changed
+
+- Allow newer dependencies by @saz in https://github.com/sensson/puppet-powerdns/pull/150
+
+**Full Changelog**: https://github.com/sensson/puppet-powerdns/compare/v3.0.2...v3.0.3
+
 ## v3.0.2 - 2023-04-01
 
 ### What's Changed
