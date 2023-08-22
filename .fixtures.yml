@@ -11,7 +11,7 @@ fixtures:
       ref: "15.0.0"
     postgresql:
       repo: "puppetlabs/postgresql"
-      ref: "6.4.0"
+      ref: "9.1.0"
     concat:
       repo: "puppetlabs/concat"
       ref: "5.3.0"
