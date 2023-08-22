@@ -5,7 +5,7 @@ fixtures:
       ref: "3.0.1"
     stdlib:
       repo: "puppetlabs/stdlib"
-      ref: "5.2.0"
+      ref: "9.3.0"
     mysql:
       repo: "puppetlabs/mysql"
       ref: "10.9.0"

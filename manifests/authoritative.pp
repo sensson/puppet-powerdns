@@ -8,7 +8,7 @@ class powerdns::authoritative (
     ensure => $package_ensure,
   }
 
-  ensure_packages($install_packages)
+  stdlib::ensure_packages($install_packages)
 
   # install the right backend
   case $::powerdns::backend {
