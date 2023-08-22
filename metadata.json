@@ -66,6 +66,9 @@
       "operatingsystemrelease": [
         "10"
       ]
+    },
+    {
+      "operatingsystem": "Archlinux"
     }
   ],
   "requirements": [

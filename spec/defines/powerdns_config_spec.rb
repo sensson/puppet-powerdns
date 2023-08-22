@@ -26,11 +26,11 @@ describe 'powerdns::config' do
           }'
         end
 
-        case facts[:osfamily]
+        case facts[:os]['family']
         when 'RedHat'
           authoritative_config = '/etc/pdns/pdns.conf'
           recursor_config = '/etc/pdns-recursor/recursor.conf'
-        when 'Debian'
+        when 'Debian', 'Archlinux'
           authoritative_config = '/etc/powerdns/pdns.conf'
           recursor_config = '/etc/powerdns/recursor.conf'
         end

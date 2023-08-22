@@ -102,7 +102,7 @@ class powerdns::repo inherits powerdns {
       Apt::Pin['powerdns'] -> Package <| title == $powerdns::params::recursor_package |>
     }
 
-    'FreeBSD': {
+    'FreeBSD','Archlinux': {
       # Use the official pkg repository
     }
 
