@@ -8,7 +8,7 @@ fixtures:
       ref: "9.3.0"
     mysql:
       repo: "puppetlabs/mysql"
-      ref: "10.9.0"
+      ref: "15.0.0"
     postgresql:
       repo: "puppetlabs/postgresql"
       ref: "6.4.0"

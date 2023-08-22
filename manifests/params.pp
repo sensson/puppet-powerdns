@@ -5,6 +5,18 @@ class powerdns::params {
 
   case $facts['os']['family'] {
     'RedHat': {
+      case $facts['os']['release']['major'] {
+        '7': {
+          $mysql_schema_file = '/usr/share/doc/pdns-backend-mysql-4.1.14/schema.mysql.sql'
+          $pgsql_schema_file = '/usr/share/doc/pdns-backend-postgresql-4.1.14/schema.pgsql.sql'
+          $sqlite_schema_file = '/usr/share/doc/pdns-backend-sqlite-4.1.14/schema.sqlite.sql'
+        }
+        default: {
+          $mysql_schema_file = '/usr/share/doc/pdns-backend-mysql-4.8.1/schema.mysql.sql'
+          $pgsql_schema_file = '/usr/share/doc/pdns-backend-postgresql-4.8.1/schema.pgsql.sql'
+          $sqlite_schema_file = '/usr/share/doc/pdns-backend-sqlite-4.8.1/schema.sqlite.sql'
+        }
+      }
       $authoritative_package = 'pdns'
       $authoritative_service = 'pdns'
       $authoritative_config = '/etc/pdns/pdns.conf'
@@ -14,9 +26,6 @@ class powerdns::params {
       $ldap_backend_package_name = 'pdns-backend-ldap'
       $pgsql_backend_package_name = 'pdns-backend-postgresql'
       $sqlite_backend_package_name = 'pdns-backend-sqlite'
-      $mysql_schema_file = '/usr/share/doc/pdns-backend-mysql-4.*.*/schema.mysql.sql'
-      $pgsql_schema_file = '/usr/share/doc/pdns-backend-postgresql-4.*.*/schema.pgsql.sql'
-      $sqlite_schema_file = '/usr/share/doc/pdns-backend-sqlite-4.*.*/schema.sqlite.sql'
       $sqlite_package_name = 'sqlite'
       $authoritative_configdir = '/etc/pdns'
       $recursor_package = 'pdns-recursor'

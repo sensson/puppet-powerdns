@@ -11,17 +11,23 @@ describe 'powerdns', type: :class do
           facts.merge(override_facts)
         end
 
-        case facts[:osfamily]
+        case facts[:os]['family']
         when 'RedHat'
           authoritative_package_name = 'pdns'
           authoritative_service_name = 'pdns'
           authoritative_config = '/etc/pdns/pdns.conf'
-          mysql_schema_file = '/usr/share/doc/pdns-backend-mysql-4.*.*/schema.mysql.sql'
+          if facts[:os]['release']['major'].to_i == 7
+            mysql_schema_file = '/usr/share/doc/pdns-backend-mysql-4.1.14/schema.mysql.sql'
+            pgsql_schema_file = '/usr/share/doc/pdns-backend-postgresql-4.1.14/schema.pgsql.sql'
+            sqlite_schema_file = '/usr/share/doc/pdns-backend-sqlite-4.1.14/schema.sqlite.sql'
+          else
+            mysql_schema_file = '/usr/share/doc/pdns-backend-mysql-4.8.1/schema.mysql.sql'
+            pgsql_schema_file = '/usr/share/doc/pdns-backend-postgresql-4.8.1/schema.pgsql.sql'
+            sqlite_schema_file = '/usr/share/doc/pdns-backend-sqlite-4.8.1/schema.sqlite.sql'
+          end
           pgsql_backend_package_name = 'pdns-backend-postgresql'
-          pgsql_schema_file = '/usr/share/doc/pdns-backend-postgresql-4.*.*/schema.pgsql.sql'
           sqlite_backend_package_name = 'pdns-backend-sqlite'
           sqlite_binary_package_name = 'sqlite'
-          sqlite_schema_file = '/usr/share/doc/pdns-backend-sqlite-4.*.*/schema.sqlite.sql'
           recursor_package_name = 'pdns-recursor'
           recursor_service_name = 'pdns-recursor'
         when 'Debian'
