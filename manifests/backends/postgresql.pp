@@ -3,16 +3,16 @@ class powerdns::backends::postgresql ($package_ensure = $powerdns::params::defau
   if $facts['os']['family'] == 'Debian' {
     # Remove the debconf gpgsql configuration file auto-generated when using the package
     # from Debian repository as it interferes with this module's backend configuration.
-    file { "${::powerdns::params::authoritative_configdir}/pdns.d/pdns.local.gpgsql.conf":
+    file { "${powerdns::params::authoritative_configdir}/pdns.d/pdns.local.gpgsql.conf":
       ensure  => absent,
-      require => Package[$::powerdns::params::pgsql_backend_package_name],
+      require => Package[$powerdns::params::pgsql_backend_package_name],
     }
 
     # The pdns-server package from the Debian APT repo automatically installs the bind
     # backend package which we do not want when using another backend such as pgsql.
     package { 'pdns-backend-bind':
       ensure  => purged,
-      require => Package[$::powerdns::params::authoritative_package],
+      require => Package[$powerdns::params::authoritative_package],
     }
   }
 
@@ -27,14 +27,14 @@ class powerdns::backends::postgresql ($package_ensure = $powerdns::params::defau
   powerdns::config { 'gpgsql-host':
     ensure  => present,
     setting => 'gpgsql-host',
-    value   => $::powerdns::db_host,
+    value   => $powerdns::db_host,
     type    => 'authoritative',
   }
 
   powerdns::config { 'gpgsql-user':
     ensure  => present,
     setting => 'gpgsql-user',
-    value   => $::powerdns::db_username,
+    value   => $powerdns::db_username,
     type    => 'authoritative',
   }
 
@@ -55,55 +55,55 @@ class powerdns::backends::postgresql ($package_ensure = $powerdns::params::defau
   powerdns::config { 'gpgsql-dbname':
     ensure  => present,
     setting => 'gpgsql-dbname',
-    value   => $::powerdns::db_name,
+    value   => $powerdns::db_name,
     type    => 'authoritative',
   }
 
   # set up the powerdns backend
-  if $::powerdns::params::pgsql_backend_package_name {
-    package { $::powerdns::params::pgsql_backend_package_name:
+  if $powerdns::params::pgsql_backend_package_name {
+    package { $powerdns::params::pgsql_backend_package_name:
       ensure  => $package_ensure,
       before  => Service['pdns'],
-      require => Package[$::powerdns::params::authoritative_package],
+      require => Package[$powerdns::params::authoritative_package],
     }
   }
-  if $::powerdns::backend_install {
-    if ! defined(Class['::postgresql::server']) {
+  if $powerdns::backend_install {
+    if ! defined(Class['postgresql::server']) {
       $_db_root_password = $powerdns::db_root_password =~ Sensitive ? {
         true => $powerdns::db_root_password.unwrap,
         false => $powerdns::db_root_password
       }
 
-      class { '::postgresql::server':
+      class { 'postgresql::server':
         postgres_password => $_db_root_password,
       }
     }
   }
 
-  if $::powerdns::backend_create_tables {
+  if $powerdns::backend_create_tables {
     $password_hash = $db_password ? {
       Undef   => undef,
-      default => postgresql_password($::powerdns::db_username, $_db_password),
+      default => postgresql_password($powerdns::db_username, $_db_password),
     }
-    postgresql::server::db { $::powerdns::db_name:
-      user     => $::powerdns::db_username,
+    postgresql::server::db { $powerdns::db_name:
+      user     => $powerdns::db_username,
       password => $password_hash,
-      require  => Package[$::powerdns::params::pgsql_backend_package_name],
+      require  => Package[$powerdns::params::pgsql_backend_package_name],
     }
 
     # define connection settings for powerdns user in order to create tables
     $connection_settings_powerdns = {
-      'PGUSER'     => $::powerdns::db_username,
+      'PGUSER'     => $powerdns::db_username,
       'PGPASSWORD' => $_db_password,
-      'PGHOST'     => $::powerdns::db_host,
-      'PGDATABASE' => $::powerdns::db_name,
+      'PGHOST'     => $powerdns::db_host,
+      'PGDATABASE' => $powerdns::db_name,
     }
 
     postgresql_psql { 'Load SQL schema':
       connect_settings => $connection_settings_powerdns,
-      command          => "\\i ${::powerdns::pgsql_schema_file}",
+      command          => "\\i ${powerdns::pgsql_schema_file}",
       unless           => "SELECT 1 FROM information_schema.tables WHERE table_schema = 'public' AND table_name = 'domains'",
-      require          => Postgresql::Server::Db[$::powerdns::db_name],
+      require          => Postgresql::Server::Db[$powerdns::db_name],
     }
   }
 }

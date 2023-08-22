@@ -284,7 +284,7 @@ describe 'powerdns', type: :class do
           it { is_expected.to contain_package(sqlite_binary_package_name).with('ensure' => 'installed') }
           it do
             is_expected.to contain_file('/var/lib/powerdns/db.sqlite3').with(
-              'ensure' => 'present',
+              'ensure' => 'file',
               'owner' => 'pdns',
               'group' => 'pdns',
               'mode' => '0644',

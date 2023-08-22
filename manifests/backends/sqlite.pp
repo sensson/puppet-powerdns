@@ -11,43 +11,43 @@ class powerdns::backends::sqlite ($package_ensure = $powerdns::params::default_p
   powerdns::config { 'gsqlite3-database':
     ensure  => present,
     setting => 'gsqlite3-database',
-    value   => $::powerdns::db_file,
+    value   => $powerdns::db_file,
     type    => 'authoritative',
   }
 
   # set up the powerdns backend
-  if $::powerdns::params::sqlite_backend_package_name {
-    package { $::powerdns::params::sqlite_backend_package_name:
+  if $powerdns::params::sqlite_backend_package_name {
+    package { $powerdns::params::sqlite_backend_package_name:
       ensure  => $package_ensure,
       before  => Service['pdns'],
-      require => Package[$::powerdns::params::authoritative_package],
+      require => Package[$powerdns::params::authoritative_package],
     }
   }
-  if $::powerdns::backend_install {
-    if ! defined(Package[$::powerdns::sqlite_package_name]) {
-      package { $::powerdns::sqlite_package_name:
+  if $powerdns::backend_install {
+    if ! defined(Package[$powerdns::sqlite_package_name]) {
+      package { $powerdns::sqlite_package_name:
         ensure => $package_ensure,
       }
     }
   }
-  if $::powerdns::backend_create_tables {
-    file { $::powerdns::db_dir:
+  if $powerdns::backend_create_tables {
+    file { $powerdns::db_dir:
       ensure => directory,
       mode   => '0755',
       owner  => 'pdns',
       group  => 'pdns',
     }
-    -> file { $::powerdns::db_file:
-      ensure => present,
+    -> file { $powerdns::db_file:
+      ensure => file,
       mode   => '0644',
       owner  => 'pdns',
       group  => 'pdns',
     }
     -> exec { 'powerdns-sqlite3-create-tables':
-      command => "/usr/bin/env sqlite3 ${::powerdns::db_file} < ${::powerdns::sqlite_schema_file}",
-      unless  => "/usr/bin/env test `echo '.tables domains' | sqlite3 ${::powerdns::db_file} | wc -l` -eq 1",
+      command => "/usr/bin/env sqlite3 ${powerdns::db_file} < ${powerdns::sqlite_schema_file}",
+      unless  => "/usr/bin/env test `echo '.tables domains' | sqlite3 ${powerdns::db_file} | wc -l` -eq 1",
       before  => Service['pdns'],
-      require => Package[$::powerdns::params::authoritative_package],
+      require => Package[$powerdns::params::authoritative_package],
     }
   }
 }

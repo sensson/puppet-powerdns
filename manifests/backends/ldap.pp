@@ -5,7 +5,7 @@ class powerdns::backends::ldap ($package_ensure = $powerdns::params::default_pac
     # backend package which we do not want when using another backend such as ldap.
     package { 'pdns-backend-bind':
       ensure  => purged,
-      require => Package[$::powerdns::params::authoritative_package],
+      require => Package[$powerdns::params::authoritative_package],
     }
   }
 
@@ -20,20 +20,20 @@ class powerdns::backends::ldap ($package_ensure = $powerdns::params::default_pac
   powerdns::config { 'ldap-host':
     ensure  => present,
     setting => 'ldap-host',
-    value   => $::powerdns::ldap_host,
+    value   => $powerdns::ldap_host,
     type    => 'authoritative',
   }
 
   powerdns::config { 'ldap-binddn':
     ensure  => present,
     setting => 'ldap-binddn',
-    value   => $::powerdns::ldap_binddn,
+    value   => $powerdns::ldap_binddn,
     type    => 'authoritative',
   }
 
-  $_ldap_secret = $::powerdns::ldap_secret =~ Sensitive ? {
-    true => $::powerdns::ldap_secret.unwrap,
-    false => $::powerdns::ldap_secret
+  $_ldap_secret = $powerdns::ldap_secret =~ Sensitive ? {
+    true => $powerdns::ldap_secret.unwrap,
+    false => $powerdns::ldap_secret
   }
 
   powerdns::config { 'ldap-secret':
@@ -46,31 +46,31 @@ class powerdns::backends::ldap ($package_ensure = $powerdns::params::default_pac
   powerdns::config { 'ldap-basedn':
     ensure  => present,
     setting => 'ldap-basedn',
-    value   => $::powerdns::ldap_basedn,
+    value   => $powerdns::ldap_basedn,
     type    => 'authoritative',
   }
 
   powerdns::config { 'ldap-method':
     ensure  => present,
     setting => 'ldap-method',
-    value   => $::powerdns::ldap_method,
+    value   => $powerdns::ldap_method,
     type    => 'authoritative',
   }
 
-  if $::powerdns::params::ldap_backend_package_name {
+  if $powerdns::params::ldap_backend_package_name {
     # set up the powerdns backend
-    package { $::powerdns::params::ldap_backend_package_name:
+    package { $powerdns::params::ldap_backend_package_name:
       ensure  => $package_ensure,
       before  => Service['pdns'],
-      require => Package[$::powerdns::params::authoritative_package],
+      require => Package[$powerdns::params::authoritative_package],
     }
   }
 
-  if $::powerdns::backend_install {
+  if $powerdns::backend_install {
     fail('backend_install is not supported with ldap')
   }
 
-  if $::powerdns::backend_create_tables {
+  if $powerdns::backend_create_tables {
     fail('backend_create_tables is not supported with ldap')
   }
 }

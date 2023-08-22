@@ -32,9 +32,9 @@ class powerdns::recursor (
   }
 
   service { 'pdns-recursor':
-    ensure   => running,
-    name     => $powerdns::params::recursor_service,
-    enable   => true,
-    require  => Package[$powerdns::params::recursor_package],
+    ensure  => running,
+    name    => $powerdns::params::recursor_service,
+    enable  => true,
+    require => Package[$powerdns::params::recursor_package],
   }
 }
