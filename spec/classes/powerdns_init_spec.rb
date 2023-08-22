@@ -1,5 +1,6 @@
 override_facts = {
-  root_home: '/root'
+  root_home: '/root',
+  service_provider: 'systemd'
 }
 
 require 'spec_helper'
