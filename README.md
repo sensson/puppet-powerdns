@@ -375,6 +375,14 @@ We believe it also on other operating systems such as:
 * Scientific Linux
 * Arch Linux
 
+The packages on EL are a bit stupid. The schemas have the exact PowerDNS version
+hardcoded in the paths. The main class has three parameters where you can adjust
+it:
+
+* `mysql_schema_file`
+* `pgsql_schema_file`
+* `sqlite_schema_file`
+
 ## Development
 
 We strongly believe in the power of open source. This module is our way
