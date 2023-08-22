@@ -19,7 +19,7 @@ jobs:
     strategy:
       matrix:
         puppet: [7.0]
-        ruby: [2.6, 2.7]
+        ruby: [2.7]
     steps:
     - name: Checkout Source
       uses: actions/checkout@v2
