@@ -1,17 +1,16 @@
 # powerdns::config
-define powerdns::config(
+define powerdns::config (
   String                            $setting = $title,
   Powerdns::ConfigValue             $value   = '',
   Enum['present', 'absent']         $ensure  = 'present',
   Enum['authoritative', 'recursor'] $type    = 'authoritative'
 ) {
-
   $empty_value_allowed = [
     'gmysql-dnssec',
     'only-notify',
     'allow-notify-from',
     'security-poll-suffix',
-    'local-ipv6'
+    'local-ipv6',
   ]
   unless $ensure == 'absent' or ($setting in $empty_value_allowed) {
     assert_type(Variant[String[1], Integer, Boolean, Sensitive[String[1]]], $value) |$_expected, $_actual| {
@@ -29,12 +28,12 @@ define powerdns::config(
   }
 
   if $type == 'authoritative' {
-    $path            = $::powerdns::params::authoritative_config
-    $require_package = $::powerdns::params::authoritative_package
+    $path            = $powerdns::params::authoritative_config
+    $require_package = $powerdns::params::authoritative_package
     $notify_service  = 'pdns'
   } else {
-    $path            = $::powerdns::params::recursor_config
-    $require_package = $::powerdns::params::recursor_package
+    $path            = $powerdns::params::recursor_config
+    $require_package = $powerdns::params::recursor_package
     $notify_service  = 'pdns-recursor'
   }
 

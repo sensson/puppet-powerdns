@@ -11,8 +11,8 @@ class powerdns (
   String[1]                  $db_name                            = 'powerdns',
   String[1]                  $db_host                            = 'localhost',
   Integer[1]                 $db_port                            = 3306,
-  String[1]                  $db_dir                             = $::powerdns::params::db_dir,
-  String[1]                  $db_file                            = $::powerdns::params::db_file,
+  String[1]                  $db_dir                             = $powerdns::params::db_dir,
+  String[1]                  $db_file                            = $powerdns::params::db_file,
   Boolean                    $require_db_password                = true,
   String[1]                  $ldap_host                          = 'ldap://localhost/',
   Optional[String[1]]        $ldap_basedn                        = undef,
@@ -21,14 +21,14 @@ class powerdns (
   Powerdns::Secret           $ldap_secret                        = undef,
   Boolean                    $custom_repo                        = false,
   Boolean                    $custom_epel                        = false,
-  Pattern[/4\.[0-9]+/]       $version                            = $::powerdns::params::version,
-  String[1]                  $mysql_schema_file                  = $::powerdns::params::mysql_schema_file,
-  String[1]                  $pgsql_schema_file                  = $::powerdns::params::pgsql_schema_file,
+  Pattern[/4\.[0-9]+/]       $version                            = $powerdns::params::version,
+  String[1]                  $mysql_schema_file                  = $powerdns::params::mysql_schema_file,
+  String[1]                  $pgsql_schema_file                  = $powerdns::params::pgsql_schema_file,
   Hash                       $forward_zones                      = {},
 ) inherits powerdns::params {
   # Do some additional checks. In certain cases, some parameters are no longer optional.
   if $authoritative {
-    if ($::powerdns::backend != 'bind') and ($::powerdns::backend != 'ldap') and ($::powerdns::backend != 'sqlite') and $require_db_password {
+    if ($powerdns::backend != 'bind') and ($powerdns::backend != 'ldap') and ($powerdns::backend != 'sqlite') and $require_db_password {
       assert_type(Variant[String[1], Sensitive[String[1]]], $db_password) |$expected, $actual| {
         fail("'db_password' must be a non-empty string when 'authoritative' == true")
       }
