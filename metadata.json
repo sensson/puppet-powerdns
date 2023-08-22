@@ -40,14 +40,12 @@
     {
       "operatingsystem": "OracleLinux",
       "operatingsystemrelease": [
-        "6",
         "7"
       ]
     },
     {
       "operatingsystem": "RedHat",
       "operatingsystemrelease": [
-        "6",
         "7"
       ]
     },
@@ -60,14 +58,12 @@
     {
       "operatingsystem": "Ubuntu",
       "operatingsystemrelease": [
-        "16.04",
         "18.04"
       ]
     },
     {
       "operatingsystem": "Debian",
       "operatingsystemrelease": [
-        "9",
         "10"
       ]
     }
@@ -81,7 +77,7 @@
   "tags": [
     "powerdns"
   ],
-  "pdk-version": "2.5.0",
-  "template-url": "pdk-default#2.5.0",
-  "template-ref": "tags/2.5.0-0-g369d483"
+  "pdk-version": "3.0.0",
+  "template-url": "pdk-default#3.0.0",
+  "template-ref": "tags/3.0.0-0-g056e50d"
 }

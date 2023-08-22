@@ -364,15 +364,16 @@ duplicate declaration errors.
 
 This module has been tested on:
 
-* CentOS 6, 7, 8
-* Ubuntu 14.04, 16.04, 18.04
-* Debian 8, 9
+* CentOS 7, 8
+* Ubuntu 18.04
+* Debian 10
 
 We believe it also on other operating systems such as:
 
 * Oracle Linux
 * RedHat Enterprise Linux
 * Scientific Linux
+* Arch Linux
 
 ## Development
 
@@ -412,14 +413,10 @@ You can run Beaker tests with:
 
 ```bash
 bundle exec rake spec_prep
-BEAKER_destroy=onpass bundle exec rake beaker:centos6
 BEAKER_destroy=onpass bundle exec rake beaker:centos7
 BEAKER_destroy=onpass bundle exec rake beaker:oel7
-BEAKER_destroy=onpass bundle exec rake beaker:ubuntu1404
-BEAKER_destroy=onpass bundle exec rake beaker:ubuntu1604
-BEAKER_destroy=onpass BEAKER_PUPPET_COLLECTION=puppet5 bundle exec rake beaker:ubuntu1804
-BEAKER_destroy=onpass bundle exec rake beaker:debian8
-BEAKER_destroy=onpass bundle exec rake beaker:debian9
+BEAKER_destroy=onpass bundle exec rake beaker:ubuntu1804
+BEAKER_destroy=onpass bundle exec rake beaker:debian10
 ```
 
 We recommend specifying `BEAKER_destroy=onpass` as it will keep the
