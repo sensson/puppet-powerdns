@@ -1,5 +1,23 @@
 # Changelog
 
+## v4.0.0 - 2023-08-24
+
+### What's Changed
+
+This version drops support for EOL operating systems and Ruby 2.6.
+
+- Drop EoL module support  by @bastelfreak in https://github.com/sensson/puppet-powerdns/pull/156
+- pdk: Update 2.5.0->3.0.0 by @bastelfreak in https://github.com/sensson/puppet-powerdns/pull/154
+- puppetlabs/postgresql: Require 9.x by @bastelfreak in https://github.com/sensson/puppet-powerdns/pull/157
+- puppetlabs/stdlib: Require 9.x  by @bastelfreak in https://github.com/sensson/puppet-powerdns/pull/152
+- puppetlabs/mysql: Allow 15.x by @bastelfreak in https://github.com/sensson/puppet-powerdns/pull/153
+- .fixtures.yml: Migrate to git by @bastelfreak in https://github.com/sensson/puppet-powerdns/pull/151
+- puppet-strings: autofix by @bastelfreak in https://github.com/sensson/puppet-powerdns/pull/155
+- puppet/epel: Allow 5.x by @bastelfreak in https://github.com/sensson/puppet-powerdns/pull/158
+- Add Arch Linux support by @bastelfreak in https://github.com/sensson/puppet-powerdns/pull/159
+
+**Full Changelog**: https://github.com/sensson/puppet-powerdns/compare/v3.0.3...v4.0.0
+
 ## v3.0.3 - 2023-05-27
 
 ### What's Changed
