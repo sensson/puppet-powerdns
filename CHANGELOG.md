@@ -1,5 +1,17 @@
 # Changelog
 
+## v4.0.1 - 2023-09-07
+
+### What's Changed
+
+- Bugfix: fix deprecated use of postgresql_password() by @sircubbi in https://github.com/sensson/puppet-powerdns/pull/161
+
+### New Contributors
+
+- @sircubbi made their first contribution in https://github.com/sensson/puppet-powerdns/pull/161
+
+**Full Changelog**: https://github.com/sensson/puppet-powerdns/compare/v4.0.0...v4.0.1
+
 ## v4.0.0 - 2023-08-24
 
 ### What's Changed
