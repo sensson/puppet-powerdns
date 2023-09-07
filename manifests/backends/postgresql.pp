@@ -83,7 +83,7 @@ class powerdns::backends::postgresql ($package_ensure = $powerdns::params::defau
   if $powerdns::backend_create_tables {
     $password_hash = $db_password ? {
       Undef   => undef,
-      default => postgresql_password($powerdns::db_username, $_db_password),
+      default => postgresql::postgresql_password($powerdns::db_username, $_db_password),
     }
     postgresql::server::db { $powerdns::db_name:
       user     => $powerdns::db_username,
