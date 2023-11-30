@@ -167,6 +167,21 @@ Remark: if the target\_zone is not managed with powerdns\_zone resource, powerdn
 
 Passwords can be passed either as plain-text strings or as [Puppet's Sensitive type](https://www.puppet.com/docs/puppet/7/lang_data_sensitive.html) when appropriate encrypted backend is configured on Puppet server.
 
+### Manage autoprimaries (automatic provisioning of secondaries)
+It's possible to manage the the 'autoprimaries' with puppet (For a decription of the autoprimary functionality in
+powerdns see [powerdns manual](https://doc.powerdns.com/authoritative/modes-of-operation.html#autoprimary-automatic-provisioning-of-secondaries).
+The autoprimaries are set with the powerdns\_autoprimary resource. As an example we add the primary 1.2.3.4 named ns1.example.org whith the account 'test'
+``` yaml
+powerdns_autoprimary{'1.2.3.4@ns1.example.org':
+  ensure  => 'present',
+  account => 'test',
+}
+```
+As an alternative, you can set the autoprimaries parameter of the powerdns class to achive the same (eg. if you use hiera).
+
+For removal of an autoprimary set ensure to 'absent' or set the parameter purge\_autoprimaries of the powerdns class to true which willa
+remove all autoprimaries that are not present in the puppet manifest.
+
 ## Reference
 
 ### Parameters
