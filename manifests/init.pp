@@ -1,4 +1,10 @@
 # powerdns
+#
+# @param autoprimaries
+#   Hash of autoprimaries the ensurce (with resource powerdns_autoprimary)
+# @param purge_autoprimaries
+#   Set this to true if you like to purge all autoprimaries not managed with puppet
+#
 class powerdns (
   Boolean                    $authoritative                      = true,
   Boolean                    $recursor                           = false,
@@ -25,6 +31,8 @@ class powerdns (
   String[1]                  $mysql_schema_file                  = $powerdns::params::mysql_schema_file,
   String[1]                  $pgsql_schema_file                  = $powerdns::params::pgsql_schema_file,
   Hash                       $forward_zones                      = {},
+  Powerdns::Autoprimaries    $autoprimaries                      = {},
+  Boolean                    $purge_autoprimaries                = false,
 ) inherits powerdns::params {
   # Do some additional checks. In certain cases, some parameters are no longer optional.
   if $authoritative {
@@ -68,4 +76,11 @@ class powerdns (
     $powerdns_recursor_defaults = { 'type' => 'recursor' }
     create_resources(powerdns::config, $powerdns_recursor_config, $powerdns_recursor_defaults)
   }
+
+  if $purge_autoprimaries {
+    resources { 'powerdns_autoprimary':
+      purge => true,
+    }
+  }
+  create_resources('powerdns_autoprimary', $autoprimaries)
 }
