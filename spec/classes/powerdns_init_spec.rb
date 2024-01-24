@@ -129,18 +129,18 @@ describe 'powerdns', type: :class do
               }
             end
             it { is_expected.to contain_yumrepo('powerdns') }
-            it { is_expected.to contain_yumrepo('powerdns').with('baseurl' => 'http://repo.powerdns.com/centos/$basearch/$releasever/auth-42') }
+            it { is_expected.to contain_yumrepo('powerdns').with('baseurl' => 'http://repo.powerdns.com/centos/$basearch/$releasever/auth-48') }
             it { is_expected.to contain_yumrepo('powerdns-recursor') }
-            it { is_expected.to contain_yumrepo('powerdns-recursor').with('baseurl' => 'http://repo.powerdns.com/centos/$basearch/$releasever/rec-42') }
+            it { is_expected.to contain_yumrepo('powerdns-recursor').with('baseurl' => 'http://repo.powerdns.com/centos/$basearch/$releasever/rec-49') }
           end
           case facts[:osfamily]
           when 'Debian'
             it { is_expected.to contain_apt__key('powerdns') }
             it { is_expected.to contain_apt__pin('powerdns') }
             it { is_expected.to contain_apt__source('powerdns') }
-            it { is_expected.to contain_apt__source('powerdns').with_release(%r{auth-42}) }
+            it { is_expected.to contain_apt__source('powerdns').with_release(%r{auth-48}) }
             it { is_expected.to contain_apt__source('powerdns-recursor') }
-            it { is_expected.to contain_apt__source('powerdns-recursor').with_release(%r{rec-42}) }
+            it { is_expected.to contain_apt__source('powerdns-recursor').with_release(%r{rec-49}) }
 
             # On Ubuntu 17.04 and higher and Debian 9 and higher it expects dirmngr
             if (facts[:operatingsystem] == 'Ubuntu' && facts[:operatingsystemmajrelease].to_i >= 17) ||
@@ -199,7 +199,8 @@ describe 'powerdns', type: :class do
               db_root_password: 'foobar',
               db_username: 'foo',
               db_password: 'bar',
-              version: '4.0'
+              recursor_version: '4.0',
+              authoritative_version: '4.0'
             }
           end
 
@@ -563,7 +564,8 @@ describe 'powerdns', type: :class do
               db_root_password: 'foobar',
               db_username: 'foo',
               db_password: 'bar',
-              version: '4.7'
+              authoritative_version: '4.7',
+              recursor_version: '4.7'
             }
           end
 

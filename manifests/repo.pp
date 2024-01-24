@@ -2,7 +2,8 @@
 class powerdns::repo inherits powerdns {
   # The repositories of PowerDNS use a version such as '40' for version 4.0
   # and 41 for version 4.1.
-  $short_version = regsubst($powerdns::version, /^(\d)\.(\d)$/, '\\1\\2', 'G')
+  $authoritative_short_version = regsubst($powerdns::authoritative_version, /^(\d)\.(\d)$/, '\\1\\2', 'G')
+  $recursor_short_version = regsubst($powerdns::recursor_version, /^(\d)\.(\d)$/, '\\1\\2', 'G')
 
   case $facts['os']['family'] {
     'RedHat': {
@@ -41,8 +42,8 @@ class powerdns::repo inherits powerdns {
 
       yumrepo { 'powerdns':
         name        => 'powerdns',
-        descr       => "PowerDNS repository for PowerDNS Authoritative - version ${powerdns::version}",
-        baseurl     => "http://repo.powerdns.com/centos/\$basearch/\$releasever/auth-${short_version}",
+        descr       => "PowerDNS repository for PowerDNS Authoritative - version ${powerdns::authoritative_version}",
+        baseurl     => "http://repo.powerdns.com/centos/\$basearch/\$releasever/auth-${authoritative_short_version}",
         gpgkey      => 'https://repo.powerdns.com/FD380FBB-pub.asc',
         gpgcheck    => 1,
         enabled     => 1,
@@ -52,8 +53,8 @@ class powerdns::repo inherits powerdns {
 
       yumrepo { 'powerdns-recursor':
         name        => 'powerdns-recursor',
-        descr       => "PowerDNS repository for PowerDNS Recursor - version ${powerdns::version}",
-        baseurl     => "http://repo.powerdns.com/centos/\$basearch/\$releasever/rec-${short_version}",
+        descr       => "PowerDNS repository for PowerDNS Recursor - version ${powerdns::recursor_version}",
+        baseurl     => "http://repo.powerdns.com/centos/\$basearch/\$releasever/rec-${recursor_short_version}",
         gpgkey      => 'https://repo.powerdns.com/FD380FBB-pub.asc',
         gpgcheck    => 1,
         enabled     => 1,
@@ -77,7 +78,7 @@ class powerdns::repo inherits powerdns {
         ensure       => present,
         location     => "http://repo.powerdns.com/${os}",
         repos        => 'main',
-        release      => "${facts['os']['distro']['codename']}-auth-${short_version}",
+        release      => "${facts['os']['distro']['codename']}-auth-${authoritative_short_version}",
         architecture => 'amd64',
         require      => Apt::Key['powerdns'],
       }
@@ -86,7 +87,7 @@ class powerdns::repo inherits powerdns {
         ensure       => present,
         location     => "http://repo.powerdns.com/${os}",
         repos        => 'main',
-        release      => "${facts['os']['distro']['codename']}-rec-${short_version}",
+        release      => "${facts['os']['distro']['codename']}-rec-${recursor_short_version}",
         architecture => 'amd64',
         require      => Apt::Source['powerdns'],
       }
