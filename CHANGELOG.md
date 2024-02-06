@@ -1,5 +1,18 @@
 # Changelog
 
+## v4.1.0 - 2024-02-06
+
+### What's Changed
+
+* add type/provider for autoprimary by @trefzer in https://github.com/sensson/puppet-powerdns/pull/162
+* Add the ability to install pdns and recursor with differents versions by @mouchymouchy in https://github.com/sensson/puppet-powerdns/pull/163
+
+### New Contributors
+
+* @mouchymouchy made their first contribution in https://github.com/sensson/puppet-powerdns/pull/163
+
+**Full Changelog**: https://github.com/sensson/puppet-powerdns/compare/v4.0.1...v4.1.0
+
 ## v4.0.1 - 2023-09-07
 
 ### What's Changed
