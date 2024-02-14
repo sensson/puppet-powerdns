@@ -26,5 +26,8 @@
 .envrc
 /inventory.yaml
 /spec/fixtures/litmus_inventory.yaml
+/.vscode/
+/.devcontainer/
 .tmp/
 Puppetfile.lock
+.ruby-version

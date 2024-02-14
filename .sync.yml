@@ -10,10 +10,9 @@ appveyor.yml:
   paths:
     - '/.vscode/'
     - '/.devcontainer/'
-.gitignore:
-  paths:
     - '.tmp/'
     - 'Puppetfile.lock'
+    - '.ruby-version'
 spec/spec_helper.rb:
   mock_with: ':rspec'
   coverage_report: true
