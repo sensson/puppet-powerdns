@@ -18,11 +18,19 @@ jobs:
       BUNDLE_WITH: "development"
     strategy:
       matrix:
-        puppet: [7.0]
-        ruby: [2.7]
+        puppet:
+          - '7.0'
+          - '8.0'
+        ruby:
+          - '2.7'
+          - '3.1'
+          - '3.2'
+        exclude:
+          - ruby: '2.7'
+            puppet: '8.0'
     steps:
     - name: Checkout Source
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
 
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
@@ -49,7 +57,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           ref: main
 
@@ -76,7 +84,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           ref: main
       - name: Get Version
@@ -108,7 +116,7 @@ jobs:
       (needs.tag.result == 'success')
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
       with:
         ref: main
     - name: Build and publish Puppet module
