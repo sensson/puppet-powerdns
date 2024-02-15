@@ -1,5 +1,15 @@
 # Changelog
 
+## v4.1.1 - 2024-02-15
+
+### What's Changed
+
+* Allow postgresql 10 module by @deric in https://github.com/sensson/puppet-powerdns/pull/164
+* Puppet 8 support by @deric in https://github.com/sensson/puppet-powerdns/pull/166
+* Pdk update & remove .ruby-version file by @deric in https://github.com/sensson/puppet-powerdns/pull/165
+
+**Full Changelog**: https://github.com/sensson/puppet-powerdns/compare/v4.1.0...v4.1.1
+
 ## v4.1.0 - 2024-02-06
 
 ### What's Changed
