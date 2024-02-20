@@ -1,5 +1,11 @@
 # Changelog
 
+## v5.0.0 - 2024-02-20
+
+Version 4.1.0 included #163, which a backwards incompatible change. This release is to be on par with semver.
+
+**Full Changelog**: https://github.com/sensson/puppet-powerdns/compare/v4.1.1...v5.0.0
+
 ## v4.1.1 - 2024-02-15
 
 ### What's Changed
