@@ -390,9 +390,8 @@ We believe it also on other operating systems such as:
 * Scientific Linux
 * Arch Linux
 
-The packages on EL are a bit stupid. The schemas have the exact PowerDNS version
-hardcoded in the paths. The main class has three parameters where you can adjust
-it:
+Schemas in the packages on EL have the exact PowerDNS hardcoded in the paths,
+the main class has three parameters where you can adjust it.
 
 * `mysql_schema_file`
 * `pgsql_schema_file`
