@@ -136,11 +136,11 @@ Puppet::Type.newtype(:powerdns_zone) do
       if r[:rname] == '.'
         content.push([r[:target_zone], r[:rttl], r[:rclass], r[:rtype], r[:rcontent]].join("\t"))
       else
-        content.push([r[:rname] + '.' + r[:target_zone], r[:rttl], r[:rclass], r[:rtype], r[:rcontent]].join("\t"))
+        content.push([(r[:rname] + '.' + r[:target_zone]).downcase, r[:rttl], r[:rclass], r[:rtype], r[:rcontent]].join("\t"))
       end
       # rubocop:enable Style/StringConcatenation
     end
-    content.push("$ORIGIN .\n") # add this, since it's always in the output..
+    content.push("$ORIGIN .") # add this, since it's always in the output..
     content.sort.join("\n")
   end
   # rubocop:enable Metrics/AbcSize
