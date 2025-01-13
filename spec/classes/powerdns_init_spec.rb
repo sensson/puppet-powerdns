@@ -437,6 +437,67 @@ describe 'powerdns', type: :class do
           end
         end
 
+        context 'powerdns class with lmdb backend' do
+          let(:params) do
+            {
+              backend: 'lmdb',
+              lmdb_filename: '/var/lib/powerdns/pdns.lmdb',
+              lmdb_schema_version: 2,
+              lmdb_shards: 2,
+              lmdb_sync_mode: 'nosync',
+              backend_install: false,
+              backend_create_tables: false
+            }
+          end
+
+          it { is_expected.to contain_class('powerdns::backends::lmdb') }
+
+          # Test package management
+          case facts[:os]['family']
+          when 'Debian'
+            it { is_expected.to contain_package('pdns-backend-bind').with('ensure' => 'purged') }
+            it { is_expected.to contain_package('pdns-backend-lmdb').with('ensure' => 'installed') }
+            it { is_expected.to contain_file('/etc/powerdns/pdns.d/lmdb.conf').with('ensure' => 'absent') }
+          end
+
+          # Test LMDB configuration
+          it { is_expected.to contain_powerdns__config('launch').with('value' => 'lmdb') }
+          it { is_expected.to contain_powerdns__config('lmdb-filename').with('value' => '/var/lib/powerdns/pdns.lmdb') }
+          it { is_expected.to contain_powerdns__config('lmdb-schema-version').with('value' => 2) }
+          it { is_expected.to contain_powerdns__config('lmdb-shards').with('value' => 2) }
+          it { is_expected.to contain_powerdns__config('lmdb-sync-mode').with('value' => 'nosync') }
+
+          # Test that backend_install fails
+          context 'with backend_install set to true' do
+            let(:params) do
+              {
+                backend: 'lmdb',
+                backend_install: true
+              }
+            end
+
+            it 'fails with backend_install' do
+              is_expected.to raise_error(%r{backend_install is not supported with lmdb})
+            end
+          end
+
+          # Test that backend_create_tables fails
+          context 'with backend_create_tables set to true' do
+            let(:params) do
+              {
+                backend: 'lmdb',
+                backend_install: false,
+                backend_create_tables: true
+              }
+            end
+
+            it 'fails with backend_create_tables' do
+              is_expected.to raise_error(%r{backend_create_tables is not supported with lmdb})
+            end
+          end
+        end
+
+
         context 'powerdns class with backend_create_tables set to false' do
           let(:params) do
             {
@@ -553,7 +614,7 @@ describe 'powerdns', type: :class do
 
           it {
             is_expected.to raise_error(
-              %r{'backend' expects a match for Enum\['bind', 'ldap', 'mysql', 'postgresql', 'sqlite'\]},
+              %r{'backend' expects a match for Enum\['bind', 'ldap', 'lmdb', 'mysql', 'postgresql', 'sqlite'\]},
             )
           }
         end
