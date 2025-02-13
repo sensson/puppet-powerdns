@@ -1,5 +1,19 @@
 # Changelog
 
+## v5.1.0 - 2025-02-13
+
+### What's Changed
+
+* Update forward_zones.conf.erb to remove .sort by @akremer in https://github.com/sensson/puppet-powerdns/pull/170
+* Add lmdb backend option by @Heidistein in https://github.com/sensson/puppet-powerdns/pull/174
+
+### New Contributors
+
+* @akremer made their first contribution in https://github.com/sensson/puppet-powerdns/pull/170
+* @Heidistein made their first contribution in https://github.com/sensson/puppet-powerdns/pull/174
+
+**Full Changelog**: https://github.com/sensson/puppet-powerdns/compare/v5.0.0...v5.1.0
+
 ## v5.0.0 - 2024-02-20
 
 Version 4.1.0 included #163, which a backwards incompatible change. This release is to be on par with semver.
