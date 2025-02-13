@@ -497,7 +497,6 @@ describe 'powerdns', type: :class do
           end
         end
 
-
         context 'powerdns class with backend_create_tables set to false' do
           let(:params) do
             {
