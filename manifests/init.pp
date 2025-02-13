@@ -4,11 +4,26 @@
 #   Hash of autoprimaries the ensurce (with resource powerdns_autoprimary)
 # @param purge_autoprimaries
 #   Set this to true if you like to purge all autoprimaries not managed with puppet
+# @param lmdb_filename
+#   Filename for the lmdb database
+# @param lmdb_schema_version
+#   Maximum allowed schema version to run on this DB. If a lower version is found, auto update is performed
+# @param lmdb_shards
+#   Records database will be split into this number of shards
+# @param lmdb_sync_mode
+#   Sync mode for LMDB. One of 'nosync', 'sync', 'nometasync', 'mapasync'
 #
 class powerdns (
   Boolean                    $authoritative                      = true,
   Boolean                    $recursor                           = false,
-  Enum['ldap', 'mysql', 'bind', 'postgresql', 'sqlite'] $backend = 'mysql',
+  Enum[
+    'ldap',
+    'mysql',
+    'bind',
+    'postgresql',
+    'sqlite',
+    'lmdb'
+  ]                          $backend                            = 'mysql',
   Boolean                    $backend_install                    = true,
   Boolean                    $backend_create_tables              = true,
   Powerdns::Secret           $db_root_password                   = undef,
@@ -25,6 +40,17 @@ class powerdns (
   String[1]                  $ldap_method                        = 'strict',
   Optional[String[1]]        $ldap_binddn                        = undef,
   Powerdns::Secret           $ldap_secret                        = undef,
+  Stdlib::Absolutepath       $lmdb_filename                      = '/var/lib/powerdns/pdns.lmdb',
+  Optional[Integer]          $lmdb_schema_version                = undef,
+  Optional[Integer]          $lmdb_shards                        = undef,
+  Optional[
+    Enum[
+      'nosync',
+      'sync',
+      'nometasync',
+      'mapasync'
+    ]
+  ]                          $lmdb_sync_mode                     = undef,
   Boolean                    $custom_repo                        = false,
   Boolean                    $custom_epel                        = false,
   Pattern[/4\.[0-9]+/]       $authoritative_version              = $powerdns::params::authoritative_version,
@@ -37,7 +63,7 @@ class powerdns (
 ) inherits powerdns::params {
   # Do some additional checks. In certain cases, some parameters are no longer optional.
   if $authoritative {
-    if ($powerdns::backend != 'bind') and ($powerdns::backend != 'ldap') and ($powerdns::backend != 'sqlite') and $require_db_password {
+    if $require_db_password and !($powerdns::backend in ['bind', 'ldap', 'sqlite', 'lmdb']) {
       assert_type(Variant[String[1], Sensitive[String[1]]], $db_password) |$expected, $actual| {
         fail("'db_password' must be a non-empty string when 'authoritative' == true")
       }

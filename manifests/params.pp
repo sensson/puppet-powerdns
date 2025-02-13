@@ -27,6 +27,7 @@ class powerdns::params {
       $ldap_backend_package_name = 'pdns-backend-ldap'
       $pgsql_backend_package_name = 'pdns-backend-postgresql'
       $sqlite_backend_package_name = 'pdns-backend-sqlite'
+      $lmdb_backend_package_name = 'pdns-backend-lmdb'
       $sqlite_package_name = 'sqlite'
       $authoritative_configdir = '/etc/pdns'
       $recursor_package = 'pdns-recursor'
@@ -45,6 +46,7 @@ class powerdns::params {
       $ldap_backend_package_name = 'pdns-backend-ldap'
       $pgsql_backend_package_name = 'pdns-backend-pgsql'
       $sqlite_backend_package_name = 'pdns-backend-sqlite3'
+      $lmdb_backend_package_name = 'pdns-backend-lmdb'
       $mysql_schema_file = '/usr/share/doc/pdns-backend-mysql/schema.mysql.sql'
       $pgsql_schema_file = '/usr/share/doc/pdns-backend-pgsql/schema.pgsql.sql'
       $sqlite_schema_file = '/usr/share/doc/pdns-backend-sqlite3/schema.sqlite3.sql'
@@ -91,6 +93,7 @@ class powerdns::params {
       $ldap_backend_package_name = undef
       $pgsql_backend_package_name = undef
       $sqlite_backend_package_name = undef
+      $lmdb_backend_package_name = undef
       $mysql_schema_file = '/usr/local/share/doc/powerdns/schema.mysql.sql'
       $pgsql_schema_file = '/usr/local/share/doc/powerdns/schema.pgsql.sql'
       $sqlite_schema_file = '/usr/local/share/doc/powerdns/schema.sqlite3.sql'
@@ -118,6 +121,7 @@ class powerdns::params {
       $ldap_backend_package_name = undef
       $pgsql_backend_package_name = undef
       $sqlite_backend_package_name = undef
+      $lmdb_backend_package_name = undef
       $authoritative_config = '/etc/powerdns/pdns.conf'
       $recursor_dir = '/etc/powerdns'
       $recursor_config = "${recursor_dir}/recursor.conf"

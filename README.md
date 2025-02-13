@@ -66,7 +66,7 @@ powerdns::forward_zones:
 ### Backends
 
 The default backend is MySQL. It also comes with support for PostgreSQL, Bind,
-LDAP and SQLite.
+LDAP, SQLite and lmdb.
 
 If you don't specify the backend it assumes you will use MySQL.
 
@@ -115,6 +115,16 @@ has write permissions to directory holding database file. For example:
 class { 'powerdns':
   backend => 'sqlite',
   db_file => '/opt/powerdns.sqlite3',
+}
+```
+To use lmdb you must set `backend_install` and `backend_create_tables` to
+false. For example:
+
+```puppet
+class { 'powerdns':
+  backend               => 'lmdb',
+  backend_install       => false,
+  backend_create_tables => false,
 }
 ```
 
@@ -265,6 +275,22 @@ Path to the object to authenticate against. Defaults to undef.
 ##### `ldap_secret`
 
 Password for simple authentication against ldap_basedn. Accepts either `String` or `Sensitive` type. Defaults to undef.
+
+##### `lmdb_filename`
+
+The file where database will be stored when using LMDB backend. Defaults to '/var/lib/powerdns/powerdns.lmdb'
+
+##### `lmdb_schema_version`
+
+The schema version to use when creating the LMDB database. Defaults to undef, using the powerdns default.
+
+##### `lmdb_shards`
+
+The number of shards to use when creating the LMDB database. Defaults to undef, using the powerdns default.
+
+##### `lmdb_sync_mode`
+
+The sync mode to use when creating the LMDB database. Defaults to undef, using the powerdns default.
 
 ##### `custom_repo`
 
