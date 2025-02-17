@@ -1,5 +1,17 @@
 # Changelog
 
+## v5.2.0 - 2025-02-17
+
+### What's Changed
+
+* PostgreSQL backend: make powerdns a database owner by @nixargh in https://github.com/sensson/puppet-powerdns/pull/173
+
+### New Contributors
+
+* @nixargh made their first contribution in https://github.com/sensson/puppet-powerdns/pull/173
+
+**Full Changelog**: https://github.com/sensson/puppet-powerdns/compare/v5.1.0...v5.2.0
+
 ## v5.1.0 - 2025-02-13
 
 ### What's Changed
