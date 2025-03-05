@@ -2,8 +2,8 @@
 class powerdns::repo inherits powerdns {
   # The repositories of PowerDNS use a version such as '40' for version 4.0
   # and 41 for version 4.1.
-  $authoritative_short_version = regsubst($powerdns::authoritative_version, /^(\d)\.(\d)$/, '\\1\\2', 'G')
-  $recursor_short_version = regsubst($powerdns::recursor_version, /^(\d)\.(\d)$/, '\\1\\2', 'G')
+  $authoritative_short_version = regsubst($powerdns::authoritative_version, /^(\d+)\.(\d+)(?:\.\d+)?$/, '\\1\\2', 'G')
+  $recursor_short_version = regsubst($powerdns::recursor_version, /^(\d+)\.(\d+)(?:\.\d+)?$/, '\\1\\2', 'G')
 
   case $facts['os']['family'] {
     'RedHat': {
