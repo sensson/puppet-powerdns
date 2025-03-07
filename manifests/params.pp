@@ -56,32 +56,7 @@ class powerdns::params {
       $recursor_service = 'pdns-recursor'
       $recursor_dir = '/etc/powerdns'
       $recursor_config = "${recursor_dir}/recursor.conf"
-
-      case $facts['os']['name'] {
-        'Debian': {
-          case $facts['os']['release']['major'] {
-            '8': {
-              $install_packages = []
-            }
-            default: {
-              $install_packages = ['dirmngr']
-            }
-          }
-        }
-        'Ubuntu': {
-          case $facts['os']['release']['major'] {
-            '16.04': {
-              $install_packages = []
-            }
-            default: {
-              $install_packages = ['dirmngr']
-            }
-          }
-        }
-        default: {
-          $install_packages = []
-        }
-      }
+      $install_packages = ['dirmngr']
     }
     'FreeBSD': {
       $authoritative_package = 'powerdns'
