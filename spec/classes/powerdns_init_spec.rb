@@ -110,8 +110,6 @@ describe 'powerdns', type: :class do
             }
           end
 
-          it { is_expected.to contain_class('powerdns::params') }
-
           # Check the repositories
           it { is_expected.to contain_class('powerdns::repo') }
           case facts[:osfamily]
@@ -399,7 +397,7 @@ describe 'powerdns', type: :class do
               }
             end
 
-            it { is_expected.to contain_powerdns__config('ldap-secret').with('value' => 'secret_bar') }
+            it { is_expected.to contain_powerdns__config('ldap-secret').with('value' => sensitive('secret_bar')) }
           end
 
           context 'with backend_install set to true' do
@@ -531,7 +529,7 @@ describe 'powerdns', type: :class do
             }
           end
 
-          it { is_expected.to contain_mysql__db('powerdns').with('user' => 'foo', 'password' => 'TopSecret', 'host' => 'localhost') }
+          it { is_expected.to contain_mysql__db('powerdns').with('user' => 'foo', 'password' => sensitive('TopSecret'), 'host' => 'localhost') }
         end
 
         context 'powerdns with postgresql backend and Sensitive password' do
@@ -545,7 +543,7 @@ describe 'powerdns', type: :class do
             }
           end
 
-          it { is_expected.to contain_powerdns__config('gpgsql-password').with(value: 'TopSecret') }
+          it { is_expected.to contain_powerdns__config('gpgsql-password').with(value: sensitive('TopSecret')) }
           it { is_expected.to contain_postgresql__server__db('powerdns').with('user' => 'foo') }
         end
 
@@ -562,7 +560,6 @@ describe 'powerdns', type: :class do
           end
 
           it { is_expected.to compile.with_all_deps }
-          it { is_expected.to contain_class('powerdns::params') }
 
           # Check the authoritative server
           it { is_expected.to contain_class('powerdns::recursor') }
@@ -611,11 +608,7 @@ describe 'powerdns', type: :class do
             }
           end
 
-          it {
-            is_expected.to raise_error(
-              %r{'backend' expects a match for Enum\['bind', 'ldap', 'lmdb', 'mysql', 'postgresql', 'sqlite'\]},
-            )
-          }
+          it { is_expected.not_to compile }
         end
 
         context 'powerdns version 4.7' do

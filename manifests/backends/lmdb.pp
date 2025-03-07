@@ -1,19 +1,18 @@
 # lmdb backend for powerdns
 class powerdns::backends::lmdb (
-  $package_ensure = $powerdns::params::default_package_ensure
 ) inherits powerdns {
   if $facts['os']['family'] == 'Debian' {
     # The pdns-server package from the Debian APT repo automatically installs the bind
     # backend package which we do not want when using another backend such as ldap.
     package { 'pdns-backend-bind':
       ensure  => purged,
-      require => Package[$powerdns::params::authoritative_package],
+      require => Package[$powerdns::authoritative_package_name],
     }
 
     # The pdns-backend-lmdb package installs a configuration file that conflicts with this module's backend configuration.
-    file { "${powerdns::params::authoritative_configdir}/pdns.d/lmdb.conf":
+    file { "${powerdns::authoritative_configdir}/pdns.d/lmdb.conf":
       ensure  => absent,
-      require => Package[$powerdns::params::lmdb_backend_package_name],
+      require => Package[$powerdns::lmdb_backend_package_name],
       before  => Service['pdns'],
     }
   }
@@ -35,12 +34,12 @@ class powerdns::backends::lmdb (
     }
   }
 
-  if $powerdns::params::lmdb_backend_package_name {
+  if $powerdns::lmdb_backend_package_name {
     # set up the powerdns backend
-    package { $powerdns::params::lmdb_backend_package_name:
-      ensure  => $package_ensure,
+    package { $powerdns::lmdb_backend_package_name:
+      ensure  => $powerdns::authoritative_package_ensure,
       before  => Service['pdns'],
-      require => Package[$powerdns::params::authoritative_package],
+      require => Package[$powerdns::authoritative_package_name],
     }
   }
 

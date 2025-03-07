@@ -1,5 +1,6 @@
 # sqlite backend for powerdns
-class powerdns::backends::sqlite ($package_ensure = $powerdns::params::default_package_ensure) inherits powerdns {
+class powerdns::backends::sqlite (
+) inherits powerdns {
   # set the configuration variables
   powerdns::config { 'launch':
     ensure  => present,
@@ -16,17 +17,17 @@ class powerdns::backends::sqlite ($package_ensure = $powerdns::params::default_p
   }
 
   # set up the powerdns backend
-  if $powerdns::params::sqlite_backend_package_name {
-    package { $powerdns::params::sqlite_backend_package_name:
-      ensure  => $package_ensure,
+  if $powerdns::sqlite_backend_package_name {
+    package { $powerdns::sqlite_backend_package_name:
+      ensure  => $powerdns::authoritative_package_ensure,
       before  => Service['pdns'],
-      require => Package[$powerdns::params::authoritative_package],
+      require => Package[$powerdns::authoritative_package_name],
     }
   }
   if $powerdns::backend_install {
     if ! defined(Package[$powerdns::sqlite_package_name]) {
       package { $powerdns::sqlite_package_name:
-        ensure => $package_ensure,
+        ensure => $powerdns::authoritative_package_ensure,
       }
     }
   }
@@ -47,7 +48,7 @@ class powerdns::backends::sqlite ($package_ensure = $powerdns::params::default_p
       command => "/usr/bin/env sqlite3 ${powerdns::db_file} < ${powerdns::sqlite_schema_file}",
       unless  => "/usr/bin/env test `echo '.tables domains' | sqlite3 ${powerdns::db_file} | wc -l` -eq 1",
       before  => Service['pdns'],
-      require => Package[$powerdns::params::authoritative_package],
+      require => Package[$powerdns::authoritative_package_name],
     }
   }
 }

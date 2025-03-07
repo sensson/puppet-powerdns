@@ -1,1 +1,6 @@
---- {}
+---
+powerdns::authoritative_package_ensure: installed
+powerdns::authoritative_extra_packages_ensure: installed
+powerdns::authoritative_version: '4.8'
+powerdns::recursor_package_ensure: installed
+powerdns::recursor_version: '4.9'

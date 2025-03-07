@@ -1,11 +1,12 @@
 # ldap backend for powerdns
-class powerdns::backends::ldap ($package_ensure = $powerdns::params::default_package_ensure) inherits powerdns {
+class powerdns::backends::ldap (
+) inherits powerdns {
   if $facts['os']['family'] == 'Debian' {
     # The pdns-server package from the Debian APT repo automatically installs the bind
     # backend package which we do not want when using another backend such as ldap.
     package { 'pdns-backend-bind':
       ensure  => purged,
-      require => Package[$powerdns::params::authoritative_package],
+      require => Package[$powerdns::authoritative_package_name],
     }
   }
 
@@ -31,15 +32,10 @@ class powerdns::backends::ldap ($package_ensure = $powerdns::params::default_pac
     type    => 'authoritative',
   }
 
-  $_ldap_secret = $powerdns::ldap_secret =~ Sensitive ? {
-    true => $powerdns::ldap_secret.unwrap,
-    false => $powerdns::ldap_secret
-  }
-
   powerdns::config { 'ldap-secret':
     ensure  => present,
     setting => 'ldap-secret',
-    value   => $_ldap_secret,
+    value   => $powerdns::ldap_secret,
     type    => 'authoritative',
   }
 
@@ -57,12 +53,12 @@ class powerdns::backends::ldap ($package_ensure = $powerdns::params::default_pac
     type    => 'authoritative',
   }
 
-  if $powerdns::params::ldap_backend_package_name {
+  if $powerdns::ldap_backend_package_name {
     # set up the powerdns backend
-    package { $powerdns::params::ldap_backend_package_name:
-      ensure  => $package_ensure,
+    package { $powerdns::ldap_backend_package_name:
+      ensure  => $powerdns::authoritative_package_ensure,
       before  => Service['pdns'],
-      require => Package[$powerdns::params::authoritative_package],
+      require => Package[$powerdns::authoritative_package_name],
     }
   }
 

@@ -1,9 +1,9 @@
 # powerdns::config
 define powerdns::config (
-  String                            $setting = $title,
-  Powerdns::ConfigValue             $value   = '',
-  Enum['present', 'absent']         $ensure  = 'present',
-  Enum['authoritative', 'recursor'] $type    = 'authoritative'
+  String[1] $setting = $title,
+  Powerdns::ConfigValue $value = '',
+  Enum['present', 'absent'] $ensure = 'present',
+  Enum['authoritative', 'recursor'] $type = 'authoritative'
 ) {
   $empty_value_allowed = [
     'gmysql-dnssec',
@@ -28,12 +28,12 @@ define powerdns::config (
   }
 
   if $type == 'authoritative' {
-    $path            = $powerdns::params::authoritative_config
-    $require_package = $powerdns::params::authoritative_package
+    $path            = $powerdns::authoritative_config
+    $require_package = $powerdns::authoritative_package_name
     $notify_service  = 'pdns'
   } else {
-    $path            = $powerdns::params::recursor_config
-    $require_package = $powerdns::params::recursor_package
+    $path            = $powerdns::recursor_config
+    $require_package = $powerdns::recursor_package_name
     $notify_service  = 'pdns-recursor'
   }
 
