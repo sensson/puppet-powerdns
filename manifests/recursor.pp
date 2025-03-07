@@ -1,26 +1,21 @@
 # @summary powerdns recursor
-
-# @param package_ensure
+#
 # @param forward_zones
 #   Hash containing zone => dns servers pairs
-# @param recursor_dir
-#   Configuration directory for recursor
 #
 class powerdns::recursor (
-  String $package_ensure = $powerdns::params::default_package_ensure,
-  Hash   $forward_zones  = $powerdns::forward_zones,
-  String $recursor_dir   = $powerdns::recursor_dir,
+  Hash $forward_zones = $powerdns::forward_zones,
 ) inherits powerdns {
-  package { $powerdns::recursor_package:
-    ensure => $package_ensure,
+  package { $powerdns::recursor_package_name:
+    ensure => $powerdns::recursor_package_ensure,
   }
 
   if !empty($forward_zones) {
-    $zone_config = "${recursor_dir}/forward_zones.conf"
+    $zone_config = "${powerdns::recursor_configdir}/forward_zones.conf"
     file { $zone_config:
       ensure  => file,
       owner   => 'root',
-      group   => 'root',
+      group   => 0,
       content => template('powerdns/forward_zones.conf.erb'),
       notify  => Service['pdns-recursor'],
     }
@@ -33,8 +28,8 @@ class powerdns::recursor (
 
   service { 'pdns-recursor':
     ensure  => running,
-    name    => $powerdns::params::recursor_service,
+    name    => $powerdns::recursor_service_name,
     enable  => true,
-    require => Package[$powerdns::params::recursor_package],
+    require => Package[$powerdns::recursor_package_name],
   }
 }
