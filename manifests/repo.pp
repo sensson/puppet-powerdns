@@ -65,33 +65,46 @@ class powerdns::repo inherits powerdns {
         source => 'https://repo.powerdns.com/FD380FBB-pub.asc',
       }
 
+      $auth_release = "${facts['os']['distro']['codename']}-auth-${authoritative_short_version}"
       apt::source { 'powerdns':
         ensure       => present,
         location     => "http://repo.powerdns.com/${os}",
         repos        => 'main',
-        release      => "${facts['os']['distro']['codename']}-auth-${authoritative_short_version}",
+        release      => $auth_release,
         architecture => 'amd64',
         require      => Apt::Key['powerdns'],
       }
 
+      $rec_release = "${facts['os']['distro']['codename']}-rec-${recursor_short_version}"
       apt::source { 'powerdns-recursor':
         ensure       => present,
         location     => "http://repo.powerdns.com/${os}",
         repos        => 'main',
-        release      => "${facts['os']['distro']['codename']}-rec-${recursor_short_version}",
+        release      => $rec_release,
         architecture => 'amd64',
         require      => Apt::Source['powerdns'],
       }
 
       apt::pin { 'powerdns':
-        priority => 600,
-        packages => 'pdns-*',
-        origin   => 'repo.powerdns.com',
-        require  => Apt::Source['powerdns-recursor'],
+        priority   => 600,
+        packages   => 'pdns-*',
+        originator => 'PowerDNS',
+        codename   => $auth_release,
+        require    => Apt::Source['powerdns-recursor'],
+      }
+
+      # authoritative apt source contains pdns-recursor
+      # this will make it possible to have different versions
+      apt::pin { 'powerdns-recursor':
+        priority   => 700,
+        packages   => 'pdns-recursor',
+        originator => 'PowerDNS',
+        codename   => $rec_release,
+        require    => Apt::Pin['powerdns'],
       }
 
       Apt::Pin['powerdns'] -> Package <| title == $powerdns::params::authoritative_package |>
-      Apt::Pin['powerdns'] -> Package <| title == $powerdns::params::recursor_package |>
+      Apt::Pin['powerdns-recursor'] -> Package <| title == $powerdns::params::recursor_package |>
     }
 
     'FreeBSD','Archlinux': {
