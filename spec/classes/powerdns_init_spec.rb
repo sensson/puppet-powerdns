@@ -115,16 +115,40 @@ describe 'powerdns', type: :class do
           case facts[:osfamily]
           when 'RedHat'
             it { is_expected.to contain_package('yum-plugin-priorities') } if facts[:operatingsystemmajrelease].to_i < 8
-            it { is_expected.to contain_yumrepo('powertools') } if facts[:operatingsystemmajrelease].to_i >= 8
-            if facts[:operatingsystem] != 'Rocky' && facts[:operatingsystemmajrelease].to_i >= 8
-              it {
-                is_expected.to contain_yumrepo('powertools').with('mirrorlist' => 'http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=PowerTools&infra=$infra')
-              }
-            end
-            if facts[:operatingsystem] == 'Rocky' && facts[:operatingsystemmajrelease].to_i >= 8
-              it {
-                is_expected.to contain_yumrepo('powertools').with('mirrorlist' => 'https://mirrors.rockylinux.org/mirrorlist?arch=$basearch&repo=PowerTools-$releasever')
-              }
+            case facts[:operatingsystemmajrelease]
+            when '8'
+              it { is_expected.to contain_yumrepo('powertools') }
+              if facts[:operatingsystem] != 'Rocky'
+                it {
+                  is_expected.to contain_yumrepo('powertools').with(
+                    'mirrorlist' => 'http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=PowerTools&infra=$infra',
+                  )
+                }
+              end
+              if facts[:operatingsystem] == 'Rocky'
+                it {
+                  is_expected.to contain_yumrepo('powertools').with(
+                    'mirrorlist' => 'https://mirrors.rockylinux.org/mirrorlist?arch=$basearch&repo=PowerTools-$releasever',
+                  )
+                }
+              end
+            when '9'
+              it { is_expected.to contain_yumrepo('CRB') }
+              if facts[:operatingsystem] == 'Rocky'
+                it {
+                  is_expected.to contain_yumrepo('crb').with(
+                    'mirrorlist' => 'http://mirrorlist.rockylinux.org/mirrorlist?arch=$basearch&repo=CRB-$releasever',
+                    'descr' => 'Rocky Linux $releasever - CRB',
+                  )
+                }
+              else
+                it {
+                  is_expected.to contain_yumrepo('crvb').with(
+                    'mirrorlist' => 'http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=CRB&infra=$infra',
+                    'descr' => 'CentOS Linux $releasever - CRB',
+                  )
+                }
+              end
             end
             it { is_expected.to contain_yumrepo('powerdns') }
             it { is_expected.to contain_yumrepo('powerdns').with('baseurl' => 'http://repo.powerdns.com/centos/$basearch/$releasever/auth-48') }
