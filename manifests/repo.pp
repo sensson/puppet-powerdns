@@ -11,8 +11,8 @@ class powerdns::repo inherits powerdns {
         include epel
       }
 
-      Yumrepo['powerdns'] -> Package <| title == $powerdns::params::authoritative_package |>
-      Yumrepo['powerdns-recursor'] -> Package <| title == $powerdns::params::recursor_package |>
+      Yumrepo['powerdns'] -> Package <| title == $powerdns::authoritative_package_name |>
+      Yumrepo['powerdns-recursor'] -> Package <| title == $powerdns::recursor_package_name |>
 
       if ($facts['os']['name'] == 'Rocky') {
         $mirrorlist = "https://mirrors.rockylinux.org/mirrorlist?arch=\$basearch&repo=PowerTools-\$releasever"
@@ -103,8 +103,8 @@ class powerdns::repo inherits powerdns {
         require    => Apt::Pin['powerdns'],
       }
 
-      Apt::Pin['powerdns'] -> Package <| title == $powerdns::params::authoritative_package |>
-      Apt::Pin['powerdns-recursor'] -> Package <| title == $powerdns::params::recursor_package |>
+      Apt::Pin['powerdns'] -> Package <| title == $powerdns::authoritative_package_name |>
+      Apt::Pin['powerdns'] -> Package <| title == $powerdns::recursor_package_name |>
     }
 
     'FreeBSD','Archlinux': {

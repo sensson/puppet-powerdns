@@ -1,0 +1,22 @@
+---
+powerdns::db_dir: /var/lib/powerdns
+powerdns::db_file: "%{lookup('powerdns::db_dir')}/powerdns.sqlite3"
+powerdns::mysql_schema_file: /usr/share/doc/pdns-backend-mysql/schema.mysql.sql
+powerdns::pgsql_schema_file: /usr/share/doc/pdns-backend-pgsql/schema.pgsql.sql
+powerdns::sqlite_schema_file: /usr/share/doc/pdns-backend-sqlite3/schema.sqlite3.sql
+powerdns::mysql_backend_package_name: pdns-backend-mysql
+powerdns::ldap_backend_package_name: pdns-backend-ldap
+powerdns::pgsql_backend_package_name: pdns-backend-pgsql
+powerdns::sqlite_backend_package_name: pdns-backend-sqlite3
+powerdns::lmdb_backend_package_name: pdns-backend-lmdb
+powerdns::sqlite_package_name: sqlite3
+powerdns::authoritative_package_name: pdns-server
+powerdns::authoritative_extra_packages:
+  - dirmngr
+powerdns::authoritative_service_name: pdns
+powerdns::authoritative_configdir: /etc/powerdns
+powerdns::authoritative_config: "%{lookup('powerdns::authoritative_configdir')}/pdns.conf"
+powerdns::recursor_configdir: /etc/powerdns
+powerdns::recursor_config: "%{lookup('powerdns::recursor_configdir')}/recursor.conf"
+powerdns::recursor_package_name: pdns-recursor
+powerdns::recursor_service_name: pdns-recursor
