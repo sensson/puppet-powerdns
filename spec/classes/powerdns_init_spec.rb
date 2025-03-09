@@ -131,6 +131,25 @@ describe 'powerdns', type: :class do
           it { is_expected.to contain_service('pdns').with('enable' => 'true') }
           it { is_expected.to contain_service('pdns').with('name' => authoritative_service_name) }
           it { is_expected.to contain_service('pdns').that_requires("Package[#{authoritative_package_name}]") }
+
+          if facts[:os]['family'] == 'RedHat'
+            it do
+              is_expected.to contain_file(authoritative_config).with(
+                ensure: 'file',
+                owner: 'root',
+                group: 'pdns',
+                mode: '0640',
+              ).that_comes_before('Service[pdns]')
+            end
+          else
+            it do
+              is_expected.to contain_file(authoritative_config).with(
+                ensure: 'file',
+                owner: 'root',
+                mode: '0640',
+              ).that_comes_before('Service[pdns]')
+            end
+          end
         end
 
         context 'powerdns class with epel' do

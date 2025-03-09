@@ -13,6 +13,9 @@
 # @param lmdb_sync_mode
 #   Sync mode for LMDB. One of 'nosync', 'sync', 'nometasync', 'mapasync'
 #
+# @param authoritative_group
+#   If present, this group will be set on the authoritative server pdns.conf file. 
+#
 class powerdns (
   String[1] $authoritative_package_name,
   String[1] $authoritative_package_ensure,
@@ -65,6 +68,7 @@ class powerdns (
   Hash $forward_zones = {},
   Powerdns::Autoprimaries $autoprimaries = {},
   Boolean $purge_autoprimaries = false,
+  Optional[String[1]] $authoritative_group = undef,
 ) {
   # Do some additional checks. In certain cases, some parameters are no longer optional.
   if $authoritative {
