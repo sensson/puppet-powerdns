@@ -133,19 +133,19 @@ describe 'powerdns', type: :class do
                 }
               end
             when '9'
-              it { is_expected.to contain_yumrepo('CRB') }
+              it { is_expected.to contain_yumrepo('crb') }
               if facts[:operatingsystem] == 'Rocky'
                 it {
                   is_expected.to contain_yumrepo('crb').with(
                     'mirrorlist' => 'http://mirrorlist.rockylinux.org/mirrorlist?arch=$basearch&repo=CRB-$releasever',
-                    'descr' => 'Rocky Linux $releasever - CRB',
+                    'descr' => "#{facts[:operatingsystem]} Linux $releasever - CRB",
                   )
                 }
               else
                 it {
-                  is_expected.to contain_yumrepo('crvb').with(
+                  is_expected.to contain_yumrepo('crb').with(
                     'mirrorlist' => 'http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=CRB&infra=$infra',
-                    'descr' => 'CentOS Linux $releasever - CRB',
+                    'descr' => "#{facts[:operatingsystem]} Linux $releasever - CRB",
                   )
                 }
               end
@@ -178,6 +178,14 @@ describe 'powerdns', type: :class do
           it { is_expected.to contain_service('pdns').with('enable' => 'true') }
           it { is_expected.to contain_service('pdns').with('name' => authoritative_service_name) }
           it { is_expected.to contain_service('pdns').that_requires("Package[#{authoritative_package_name}]") }
+          it 'creates the pdns.conf file' do
+            is_expected.to contain_file(authoritative_config).with(
+              ensure: 'file',
+              owner: 'root',
+              group: 'pdns',
+              mode: '0640',
+            ).that_comes_before('Service[pdns]')
+          end
         end
 
         context 'powerdns class with epel' do
