@@ -1,0 +1,2 @@
+---
+powerdns::pgsql_schema_file: /usr/share/doc/pdns-backend-postgresql/schema.pgsql.sql

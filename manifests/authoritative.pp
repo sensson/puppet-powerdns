@@ -1,5 +1,9 @@
 # powerdns::authoritative
+#
+# @param group
+#   Name of the group associated with the pdns authoritative service - needed to ensure the config file can be read.
 class powerdns::authoritative (
+  String $group = 'pdns',
 ) inherits powerdns {
   # install the powerdns package
   package { $powerdns::authoritative_package_name:
@@ -9,6 +13,14 @@ class powerdns::authoritative (
   stdlib::ensure_packages($powerdns::authoritative_extra_packages, { 'ensure' => $powerdns::authoritative_extra_packages_ensure })
 
   include "powerdns::backends::${powerdns::backend}"
+
+  file { $powerdns::authoritative_config:
+    ensure => 'file',
+    owner  => 'root',
+    group  => $group,
+    mode   => '0640',
+    before => Service['pdns'],
+  }
 
   service { 'pdns':
     ensure  => running,

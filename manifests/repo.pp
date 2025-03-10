@@ -14,21 +14,28 @@ class powerdns::repo inherits powerdns {
       Yumrepo['powerdns'] -> Package <| title == $powerdns::authoritative_package_name |>
       Yumrepo['powerdns-recursor'] -> Package <| title == $powerdns::recursor_package_name |>
 
-      if ($facts['os']['name'] == 'Rocky') {
-        $mirrorlist = "https://mirrors.rockylinux.org/mirrorlist?arch=\$basearch&repo=PowerTools-\$releasever"
-        $gpgkey = 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-rockyofficial'
-      } else {
-        $mirrorlist = "http://mirrorlist.centos.org/?release=\$releasever&arch=\$basearch&repo=PowerTools&infra=\$infra"
-        $gpgkey = 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-centosofficial'
+      $repo_desc = $facts['os']['release']['major'] ? {
+        '8'     => 'PowerTools',
+        default => 'CRB',
       }
-
-      yumrepo { 'powertools':
-        ensure     => 'present',
-        descr      => 'PowerTools',
-        mirrorlist => $mirrorlist,
-        enabled    => 'true',
-        gpgkey     => $gpgkey,
-        gpgcheck   => 'true',
+      $repo_name = $repo_desc.downcase()
+      if ($facts['os']['name'] == 'Rocky') {
+        $code_repo_params = {
+          mirrorlist => "https://mirrors.rockylinux.org/mirrorlist?arch=\$basearch&repo=${repo_desc}-\$releasever",
+          gpgkey     => 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-rockyofficial',
+        }
+      } else {
+        $code_repo_params = {
+          mirrorlist => "http://mirrorlist.centos.org/?release=\$releasever&arch=\$basearch&repo=${repo_desc}&infra=\$infra",
+          gpgkey     => 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-centosofficial',
+        }
+      }
+      yumrepo { $repo_name:
+        ensure   => 'present',
+        descr    => "${$facts['os']['name']} Linux \$releasever - ${repo_desc}",
+        enabled  => 'true',
+        gpgcheck => 'true',
+        *        => $code_repo_params,
       }
 
       yumrepo { 'powerdns':
