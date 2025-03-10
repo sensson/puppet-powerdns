@@ -17,15 +17,9 @@ describe 'powerdns', type: :class do
           authoritative_package_name = 'pdns'
           authoritative_service_name = 'pdns'
           authoritative_config = '/etc/pdns/pdns.conf'
-          if facts[:os]['release']['major'].to_i == 7
-            mysql_schema_file = '/usr/share/doc/pdns-backend-mysql-4.1.14/schema.mysql.sql'
-            pgsql_schema_file = '/usr/share/doc/pdns-backend-postgresql-4.1.14/schema.pgsql.sql'
-            sqlite_schema_file = '/usr/share/doc/pdns-backend-sqlite-4.1.14/schema.sqlite.sql'
-          else
-            mysql_schema_file = '/usr/share/doc/pdns-backend-mysql-4.8.1/schema.mysql.sql'
-            pgsql_schema_file = '/usr/share/doc/pdns-backend-postgresql-4.8.1/schema.pgsql.sql'
-            sqlite_schema_file = '/usr/share/doc/pdns-backend-sqlite-4.8.1/schema.sqlite.sql'
-          end
+          mysql_schema_file = '/usr/share/doc/pdns-backend-mysql-4.8.1/schema.mysql.sql'
+          pgsql_schema_file = '/usr/share/doc/pdns-backend-postgresql-4.8.1/schema.pgsql.sql'
+          sqlite_schema_file = '/usr/share/doc/pdns-backend-sqlite-4.8.1/schema.sqlite.sql'
           pgsql_backend_package_name = 'pdns-backend-postgresql'
           sqlite_backend_package_name = 'pdns-backend-sqlite'
           sqlite_binary_package_name = 'sqlite'
@@ -114,14 +108,13 @@ describe 'powerdns', type: :class do
           it { is_expected.to contain_class('powerdns::repo') }
           case facts[:osfamily]
           when 'RedHat'
-            it { is_expected.to contain_package('yum-plugin-priorities') } if facts[:operatingsystemmajrelease].to_i < 8
-            it { is_expected.to contain_yumrepo('powertools') } if facts[:operatingsystemmajrelease].to_i >= 8
-            if facts[:operatingsystem] != 'Rocky' && facts[:operatingsystemmajrelease].to_i >= 8
+            it { is_expected.to contain_yumrepo('powertools') }
+            if facts[:operatingsystem] != 'Rocky'
               it {
                 is_expected.to contain_yumrepo('powertools').with('mirrorlist' => 'http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=PowerTools&infra=$infra')
               }
             end
-            if facts[:operatingsystem] == 'Rocky' && facts[:operatingsystemmajrelease].to_i >= 8
+            if facts[:operatingsystem] == 'Rocky'
               it {
                 is_expected.to contain_yumrepo('powertools').with('mirrorlist' => 'https://mirrors.rockylinux.org/mirrorlist?arch=$basearch&repo=PowerTools-$releasever')
               }
@@ -139,12 +132,7 @@ describe 'powerdns', type: :class do
             it { is_expected.to contain_apt__source('powerdns').with_release(%r{auth-48}) }
             it { is_expected.to contain_apt__source('powerdns-recursor') }
             it { is_expected.to contain_apt__source('powerdns-recursor').with_release(%r{rec-49}) }
-
-            # On Ubuntu 17.04 and higher and Debian 9 and higher it expects dirmngr
-            if (facts[:operatingsystem] == 'Ubuntu' && facts[:operatingsystemmajrelease].to_i >= 17) ||
-               (facts[:operatingsystem] == 'Debian' && facts[:operatingsystemmajrelease].to_i >= 9)
-              it { is_expected.to contain_package('dirmngr') }
-            end
+            it { is_expected.to contain_package('dirmngr') }
           end
 
           # Check the authoritative server
