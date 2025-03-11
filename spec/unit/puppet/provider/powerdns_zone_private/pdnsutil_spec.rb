@@ -8,7 +8,7 @@ describe provider_class do
   let(:resource) do
     Puppet::Type::Powerdns_zone_private.new(
       name: 'example.com',
-      provider: described_class.name,
+      provider: described_class.name
     )
   end
 

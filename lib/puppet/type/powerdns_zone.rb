@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'puppet/parameter/boolean'
 
 Puppet::Type.newtype(:powerdns_zone) do
@@ -121,11 +123,11 @@ Puppet::Type.newtype(:powerdns_zone) do
 
   def records
     # Collect records that target this zone.
-    @records ||= catalog.resources.map { |resource|
+    @records ||= catalog.resources.map do |resource|
       next unless resource.is_a?(Puppet::Type.type(:powerdns_record))
 
       resource if resource[:target_zone] == title
-    }.compact
+    end.compact
   end
 
   def should_content
@@ -136,9 +138,8 @@ Puppet::Type.newtype(:powerdns_zone) do
       if r[:rname] == '.'
         content.push([r[:target_zone], r[:rttl], r[:rclass], r[:rtype], r[:rcontent]].join("\t"))
       else
-        content.push([r[:rname] + '.' + r[:target_zone], r[:rttl], r[:rclass], r[:rtype], r[:rcontent]].join("\t"))
+        content.push(["#{r[:rname]}.#{r[:target_zone]}", r[:rttl], r[:rclass], r[:rtype], r[:rcontent]].join("\t"))
       end
-      # rubocop:enable Style/StringConcatenation
     end
     content.push("$ORIGIN .\n") # add this, since it's always in the output..
     content.sort.join("\n")
@@ -150,16 +151,16 @@ Puppet::Type.newtype(:powerdns_zone) do
     # without content
     powerdns_zone_private_opts = {}
 
-    [:name,
-     :config_name,
-     :config_dir,
-     :show_diff,
-     :manage_records].each do |p|
+    %i[name
+       config_name
+       config_dir
+       show_diff
+       manage_records].each do |p|
       powerdns_zone_private_opts[p] = self[p] unless self[p].nil?
     end
     powerdns_zone_private_opts['ensure'] = self['zone_ensure']
 
-    excluded_metaparams = [:before, :notify, :require, :subscribe, :tag]
+    excluded_metaparams = %i[before notify require subscribe tag]
 
     Puppet::Type.metaparams.each do |metaparam|
       powerdns_zone_private_opts[metaparam] = self[metaparam] unless self[metaparam].nil? || excluded_metaparams.include?(metaparam)
@@ -167,7 +168,6 @@ Puppet::Type.newtype(:powerdns_zone) do
 
     [Puppet::Type.type(:powerdns_zone_private).new(powerdns_zone_private_opts)]
   end
-  # rubocop:enable Metrics/AbcSize
   # rubocop:enable Metrics/MethodLength
 
   def eval_generate
@@ -186,6 +186,6 @@ Puppet::Type.newtype(:powerdns_zone) do
 
   # autorequire the powerdns_records
   autorequire(:powerdns_record) do
+    # placeholder
   end
-  # rubocop:enable Lint/EmptyBlock
 end
