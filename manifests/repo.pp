@@ -9,27 +9,11 @@ class powerdns::repo inherits powerdns {
     'RedHat': {
       unless $powerdns::custom_epel {
         include epel
+        Class['epel'] -> Yumrepo['powerdns']
       }
 
       Yumrepo['powerdns'] -> Package <| title == $powerdns::authoritative_package_name |>
       Yumrepo['powerdns-recursor'] -> Package <| title == $powerdns::recursor_package_name |>
-
-      if ($facts['os']['name'] == 'Rocky') {
-        $mirrorlist = "https://mirrors.rockylinux.org/mirrorlist?arch=\$basearch&repo=PowerTools-\$releasever"
-        $gpgkey = 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-rockyofficial'
-      } else {
-        $mirrorlist = "http://mirrorlist.centos.org/?release=\$releasever&arch=\$basearch&repo=PowerTools&infra=\$infra"
-        $gpgkey = 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-centosofficial'
-      }
-
-      yumrepo { 'powertools':
-        ensure     => 'present',
-        descr      => 'PowerTools',
-        mirrorlist => $mirrorlist,
-        enabled    => 'true',
-        gpgkey     => $gpgkey,
-        gpgcheck   => 'true',
-      }
 
       yumrepo { 'powerdns':
         name        => 'powerdns',
