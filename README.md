@@ -403,19 +403,6 @@ duplicate declaration errors.
 
 ## Limitations
 
-This module has been tested on:
-
-* CentOS 7, 8
-* Ubuntu 18.04
-* Debian 10
-
-We believe it also on other operating systems such as:
-
-* Oracle Linux
-* RedHat Enterprise Linux
-* Scientific Linux
-* Arch Linux
-
 Schemas in the packages on EL have the exact PowerDNS hardcoded in the paths,
 the main class has three parameters where you can adjust it.
 
