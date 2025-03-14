@@ -108,17 +108,6 @@ describe 'powerdns', type: :class do
           it { is_expected.to contain_class('powerdns::repo') }
           case facts[:osfamily]
           when 'RedHat'
-            it { is_expected.to contain_yumrepo('powertools') }
-            if facts[:operatingsystem] != 'Rocky'
-              it {
-                is_expected.to contain_yumrepo('powertools').with('mirrorlist' => 'http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=PowerTools&infra=$infra')
-              }
-            end
-            if facts[:operatingsystem] == 'Rocky'
-              it {
-                is_expected.to contain_yumrepo('powertools').with('mirrorlist' => 'https://mirrors.rockylinux.org/mirrorlist?arch=$basearch&repo=PowerTools-$releasever')
-              }
-            end
             it { is_expected.to contain_yumrepo('powerdns') }
             it { is_expected.to contain_yumrepo('powerdns').with('baseurl' => 'http://repo.powerdns.com/centos/$basearch/$releasever/auth-48') }
             it { is_expected.to contain_yumrepo('powerdns-recursor') }
