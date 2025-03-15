@@ -9,6 +9,8 @@ powerdns::ldap_backend_package_name: pdns-backend-ldap
 powerdns::pgsql_backend_package_name: pdns-backend-postgresql
 powerdns::sqlite_backend_package_name: pdns-backend-sqlite
 powerdns::lmdb_backend_package_name: pdns-backend-lmdb
+powerdns::mysql_charset: utf8
+powerdns::mysql_collate: utf8_general_ci
 powerdns::sqlite_package_name: sqlite
 powerdns::authoritative_package_name: pdns
 powerdns::authoritative_extra_packages: []
