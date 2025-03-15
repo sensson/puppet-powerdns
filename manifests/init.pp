@@ -39,6 +39,8 @@ class powerdns (
   Optional[String[1]] $pgsql_backend_package_name = undef,
   Optional[String[1]] $sqlite_backend_package_name = undef,
   Optional[String[1]] $lmdb_backend_package_name = undef,
+  Optional[String[1]] $mysql_charset = undef,
+  Optional[String[1]] $mysql_collate = undef,
   Boolean $authoritative = true,
   Boolean $recursor = false,
   Powerdns::Backends $backend = 'mysql',
