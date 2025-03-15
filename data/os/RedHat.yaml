@@ -1,9 +1,9 @@
 ---
 powerdns::db_dir: /var/lib/powerdns
 powerdns::db_file: "%{lookup('powerdns::db_dir')}/powerdns.sqlite3"
-powerdns::mysql_schema_file: /usr/share/doc/pdns-backend-mysql-4.8.1/schema.mysql.sql
-powerdns::pgsql_schema_file: /usr/share/doc/pdns-backend-postgresql-4.8.1/schema.pgsql.sql
-powerdns::sqlite_schema_file: /usr/share/doc/pdns-backend-sqlite-4.8.1/schema.sqlite.sql
+powerdns::mysql_schema_file: /usr/share/doc/pdns-backend-mysql/schema.mysql.sql
+powerdns::pgsql_schema_file: /usr/share/doc/pdns-backend-postgresql/schema.pgsql.sql
+powerdns::sqlite_schema_file: /usr/share/doc/pdns-backend-sqlite/schema.sqlite.sql
 powerdns::mysql_backend_package_name: pdns-backend-mysql
 powerdns::ldap_backend_package_name: pdns-backend-ldap
 powerdns::pgsql_backend_package_name: pdns-backend-postgresql
