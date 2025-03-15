@@ -10,10 +10,19 @@ class powerdns::authoritative (
 
   include "powerdns::backends::${powerdns::backend}"
 
+  # TODO: move owner and group to module data
+  file { $powerdns::authoritative_config:
+    owner   => 'pdns',
+    group   => 'pdns',
+    mode    => '0600',
+    replace => false,
+    require => Package[$powerdns::authoritative_package_name],
+  }
+
   service { 'pdns':
     ensure  => running,
     name    => $powerdns::authoritative_service_name,
     enable  => true,
-    require => Package[$powerdns::authoritative_package_name],
+    require => File[$powerdns::authoritative_config],
   }
 }
