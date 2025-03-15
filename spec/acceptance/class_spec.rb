@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper_acceptance'
 
 case default['platform']
@@ -44,7 +46,7 @@ describe 'powerdns class' do
     end
 
     describe command('/usr/bin/pdns_control version') do
-      its(:stdout) { is_expected.to match '4.1' }
+      its(:stdout) { is_expected.to match %r{^4\.9} }
     end
   end
 

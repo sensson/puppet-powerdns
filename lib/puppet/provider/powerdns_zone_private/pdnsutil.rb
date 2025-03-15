@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 # This file contains a provider for the resource type `powerdns_zone`,
 #
 require 'tempfile'
 Puppet::Type.type(:powerdns_zone_private).provide(
-  :pdnsutil,
+  :pdnsutil
 ) do
   desc "A provider for the resource type `powerdns_zone`,
         which manages a zone on powerdns
@@ -66,11 +68,12 @@ Puppet::Type.type(:powerdns_zone_private).provide(
       @serial = '1'
       return c
     end
-    soarec = records[soanr].split(' ')
+    soarec = records[soanr].split
     @serial = soarec[-5]
     soarec[-5] = '_SERIAL_'
-    records[soanr] = soarec[0..3].join("\t") + "\t" + soarec[4..10].join(' ')
-    records.sort.join("\n") + "\n" end
+    records[soanr] = "#{soarec[0..3].join("\t")}\t#{soarec[4..10].join(' ')}"
+    "#{records.sort.join("\n")}\n"
+  end
   # rubocop:enable Metrics/AbcSize
   # rubocop:enable Metrics/MethodLength
 

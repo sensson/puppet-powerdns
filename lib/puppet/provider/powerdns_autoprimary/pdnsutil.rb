@@ -14,10 +14,11 @@ Puppet::Type.type(:powerdns_autoprimary).provide(:pdnsutil) do
   def self.instances
     pdnsutil('list-autoprimaries').split("\n").map do |line|
       raise Puppet::Error, "Cannot parse invalid autoprimary line: #{line}" unless line =~ %r{^IP=(\S+),\s+NS=(\S+),\s+account=(\S*)$}
+
       new(
         ensure: :present,
-        name: Regexp.last_match(1) + '@' + Regexp.last_match(2),
-        account: Regexp.last_match(3),
+        name: "#{Regexp.last_match(1)}@#{Regexp.last_match(2)}",
+        account: Regexp.last_match(3)
       )
     end
   end
@@ -57,6 +58,7 @@ Puppet::Type.type(:powerdns_autoprimary).provide(:pdnsutil) do
 
   def flush
     return if @property_flush.empty?
+
     content = @property_flush[:content] || @resource[:content]
     virsh_define(content)
     @property_flush.clear

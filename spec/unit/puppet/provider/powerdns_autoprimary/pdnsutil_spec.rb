@@ -8,7 +8,7 @@ describe provider_class do
   let(:resource) do
     Puppet::Type::Powerdns_autoprimary.new(
       name: '1.2.3.4@ns1.example.com',
-      provider: described_class.name,
+      provider: described_class.name
     )
   end
 

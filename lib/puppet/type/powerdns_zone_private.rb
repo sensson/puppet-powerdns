@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # private resource which collected all the records through powerdns_zone
 require 'puppet/parameter/boolean'
 
@@ -51,7 +53,7 @@ Puppet::Type.newtype(:powerdns_zone_private) do
 
     munge do |value|
       if @resource[:manage_records]
-        value.to_s.gsub(%r{\n+$}, '') + "\n"
+        "#{value.to_s.gsub(%r{\n+$}, '')}\n"
       else
         ''
       end
@@ -59,17 +61,17 @@ Puppet::Type.newtype(:powerdns_zone_private) do
 
     def should_to_s(value)
       if @resource[:show_diff]
-        ":\n" + value
+        ":\n#{value}"
       else
-        '{md5}' + Digest::MD5.hexdigest(value.to_s)
+        "{md5}#{Digest::MD5.hexdigest(value.to_s)}"
       end
     end
 
-    def is_to_s(value) # rubocop:disable Naming/PredicateName
+    def is_to_s(value)
       if @resource[:show_diff]
-        ":\n" + value
+        ":\n#{value}"
       else
-        '{md5}' + Digest::MD5.hexdigest(value.to_s)
+        "{md5}#{Digest::MD5.hexdigest(value.to_s)}"
       end
     end
   end
@@ -79,6 +81,6 @@ Puppet::Type.newtype(:powerdns_zone_private) do
     ['pdns']
   end
   autorequire(:powerdns_zone) do
+    # placeholder
   end
-  # rubocop:enable Lint/EmptyBlock
 end

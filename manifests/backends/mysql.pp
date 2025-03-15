@@ -75,6 +75,8 @@ class powerdns::backends::mysql (
       password => $powerdns::db_password,
       host     => $powerdns::db_host,
       grant    => ['ALL'],
+      charset  => $powerdns::mysql_charset,
+      collate  => $powerdns::mysql_collate,
       sql      => [$powerdns::mysql_schema_file],
       require  => Package[$powerdns::mysql_backend_package_name],
     }

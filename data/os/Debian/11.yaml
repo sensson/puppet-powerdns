@@ -1,0 +1,3 @@
+---
+powerdns::mysql_charset: utf8
+powerdns::mysql_collate: utf8_general_ci
